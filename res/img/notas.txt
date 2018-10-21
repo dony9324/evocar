@@ -1,0 +1,16 @@
+
+action usados
+	searchproduct
+	viewcart
+	clearcart      -> borra un elemento del carro
+	searchclients
+	access
+	addtore
+	addtocar
+
+action negadas
+	schatoday
+	newclient
+
+
+$products = ProductData::getLike(addslashes($_GET["product"])); //resibimos el codigo o nombre . addslashe esta es para formater la cadena i eliminar las comillas

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 $debug= true;
 if($debug){
 ini_set('display_errors', 1);

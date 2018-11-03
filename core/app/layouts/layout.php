@@ -545,7 +545,7 @@ if(isset($_SESSION["user_id"])){ ?>
   ////////////////////////////revisa la secion cada 30 segundos/////////////////////////////
   $(document).ready(function(){
     var myVar;
-    myVar = setInterval(alertFunc, 30000000);
+    myVar = setInterval(alertFunc, 30000);
     function alertFunc() {
       $.get("./?action=access&o=logouttime",function(response) {
         if (response.estado == "true") {

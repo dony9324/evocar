@@ -1,4 +1,4 @@
-<section class="content-header">
+﻿<section class="content-header">
   <h1> <i class='fa fa-tags'></i> Inventario <small></small> </h1>
   <ol class="breadcrumb">
     <li><a><i class="fa fa-home"></i> Inicio</a></li>
@@ -190,15 +190,25 @@
                           <option value="">--Seleccione--</option>
 						  <?php foreach($units as $unit):?>
                               <option class="<?php switch ($unit->type) {
-								  case 0: echo "text-muted"; break;
-								  case 1: echo "text-aqua"; break;
-								  case 2: echo "text-yellow"; break;
-								  case 3: echo "text-green"; break;
-								  case 4: echo "text-red"; break;
-								  case 5: echo "text-light-blue"; break;
-								  case 5: echo "text-light-blue"; break; default:
-								  }
-								  ?>" value="<?php echo $unit->id;?>"> <?php echo $unit->name;?></option>
+		case 0:
+        echo "";
+        break;
+    case 1:
+        echo "text-aqua";
+        break;
+    case 2:
+        echo "text-yellow";
+        break;
+    case 3:
+        echo "text-green";
+        break;
+    case 4:
+        echo "text-red";
+        break;
+		 default:
+		 
+}
+?>" value="<?php echo $unit->id;?>"> <?php echo $unit->name;?></option>
                             <?php endforeach;?>
                         </select>
                       </div>
@@ -267,14 +277,36 @@
               var mesaje = "";
               var uno = value * 1;
               switch (uno) {
-			<?php foreach($units as $unit):
-                if ($unit->type >1) {
-					echo "case ".$unit->id.": mesaje ='Cuantos ".$unit->name."'; break;";
-				}
-			?>
-            <?php endforeach;?>
+                case 6:
+                mesaje = "Cuantos Mililitros";
+                break
+                case 7:
+                mesaje = "Cuantos Litros";
+                break
+                case 8:
+                mesaje = "Cuantos Metros cúbicos";
+                break
+                case 10:
+                mesaje = "Cuantos Gramos";
+                break
+                case 11:
+                mesaje = "Cuantos Kilogramos";
+                break
+                case 12:
+                mesaje = "Cuantos Tonelada";
+                break
+                case 13:
+                mesaje = "Cuantos Metros";
+                break
+                case 14:
+                mesaje = "Cuantos Centimetros";
+                break
+                case 15:
+                mesaje = "Cuantos Milímetros";
+                break
                 default:
               }
+
             if (value<=5 || value==9){
               elem2.hide();
               adeshabx();

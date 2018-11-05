@@ -1,20 +1,39 @@
 <div class="nav-tabs-custom">
   <ul class="nav nav-tabs pull-right">
-    <li class=""><a href="#tab_1-1" data-toggle="tab" aria-expanded="false">Grupos</a></li>
-    <li class=""><a href="#tab_2-2" data-toggle="tab" aria-expanded="false">Fracciones</a></li>
-    <li class="active"><a href="#tab_3-2" data-toggle="tab" aria-expanded="true">Instrucciones</a></li>
-    <li class="pull-left header"><i class="fa fa-th"></i>Presentaciones</li>
+    <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">Instrucciones</a></li>
+    <li class="pull-left header active"><a href="#tab_1" data-toggle="tab" aria-expanded="true"><i class="fa fa-th"></i>Presentaciones</a></li>
   </ul>
   <div class="tab-content">
-    <div class="tab-pane" id="tab_1-1">
-
+    <div class="tab-pane active" id="tab_1">
+      <div class="botones">
+        <a href="#" class="btn btn-default" onclick="newuni()"><i class="fa  fa-plus"></i> Nueva Unidad de medida</a>
+        <a href="#" class="btn btn-default" onclick="newfra()"><i class="fa  fa-plus"></i> Nueva Fraccion</a>
+        <a href="#" class="btn btn-default" onclick="newgru()"><i class="fa  fa-plus"></i> Nuevo Grupo</a>
+      </div>
+      <div class="uniform" hidden>
+        <div class="box-body">
+          <div class="row">
+            <div class="col-xs-4">
+              <input id="namuni" type="text" class="form-control" placeholder="Nombre">
+              <span id="spannamuni"></span>
+            </div>
+            <div class="col-xs-5">
+              <input id="desuni" type="text" class="form-control" placeholder="Descripcion">
+            </div>
+            <div class="col-xs-3">
+              <input id="abruni"type="text" class="form-control" placeholder="Abreviatura">
+              <span id="spanabruni"></span>
+            </div>
+          </div>
+        </div>
+        <div class="box-body">
+          <button class="btn btn-danger" onclick="canuni()">Cancel</button>
+          <button class="btn btn-success pull-right" onclick="savuni()">Guardar</button>
+        </div>
+      </div>
     </div>
     <!-- /.tab-pane -->
-    <div class="tab-pane" id="tab_2-2">
-      and regular than that of the individual languages.
-    </div>
-    <!-- /.tab-pane -->
-    <div class="tab-pane active" id="tab_3-2">
+    <div class="tab-pane" id="tab_2">
       <div class="panel box box-primary">
         <div class="box-header with-border">
           <h4 class="box-title">
@@ -61,3 +80,54 @@
   </div>
   <!-- /.tab-content -->
 </div>
+<script>
+function newuni(){
+  console.log("new Unidad");
+  var elem = $('.botones');
+  elem.hide();
+  var elem2 = $('.uniform');
+  elem2.fadeIn();
+  $("#namuni").focus();
+  alertify.message('Ingrese datos de Nueva Unidad de medida');
+}
+
+function canuni() {
+  console.log(" Cancelado newuni");
+  var elem = $('.botones');
+  elem.fadeIn();
+  var elem2 = $('.uniform');
+  elem2.hide();
+  $(".uniform button").val("");
+  alertify.error('Cancelado por usuario ');
+}
+
+function savuni(){
+  console.log("save unidad")
+  if (validate("namuni",1,0)){
+    console.log("si valido name unidad");
+    $("#spanamuni").html("");
+
+    $.post("./?action=addcategory",
+    {
+      name:$("#namuni").val(),
+      description:$("#desuni").val(),
+      abbreviation:$("#abruni").val(),
+    },function(data){
+      if (data.estado == "true") {
+        alertify.success('Se agregó categoría correctamente');
+        recargarcategoria();
+        adeshabx();
+      }else {
+        alertify.error('No se pudo categoría producto');
+      }
+    });
+
+
+  }else {
+    $("#namuni").focus();
+    $("#spannamuni").html("Complete este campo.");
+    alertify.error('Complete campo obligatorio');
+    console.log("no valido name Unidad");
+  }
+}
+</script>

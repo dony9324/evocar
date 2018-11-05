@@ -233,9 +233,6 @@
                       </div>
                     </div>
                     <div class="form-group">
-                      <p class="col-sm-4"> <input type="checkbox">Pemitir Venta fraccionada</p>
-                    </div>
-                    <div class="form-group">
                       <label for="q" class="col-sm-2 control-label">Inventario inicial</label>
                       <div class="col-sm-4">
                         <input type="number" min="0" step="any" name="q" required class="form-control"  id="q" placeholder="Inventario inicial" value="0">
@@ -901,8 +898,8 @@
               },function(data){
                 if (data.estado == "true") {
                   alertify.success('Se agregó categoría correctamente');
-                  recargarcategoria();
-                  adeshabx();
+                //  recargarcategoria();
+                //  adeshabx();
                 }else {
                   alertify.error('No se pudo categoría producto');
                 }

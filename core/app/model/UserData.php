@@ -2,7 +2,7 @@
 class UserData {
 	public static $tablename = "user";
 
-	public function Userdata(){
+	public function  __construct(){
 		$this->name = "";
 		$this->lastname = "";
 		$this->username = "";
@@ -43,7 +43,7 @@ class UserData {
 	}
 
 	public static function getById($id){
-		 $sql = "select * from ".self::$tablename." where id=$id";
+		$sql = "select * from ".self::$tablename." where id=$id";
 		$query = Executor::doit($sql);
 		return Model::one($query[0],new UserData());
 	}
@@ -55,13 +55,13 @@ class UserData {
 	}
 
 	public static function getAll(){
-		 $sql = "select * from ".self::$tablename;
+		$sql = "select * from ".self::$tablename;
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new UserData());
 	}
 
 	public static function getAllBy($k,$v){
-		 $sql = "select * from ".self::$tablename." where $k=\"$v\"";
+		$sql = "select * from ".self::$tablename." where $k=\"$v\"";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new UserData());
 	}

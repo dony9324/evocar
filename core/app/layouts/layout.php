@@ -36,6 +36,11 @@ $skin = $us->value;
 </head>
 
 <body class="hold-transition skin <?php if(!isset($_SESSION["user_id"])):?> sidebar-collapse<?php else: echo "sidebar-mini"; endif; ?>">
+<div id="barra">
+
+</div>
+
+</div>
   <div class="wrapper">
     <!-- Main Header -->
     <header class="main-header">
@@ -406,7 +411,7 @@ function validate(id,tipo,m){
     }
     break
     default:
-    document.write("Ese día no existe")
+
   }
 }
 

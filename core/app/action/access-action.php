@@ -24,7 +24,7 @@ if(isset($_GET["o"])){
 
 				$_SESSION["ultimoAcceso"]=time();
 				//setcookie("ultimoAcceso","true");
-				setcookie("ultimoAcceso","true",(time()+4000));
+				setcookie("ultimoAcceso","true",(time()+40));
 				$_SESSION['user_id']=$userid ;
 				$resultado = array("estado" => "true");
 				return print(json_encode($resultado));
@@ -57,7 +57,7 @@ if(isset($_GET["o"])){
 				$ahora = time();
 				$tiempo_transcurrido = $ahora-$fechaGuardada;
 				//comparamos el tiempo transcurrido
-				if($tiempo_transcurrido >= 6000) {
+				if($tiempo_transcurrido >= 600) {
 					//si pasaron 1 minutos o más
 					unset($_SESSION);
 					session_destroy();; // destruyo la sesión
@@ -66,7 +66,7 @@ if(isset($_GET["o"])){
 					$resultado = array("estado" => "true");
 					return print(json_encode($resultado));
 				}else {
-					setcookie("ultimoAcceso","true",(time()+4000));
+					setcookie("ultimoAcceso","true",(time()+40));
 					//	$_SESSION["ultimoAcceso"] = time();
 					$resultado = array("estado" => "false");
 					return print(json_encode($resultado));

@@ -2,7 +2,7 @@
 class CompanyData {
 	public static $tablename = "company";
 
-	public function CCompanyData(){
+	public function  __construct(){
 		$this->id = "";
 		$this->name = "";
 		$this->value = "";

@@ -1,10 +1,12 @@
 ﻿<?php
 class UnitData {
 	public static $tablename = "unit";
-	public function UnitData(){
+	public function  __construct(){
+		$this->id = "";
+		$this->equivalent_id = "";
 		$this->name = "";
 		$this->description = "";
-		$this->equivalent_id = "";
+		$this->abbreviation = "";
 		$this->value_equivalent = "";
 		$this->fractions = "";
 		$this->type = "";
@@ -12,8 +14,8 @@ class UnitData {
 		$this->created_at = "NOW()";
 	}
 	public function add(){
-		$sql = "insert into unit (name,description,user_id,created_at) ";
-		$sql .= "value (\"$this->name\",\"$this->description\",\"$this->user_id\",$this->created_at)";
+		$sql = "insert into unit (name,description,abbreviation,user_id,created_at) ";
+		$sql .= "value (\"$this->name\",\"$this->description\",\"$this->abbreviation\",\"$this->user_id\",$this->created_at)";
 		Executor::doit($sql);
 	}
 	public static function delById($id){

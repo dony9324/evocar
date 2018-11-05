@@ -2,7 +2,7 @@
 class SellData {
 	public static $tablename = "sell";
 
-	public function SellData(){
+	public function  __construct(){
 		$this->id = "";
 		$this->person_id = "";
 		$this->total = "";
@@ -13,7 +13,7 @@ class SellData {
 		$this->box_id = "";
 		$this->didcount = "0";
 		$this->created_at = "NOW()";
-		
+
 	}
 
 	public function getPerson(){ return PersonData::getById($this->person_id);}
@@ -79,7 +79,7 @@ public static function getByperson_id($id){
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}
-	
+
 	public static function getSells(){
 		$sql = "select * from ".self::$tablename." where operation_type_id=2 order by created_at desc";
 		$query = Executor::doit($sql);
@@ -114,7 +114,7 @@ public static function getByperson_id($id){
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 
-	}	
+	}
 ////////////////////////para obtener la ventar entre dos fechas////////////////////////
 
 	public static function getAllByDateOpp($start,$end,$op){
@@ -136,7 +136,7 @@ public static function getByperson_id($id){
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}
-	
+
 	public static function getAllByDateBCOp($clientid,$start,$end,$op){
  $sql = "select * from ".self::$tablename." where date(created_at) BETWEEN '$start' AND '$end' and operation_type_id=$op and person_id= $clientid order by created_at desc";
 		$query = Executor::doit($sql);

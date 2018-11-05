@@ -3,7 +3,7 @@
 // Lb.php
 // @brief el objeto legobox
 class Lb {
-	public function Lb(){
+	public function  __construct(){
 	}
 	public function start(){
 		include "core/app/autoload.php";

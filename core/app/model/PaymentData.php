@@ -2,12 +2,12 @@
 class PaymentData {
 	public static $tablename = "payment";
 
-	public function PaymentData(){
+	public function  __construct(){
 		$this->person_id = "";
 		$this->user_id = "";
 		$this->sell_id = "";
-		
-		
+
+
 		$this->payment = "";
 		$this->created_at = "NOW()";
 	}
@@ -77,12 +77,12 @@ class PaymentData {
 
 	public static function getQYesF($product_id){
 		$q=0;
-		$operations = self::getAllByProductId($product_id); // LIENEA 99 buscamos todos los pagos 
+		$operations = self::getAllByProductId($product_id); // LIENEA 99 buscamos todos los pagos
 		$q = SellData::getById("$product_id")->total; // preguntamos el total de la venta
-	
+
 		foreach($operations as $operation){
 			$q = $q - $operation->payment; // restamos todos los pagos a el total de la venta
-				
+
 		}
 		// print_r($data);
 		return $q;

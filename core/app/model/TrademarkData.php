@@ -1,7 +1,7 @@
 <?php
 class TrademarkData {
 	public static $tablename = "Trademark";
-	public function TrademarkData(){
+	public function  __construct(){
 		$this->name = "";
 		$this->description = "";
 		$this->user_id = "";

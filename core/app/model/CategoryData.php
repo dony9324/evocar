@@ -1,12 +1,11 @@
 <?php
 class CategoryData {
 	public static $tablename = "category";
-	public function CategoryData(){
+	public function  __construct(){
+		$this->id = "";
 		$this->name = "";
 		$this->description = "";
 		$this->user_id = "";
-		$this->image = "";
-		$this->password = "";
 		$this->created_at = "NOW()";
 	}
 	public function add(){
@@ -14,7 +13,11 @@ class CategoryData {
 		$sql .= "value (\"$this->name\",\"$this->description\",\"$this->user_id\",$this->created_at)";
 		Executor::doit($sql);
 	}
-
+	public function add2(){
+		$sql = "insert into unit (name,description,abbreviation,user_id,created_at) ";
+		$sql .= "value (\"$this->name\",\"$this->description\",\"$this->abbreviation\",\"$this->user_id\",$this->created_at)";
+		Executor::doit($sql);
+	}
 	public static function delById($id){
 		$sql = "delete from ".self::$tablename." where id=$id";
 		Executor::doit($sql);

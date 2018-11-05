@@ -1,7 +1,7 @@
 <?php
 class IvaData {
 	public static $tablename = "iva";
-	public function IvaData(){
+	public function  __construct(){
 		$this->name = "";
 		$this->porcentage = "";
 		$this->user_id = "";

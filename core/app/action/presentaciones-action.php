@@ -101,9 +101,20 @@ function canuni() {
   alertify.error('Cancelado por usuario ');
 }
 
+function savcanuni() {
+  console.log(" guardado Cancelado  newuni");
+  var elem = $('.botones');
+  elem.fadeIn();
+  var elem2 = $('.uniform');
+  elem2.hide();
+  $(".uniform button").val("");
+}
+
 function savuni(){
   console.log("save unidad")
   if (validate("namuni",1,0)){
+    if (validate("abruni",1,0)){
+    abruni
     console.log("si valido name unidad");
     $("#spanamuni").html("");
 
@@ -116,13 +127,18 @@ function savuni(){
       if (data.estado == "true") {
         alertify.success('Se agregó categoría correctamente');
         recargarcategoria();
-        adeshabx();
+      savcanuni();
       }else {
         alertify.error('No se pudo categoría producto');
       }
     });
 
-
+  }else {
+    $("#abruni").focus();
+    $("#spanabruni").html("Complete este campo.");
+    alertify.error('Complete campo obligatorio');
+    console.log("no valido abruni Unidad");
+  }
   }else {
     $("#namuni").focus();
     $("#spannamuni").html("Complete este campo.");

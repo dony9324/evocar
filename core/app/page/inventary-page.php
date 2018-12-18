@@ -37,7 +37,7 @@
                 <?php $categories = CategoryData::getAll();
                 $ivas = IvaData::getAll();
                 $marcas = TrademarkData::getAll();
-				$units = unitData::getAll();
+                $units = unitData::getAll();
                 ?>
                 <!-- form start -->
                 <form name="pepe" class="form-horizontal" method="post" autocomplete="off" enctype="multipart/form-data"  id="addproduct" role="form" >
@@ -183,41 +183,41 @@
                       </div>
                     </div>
                     <div id="bg-white2" class="">
-                    <div id="contentselectmedida" class="form-group">
-                      <label class="col-sm-2 control-label">Unidad de medida</label>
-                      <div class="col-sm-4">
-                        <select id="selectmedida" name="selectmedida" class="form-control" onChange="medida(this.value)">
-                          <option value="">--Seleccione--</option>
-						  <?php foreach($units as $unit):?>
-                              <option class="<?php switch ($unit->type) {
-								  case 0: echo "text-muted"; break;
-								  case 1: echo "text-aqua"; break;
-								  case 2: echo "text-yellow"; break;
-								  case 3: echo "text-green"; break;
-								  case 4: echo "text-red"; break;
-								  case 5: echo "text-light-blue"; break;
-								  case 5: echo "text-light-blue"; break; default:
-								  }
-								  ?>" value="<?php echo $unit->id;?>"> <?php echo $unit->name;?></option>
-                            <?php endforeach;?>
-                        </select>
-                      </div>
-                      <div class="mostrar4" hidden="on">
-                        <label id="labelmedida" class=" col-sm-2">tata</label>
+                      <div id="contentselectmedida" class="form-group">
+                        <label class="col-sm-2 control-label">Unidad de medida</label>
                         <div class="col-sm-4">
-                          <input type="number" id="cantidad" name="cantidad" class="form-control" onchange="adeshab()"  placeholder="Cantidad" autocomplete="off">
-                          <span id="spanmedida"></span>
+                          <select id="selectmedida" name="selectmedida" class="form-control" onChange="medida(this.value)">
+                            <option value="">--Seleccione--</option>
+                            <?php foreach($units as $unit):?>
+                              <option class="<?php switch ($unit->type) {
+                                case 0: echo "text-muted"; break;
+                                case 1: echo "text-aqua"; break;
+                                case 2: echo "text-yellow"; break;
+                                case 3: echo "text-green"; break;
+                                case 4: echo "text-red"; break;
+                                case 5: echo "text-light-blue"; break;
+                                case 5: echo "text-light-blue"; break; default:
+                              }
+                              ?>" value="<?php echo $unit->id;?>"> <?php echo $unit->name;?></option>
+                            <?php endforeach;?>
+                          </select>
+                        </div>
+                        <div class="mostrar4" hidden="on">
+                          <label id="labelmedida" class=" col-sm-2">tata</label>
+                          <div class="col-sm-4">
+                            <input type="number" id="cantidad" name="cantidad" class="form-control" onchange="adeshab()"  placeholder="Cantidad" autocomplete="off">
+                            <span id="spanmedida"></span>
+                          </div>
                         </div>
                       </div>
-                    </div>
                     </div>
                     <div class="form-group">
                       <label for="presentation" class="col-sm-2 control-label">Otras presentaciones</label>
                       <div class="col-sm-4">
-                        <div class="switch-field" onchange="presentaciones()">
-                          <input type="radio" id="switch_left" name="switch_2" value="0" checked="">
+                        <div class="switch-field" >
+                          <input type="radio" id="switch_left" name="switch_2" value="0" checked="" >
                           <label for="switch_left">No</label>
-                          <input type="radio" id="switch_right" name="switch_2" value="1">
+                          <input type="radio" id="switch_right" name="switch_2" value="1" onchange="presentaciones()">
                           <label for="switch_right">Si</label>
                         </div>
                       </div>
@@ -260,800 +260,846 @@
           <script>
           function medida(value){
             console.log("medida "+value);
-              var elem2 = $('.mostrar4');
-              var mesaje = "";
-              var uno = value * 1;
-              switch (uno) {
-			<?php foreach($units as $unit):
+            var elem2 = $('.mostrar4');
+            var mesaje = "";
+            var uno = value * 1;
+            switch (uno) {
+              <?php foreach($units as $unit):
                 if ($unit->type >1) {
-					echo "case ".$unit->id.": mesaje ='Cuantos ".$unit->name."'; break;";
-				}
-			?>
-            <?php endforeach;?>
+                  echo "case ".$unit->id.": mesaje ='Cuantos ".$unit->name."'; break;";
+                }
+                ?>
+                <?php endforeach;?>
                 default:
               }
-            if (value<=5 || value==9){
-              elem2.hide();
-              adeshabx();
-            }else {
-              $("#labelmedida").html(mesaje);
-              alertify.success('Ingrese '+mesaje);
-              deshab();//DESAVILITA EL FORMULARIO
-              $("#contentselectmedida").addClass("has-success");
-              $('.fondo').addClass('bg-gray-light');
-              $('#bg-white2').addClass('bg-white');
-              elem2.fadeIn();
-              $("#cantidad").removeAttr("disabled");
-              $("#selectmedida").removeAttr("disabled");
-              $("#cantidad").focus();
+              if (value<=7){
+                elem2.hide();
+                adeshabx();
+              }else {
+                $("#labelmedida").html(mesaje);
+                alertify.success('Ingrese '+mesaje);
+                deshab();//DESAVILITA EL FORMULARIO
+                $("#contentselectmedida").addClass("has-success");
+                $('.fondo').addClass('bg-gray-light');
+                $('#bg-white2').addClass('bg-white');
+                elem2.fadeIn();
+                $("#cantidad").removeAttr("disabled");
+                $("#selectmedida").removeAttr("disabled");
+                $("#cantidad").focus();
+              }
             }
-          }
 
-          function presentaciones(){
-            console.log("categorias")
-            alertify.genericDialog || alertify.dialog('genericDialog',function(){
-              return {
-                main:function(content){
-                  this.setContent(content);
-                },
-                setup:function(){
+            function presentaciones(){
+                console.log("categorias")
+                alertify.genericDialog || alertify.dialog('genericDialog',function(){
                   return {
-                    focus:{
-                      element:function(){
-                        return this.elements.body.querySelector(this.get('selector'));
-                      },
-                      select:true
+                    main:function(content){
+                      this.setContent(content);
                     },
-                    options:{
-                      title: false,
-                      basic:true,
-                      maximizable:false,
-                      resizable:false,
-                      padding:false
+                    setup:function(){
+                      return {
+                        focus:{
+                          element:function(){
+                            return this.elements.body.querySelector(this.get('selector'));
+                          },
+                          select:true
+                        },
+                        options:{
+                          title: false,
+                          basic:true,
+                          maximizable:false,
+                          resizable:false,
+                          padding:false
+                        }
+                      };
+                    },
+                    settings:{
+                      selector:undefined
                     }
                   };
-                },
-                settings:{
-                  selector:undefined
-                }
-              };
-            });
-            //force focusing password box
-            alertify.genericDialog ($('#categorías')[0]).set('selector', 'input[type="password"]');
-            $.get("./?action=presentaciones",function(data){
-              $("#categorías").html(data);
-            });
-
-          }
-          /*para dale estilo al campo tipe file*/
-          $('input[type=file]').change(function(){
-            var filename = jQuery(this).val().split('\\').pop();
-            var idname = jQuery(this).attr('id');
-            console.log(jQuery(this));
-            console.log(filename);
-            console.log(idname);
-            $("#imagelabel").removeClass("btn-default");
-            $("#imagelabel").addClass("btn-success");
-            $("#imagelabel").html("<i class='fa fa-fw fa-file-image-o'></i>"+filename);
-          });
-          function categorias(){
-            console.log("categorias")
-            alertify.genericDialog || alertify.dialog('genericDialog',function(){
-              return {
-                main:function(content){
-                  this.setContent(content);
-                },
-                setup:function(){
-                  return {
-                    focus:{
-                      element:function(){
-                        return this.elements.body.querySelector(this.get('selector'));
-                      },
-                      select:true
-                    },
-                    options:{
-                      title: false,
-                      basic:true,
-                      maximizable:false,
-                      resizable:false,
-                      padding:false
-                    }
-                  };
-                },
-                settings:{
-                  selector:undefined
-                }
-              };
-            });
-            //force focusing password box
-            alertify.genericDialog ($('#categorías')[0]).set('selector', 'input[type="password"]');
-            $.get("./?action=categories",function(data){
-              $("#categorías").html(data);
-            });
-          }
-          function categoriasiva(){
-            console.log("categorias iva")
-            alertify.genericDialog || alertify.dialog('genericDialog',function(){
-              return {
-                main:function(content){
-                  this.setContent(content);
-                },
-                setup:function(){
-                  return {
-                    focus:{
-                      element:function(){
-                        return this.elements.body.querySelector(this.get('selector'));
-                      },
-                      select:true
-                    },
-                    options:{
-                      title: false,
-                      basic:true,
-                      maximizable:false,
-                      resizable:false,
-                      padding:false
-                    }
-                  };
-                },
-                settings:{
-                  selector:undefined
-                }
-              };
-            });
-            //force focusing password box
-            alertify.genericDialog ($('#categorías')[0]).set('selector', 'input[type="password"]');
-            $.get("./?action=categoriesiva",function(data){
-              $("#categorías").html(data);
-            });
-          }
-
-          function marcas(){
-            console.log("marcas")
-            alertify.genericDialog || alertify.dialog('genericDialog',function(){
-              return {
-                main:function(content){
-                  this.setContent(content);
-                },
-                setup:function(){
-                  return {
-                    focus:{
-                      element:function(){
-                        return this.elements.body.querySelector(this.get('selector'));
-                      },
-                      select:true
-                    },
-                    options:{
-                      title: false,
-                      basic:true,
-                      maximizable:false,
-                      resizable:false,
-                      padding:false
-                    }
-                  };
-                },
-                settings:{
-                  selector:undefined
-                }
-              };
-            });
-            //force focusing password box
-            alertify.genericDialog ($('#categorías')[0]).set('selector', 'input[type="password"]');
-            $.get("./?action=trademarks",function(data){
-              $("#categorías").html(data);
-            });
-          }
-
-          function editcategory(id) {
-            console.log("editcategoryt"+id)
-            alertify.genericDialog || alertify.dialog('genericDialog',function(){
-              return {
-                main:function(content){
-                  this.setContent(content);
-                },
-                setup:function(){
-                  return {
-                    focus:{
-                      element:function(){
-                        return this.elements.body.querySelector(this.get('selector'));
-                      },
-                      select:true
-                    },
-                    options:{
-                      title: false,
-                      basic:true,
-                      maximizable:false,
-                      resizable:false,
-                      padding:false
-                    }
-                  };
-                },
-                settings:{
-                  selector:undefined
-                }
-              };
-            });
-            //force focusing password box
-            alertify.genericDialog ($('#categorías')[0]).set('selector', 'input[type="text"]');
-            $.get("./?action=editcategory",{idc:id},function(data){
-              $("#categorías").html(data);
-              $("#namec").focus(function(){
-                this.select();
-              });
-              $( "#namec" ).focus();
-            });
-          }
-
-          function editcategoryiva(id) {
-            console.log("editcategoryt "+id+" iva")
-            alertify.genericDialog || alertify.dialog('genericDialog',function(){
-              return {
-                main:function(content){
-                  this.setContent(content);
-                },
-                setup:function(){
-                  return {
-                    focus:{
-                      element:function(){
-                        return this.elements.body.querySelector(this.get('selector'));
-                      },
-                      select:true
-                    },
-                    options:{
-                      title: false,
-                      basic:true,
-                      maximizable:false,
-                      resizable:false,
-                      padding:false
-                    }
-                  };
-                },
-                settings:{
-                  selector:undefined
-                }
-              };
-            });
-            //force focusing password box
-            alertify.genericDialog ($('#categorías')[0]).set('selector', 'input[type="text"]');
-            $.get("./?action=editcategoryiva",{idc:id},function(data){
-              $("#categorías").html(data);
-              $("#namec").focus(function(){
-                this.select();
-              });
-              $( "#namec" ).focus();
-            });
-          }
-
-          function editmarca(id) {
-            console.log("editcategoryt"+id)
-            alertify.genericDialog || alertify.dialog('genericDialog',function(){
-              return {
-                main:function(content){
-                  this.setContent(content);
-                },
-                setup:function(){
-                  return {
-                    focus:{
-                      element:function(){
-                        return this.elements.body.querySelector(this.get('selector'));
-                      },
-                      select:true
-                    },
-                    options:{
-                      title: false,
-                      basic:true,
-                      maximizable:false,
-                      resizable:false,
-                      padding:false
-                    }
-                  };
-                },
-                settings:{
-                  selector:undefined
-                }
-              };
-            });
-            //force focusing password box
-            alertify.genericDialog ($('#categorías')[0]).set('selector', 'input[type="text"]');
-            $.get("./?action=editmarca",{idc:id},function(data){
-              $("#categorías").html(data);
-              $("#namec").focus(function(){
-                this.select();
-              });
-              $( "#namec" ).focus();
-            });
-          }
-
-          function updatecategory(){
-            console.log("updatecategory");
-            if (validate("namec",1,0)){
-              console.log("si valido");
-              $.post("./?action=updatecategory",
-              {
-                id:$("#idca").val(),
-                name:$("#namec").val(),
-                descripcion:$("#descripcionc").val(),
-              },function(data){
-                if (data.estado == "true") {
-                  alertify.success('Se actualiso categoría #'+$("#idca").val()+' correctamente');
-                  recargarcategoria()
-                  categorias();
-                }else {
-                  alertify.error('No se pudo guardar');
-                }
-              });
-            }else {
-              $("#contentnamec").addClass("has-error")
-              $( "#namec" ).focus();
-              $("#contentnamec span").html("Complete este campo.");
-              alertify.error('Complete campo obligatorio');
-              console.log("no valido");
+                });
+                //force focusing password box
+                alertify.genericDialog ($('#categorías')[0]).set('selector', 'input[type="password"]');
+                $.get("./?action=presentaciones",function(data){
+                  $("#categorías").html(data);
+                });
             }
-          }
 
-          function updatecategoryiva(){
-            console.log("updatecategory iva");
-            if (validate("namec",1,0)){
-              $("#contentnamec").removeClass("has-error");
-              $("#contentnamec span").html("");
-              console.log("si valido name");
-              if (validate("descripcionc",1,0)){
-                $("#contentporcentajec").removeClass("has-error");
-                $("#spanporcentaje").html("");
-                console.log("si valido porcentage");
-                if (validate("descripcionc",2,50)){
-                  if (validate("descripcionc",3,0)){
-                    $.post("./?action=updatecategory",
-                    {
-                      id:$("#idca").val(),
-                      name:$("#namec").val(),
-                      descripcion:$("#descripcionc").val(),
-                    },function(data){
-                      if (data.estado == "true") {
-                        alertify.success('Se actualiso categoría #'+$("#idca").val()+' correctamente');
-                        recargarcategoria();
-                        categorias();
-                      }else {
-                        alertify.error('No se pudo guardar');
+            /*para dale estilo al campo tipe file*/
+            $('input[type=file]').change(function(){
+              var filename = jQuery(this).val().split('\\').pop();
+              var idname = jQuery(this).attr('id');
+              console.log(jQuery(this));
+              console.log(filename);
+              console.log(idname);
+              $("#imagelabel").removeClass("btn-default");
+              $("#imagelabel").addClass("btn-success");
+              $("#imagelabel").html("<i class='fa fa-fw fa-file-image-o'></i>"+filename);
+            });
+            function categorias(){
+              console.log("categorias")
+              alertify.genericDialog || alertify.dialog('genericDialog',function(){
+                return {
+                  main:function(content){
+                    this.setContent(content);
+                  },
+                  setup:function(){
+                    return {
+                      focus:{
+                        element:function(){
+                          return this.elements.body.querySelector(this.get('selector'));
+                        },
+                        select:true
+                      },
+                      options:{
+                        title: false,
+                        basic:true,
+                        maximizable:false,
+                        resizable:false,
+                        padding:false
                       }
-                    });
+                    };
+                  },
+                  settings:{
+                    selector:undefined
+                  }
+                };
+              });
+              //force focusing password box
+              alertify.genericDialog ($('#categorías')[0]).set('selector', 'input[type="password"]');
+              $.get("./?action=categories",function(data){
+                $("#categorías").html(data);
+              });
+            }
+            function categoriasiva(){
+              console.log("categorias iva")
+              alertify.genericDialog || alertify.dialog('genericDialog',function(){
+                return {
+                  main:function(content){
+                    this.setContent(content);
+                  },
+                  setup:function(){
+                    return {
+                      focus:{
+                        element:function(){
+                          return this.elements.body.querySelector(this.get('selector'));
+                        },
+                        select:true
+                      },
+                      options:{
+                        title: false,
+                        basic:true,
+                        maximizable:false,
+                        resizable:false,
+                        padding:false
+                      }
+                    };
+                  },
+                  settings:{
+                    selector:undefined
+                  }
+                };
+              });
+              //force focusing password box
+              alertify.genericDialog ($('#categorías')[0]).set('selector', 'input[type="password"]');
+              $.get("./?action=categoriesiva",function(data){
+                $("#categorías").html(data);
+              });
+            }
+
+            function marcas(){
+              console.log("marcas")
+              alertify.genericDialog || alertify.dialog('genericDialog',function(){
+                return {
+                  main:function(content){
+                    this.setContent(content);
+                  },
+                  setup:function(){
+                    return {
+                      focus:{
+                        element:function(){
+                          return this.elements.body.querySelector(this.get('selector'));
+                        },
+                        select:true
+                      },
+                      options:{
+                        title: false,
+                        basic:true,
+                        maximizable:false,
+                        resizable:false,
+                        padding:false
+                      }
+                    };
+                  },
+                  settings:{
+                    selector:undefined
+                  }
+                };
+              });
+              //force focusing password box
+              alertify.genericDialog ($('#categorías')[0]).set('selector', 'input[type="password"]');
+              $.get("./?action=trademarks",function(data){
+                $("#categorías").html(data);
+              });
+            }
+
+            function editcategory(id) {
+              console.log("editcategoryt"+id)
+              alertify.genericDialog || alertify.dialog('genericDialog',function(){
+                return {
+                  main:function(content){
+                    this.setContent(content);
+                  },
+                  setup:function(){
+                    return {
+                      focus:{
+                        element:function(){
+                          return this.elements.body.querySelector(this.get('selector'));
+                        },
+                        select:true
+                      },
+                      options:{
+                        title: false,
+                        basic:true,
+                        maximizable:false,
+                        resizable:false,
+                        padding:false
+                      }
+                    };
+                  },
+                  settings:{
+                    selector:undefined
+                  }
+                };
+              });
+              //force focusing password box
+              alertify.genericDialog ($('#categorías')[0]).set('selector', 'input[type="text"]');
+              $.get("./?action=editcategory",{idc:id},function(data){
+                $("#categorías").html(data);
+                $("#namec").focus(function(){
+                  this.select();
+                });
+                $( "#namec" ).focus();
+              });
+            }
+
+            function editcategoryiva(id) {
+              console.log("editcategoryt "+id+" iva")
+              alertify.genericDialog || alertify.dialog('genericDialog',function(){
+                return {
+                  main:function(content){
+                    this.setContent(content);
+                  },
+                  setup:function(){
+                    return {
+                      focus:{
+                        element:function(){
+                          return this.elements.body.querySelector(this.get('selector'));
+                        },
+                        select:true
+                      },
+                      options:{
+                        title: false,
+                        basic:true,
+                        maximizable:false,
+                        resizable:false,
+                        padding:false
+                      }
+                    };
+                  },
+                  settings:{
+                    selector:undefined
+                  }
+                };
+              });
+              //force focusing password box
+              alertify.genericDialog ($('#categorías')[0]).set('selector', 'input[type="text"]');
+              $.get("./?action=editcategoryiva",{idc:id},function(data){
+                $("#categorías").html(data);
+                $("#namec").focus(function(){
+                  this.select();
+                });
+                $( "#namec" ).focus();
+              });
+            }
+
+            function editmarca(id) {
+              console.log("editcategoryt"+id)
+              alertify.genericDialog || alertify.dialog('genericDialog',function(){
+                return {
+                  main:function(content){
+                    this.setContent(content);
+                  },
+                  setup:function(){
+                    return {
+                      focus:{
+                        element:function(){
+                          return this.elements.body.querySelector(this.get('selector'));
+                        },
+                        select:true
+                      },
+                      options:{
+                        title: false,
+                        basic:true,
+                        maximizable:false,
+                        resizable:false,
+                        padding:false
+                      }
+                    };
+                  },
+                  settings:{
+                    selector:undefined
+                  }
+                };
+              });
+              //force focusing password box
+              alertify.genericDialog ($('#categorías')[0]).set('selector', 'input[type="text"]');
+              $.get("./?action=editmarca",{idc:id},function(data){
+                $("#categorías").html(data);
+                $("#namec").focus(function(){
+                  this.select();
+                });
+                $( "#namec" ).focus();
+              });
+            }
+
+            function updatecategory(){
+              console.log("updatecategory");
+              if (validate("namec",1,0)){
+                console.log("si valido");
+                $.post("./?action=updatecategory",
+                {
+                  id:$("#idca").val(),
+                  name:$("#namec").val(),
+                  descripcion:$("#descripcionc").val(),
+                },function(data){
+                  if (data.estado == "true") {
+                    alertify.success('Se actualiso categoría #'+$("#idca").val()+' correctamente');
+                    recargarcategoria()
+                    categorias();
+                  }else {
+                    alertify.error('No se pudo guardar');
+                  }
+                });
+              }else {
+                $("#contentnamec").addClass("has-error")
+                $( "#namec" ).focus();
+                $("#contentnamec span").html("Complete este campo.");
+                alertify.error('Complete campo obligatorio');
+                console.log("no valido");
+              }
+            }
+
+            function updatecategoryiva(){
+              console.log("updatecategory iva");
+              if (validate("namec",1,0)){
+                $("#contentnamec").removeClass("has-error");
+                $("#contentnamec span").html("");
+                console.log("si valido name");
+                if (validate("descripcionc",1,0)){
+                  $("#contentporcentajec").removeClass("has-error");
+                  $("#spanporcentaje").html("");
+                  console.log("si valido porcentage");
+                  if (validate("descripcionc",2,50)){
+                    if (validate("descripcionc",3,0)){
+                      $.post("./?action=updatecategory",
+                      {
+                        id:$("#idca").val(),
+                        name:$("#namec").val(),
+                        descripcion:$("#descripcionc").val(),
+                      },function(data){
+                        if (data.estado == "true") {
+                          alertify.success('Se actualiso categoría #'+$("#idca").val()+' correctamente');
+                          recargarcategoria();
+                          categorias();
+                        }else {
+                          alertify.error('No se pudo guardar');
+                        }
+                      });
+                    }else {
+                      $("#contentporcentajec").addClass("has-error");
+                      $( "#descripcionc" ).focus();
+                      $("#spanporcentaje").html("No se puede poner impuesto negativo.");
+                      alertify.error('Ingresa un valor entre 0 y 50.');
+                      console.log("no valido porcentage muy bajo");
+                    }
                   }else {
                     $("#contentporcentajec").addClass("has-error");
                     $( "#descripcionc" ).focus();
-                    $("#spanporcentaje").html("No se puede poner impuesto negativo.");
+                    $("#spanporcentaje").html("Impuesto exageradamente alto.");
                     alertify.error('Ingresa un valor entre 0 y 50.');
-                    console.log("no valido porcentage muy bajo");
+                    console.log("no valido porcentage muy alto");
                   }
                 }else {
                   $("#contentporcentajec").addClass("has-error");
                   $( "#descripcionc" ).focus();
-                  $("#spanporcentaje").html("Impuesto exageradamente alto.");
-                  alertify.error('Ingresa un valor entre 0 y 50.');
-                  console.log("no valido porcentage muy alto");
+                  $("#spanporcentaje").html("Complete este campo.");
+                  alertify.error('Complete campo obligatorio');
+                  console.log("no valido porcentage");
                 }
               }else {
-                $("#contentporcentajec").addClass("has-error");
-                $( "#descripcionc" ).focus();
-                $("#spanporcentaje").html("Complete este campo.");
+                $("#contentnamec").addClass("has-error");
+                $( "#namec" ).focus();
+                $("#contentnamec span").html("Complete este campo.");
                 alertify.error('Complete campo obligatorio');
-                console.log("no valido porcentage");
+                console.log("no valido");
               }
-            }else {
-              $("#contentnamec").addClass("has-error");
-              $( "#namec" ).focus();
-              $("#contentnamec span").html("Complete este campo.");
-              alertify.error('Complete campo obligatorio');
-              console.log("no valido");
             }
-          }
 
-          function updatemarca(){
-            console.log("updatemarca");
-            if (validate("namec",1,0)){
-              console.log("si valido");
-              $.post("./?action=updatemarca",
-              {
-                id:$("#idca").val(),
-                name:$("#namec").val(),
-                descripcion:$("#descripcionc").val(),
-              },function(data){
-                if (data.estado == "true") {
-                  alertify.success('Se actualiso Marca #'+$("#idca").val()+' correctamente');
-                  recargarmarca()
-                  marcas();
-                }else {
-                  alertify.error('No se pudo guardar');
-                }
-              });
-            }else {
-              $("#contentnamec").addClass("has-error")
-              $( "#namec" ).focus();
-              $("#contentnamec span").html("Complete este campo.");
-              alertify.error('Complete campo obligatorio');
-              console.log("no valido");
+            function updatemarca(){
+              console.log("updatemarca");
+              if (validate("namec",1,0)){
+                console.log("si valido");
+                $.post("./?action=updatemarca",
+                {
+                  id:$("#idca").val(),
+                  name:$("#namec").val(),
+                  descripcion:$("#descripcionc").val(),
+                },function(data){
+                  if (data.estado == "true") {
+                    alertify.success('Se actualiso Marca #'+$("#idca").val()+' correctamente');
+                    recargarmarca()
+                    marcas();
+                  }else {
+                    alertify.error('No se pudo guardar');
+                  }
+                });
+              }else {
+                $("#contentnamec").addClass("has-error")
+                $( "#namec" ).focus();
+                $("#contentnamec span").html("Complete este campo.");
+                alertify.error('Complete campo obligatorio');
+                console.log("no valido");
+              }
             }
-          }
-          function delcategory(id){
-            console.log("del category "+id);
-            $("body").overhang({
-              type: "confirm",
-              custom: true, // Establecer personalizado en verdadero
-              primary: "#e74c3c", // Tu color primario personalizado
-              accent: "#c0392b", // Tu color de acento personalizado
-              yesMessage: "Si",
-              message: "¿Desea realmente eliminar categoría # "+id+" ?",
-              noColor: "#c61200",
-              closeConfirm: "true",
-              overlay: true,
-              overlayColor: "#1B1B1B",
-              callback: function (value) {
-                if (value){
-                  console.log("respondio si");
-                  $.post("./?action=delcategory",
-                  {
-                    idc: id,
-                  },function(data){
-                    if (data.estado == "true") {
-                      alertify.success('Se eliminó categoría # '+id+' correctamente');
-                      recargarcategoria()
-                      categorias();
-                    }else {
-                      alertify.error('No se pudo eliminar categoría');
-                    }
-                  });
-                }else {
-                  alertify.error('Eliminación Cancelado por usuario ');
-                  console.log("respondio no ");
-                }
-              }
-            });
-          }
-
-          function delcategoryiva(id){
-            console.log("del category "+id);
-            $("body").overhang({
-              type: "confirm",
-              custom: true, // Establecer personalizado en verdadero
-              primary: "#e74c3c", // Tu color primario personalizado
-              accent: "#c0392b", // Tu color de acento personalizado
-              yesMessage: "Si",
-              message: "¿Desea realmente eliminar categoría de I.V.A # "+id+" ?",
-              noColor: "#c61200",
-              closeConfirm: "true",
-              overlay: true,
-              overlayColor: "#1B1B1B",
-              callback: function (value) {
-                if (value){
-                  console.log("respondio si");
-                  $.post("./?action=delcategoryiva",
-                  {
-                    idc: id,
-                  },function(data){
-                    if (data.estado == "true") {
-                      alertify.success('Se eliminó categoría de I.V.A # '+id+' correctamente');
-                      recargarcategoriaiva()
-                      categoriasiva();
-                    }else {
-                      alertify.error('No se pudo eliminar categoría');
-                    }
-                  });
-                }else {
-                  alertify.error('Eliminación Cancelado por usuario ');
-                  console.log("respondio no ");
-                }
-              }
-            });
-          }
-
-          function delmarca(id){
-            console.log("del category "+id);
-            $("body").overhang({
-              type: "confirm",
-              custom: true, // Establecer personalizado en verdadero
-              primary: "#e74c3c", // Tu color primario personalizado
-              accent: "#c0392b", // Tu color de acento personalizado
-              yesMessage: "Si",
-              message: "¿Desea realmente eliminar categoría # "+id+" ?",
-              noColor: "#c61200",
-              closeConfirm: "true",
-              overlay: true,
-              overlayColor: "#1B1B1B",
-              callback: function (value) {
-                if (value){
-                  console.log("respondio si");
-                  $.post("./?action=delmarca",
-                  {
-                    idc: id,
-                  },function(data){
-                    if (data.estado == "true") {
-                      alertify.success('Se eliminó marca # '+id+' correctamente');
-                      recargarmarca();
-                      marcas();
-                    }else {
-                      alertify.error('No se pudo eliminar marca');
-                    }
-                  });
-                }else {
-                  alertify.error('Eliminación Cancelado por usuario ');
-                  console.log("respondio no ");
-                }
-              }
-            });
-          }
-
-          function deshab() {
-            frm = document.forms['pepe'];
-            for(i=0; ele=frm.elements[i]; i++)
-            ele.disabled=true;
-          }
-          function adeshab() {
-            console.log("adeshab Cancelado");
-            $('.fondo').removeClass('bg-gray-light');
-            $('.bg-white').removeClass('bg-white');
-            var elem2 = $('.mostrar');
-            elem2.hide();
-            var elem3 = $('.mostrar2');
-            elem3.hide();
-            var elem4 = $('.mostrar3');
-            elem4.hide();
-            var elem = $('.ocultar');
-            elem.fadeIn();
-            $(".has-success").removeClass("has-success");
-            $("#contentcategory_id").removeClass("has-error");
-            $("#contentcategory_id_iva").removeClass("has-error");
-            $("#contentnuevacategoria span").html("");
-            $("#spanameiva").html("");
-            $("#spanporcentajeiva").html("");
-            $("#nuevacategoria").val("");
-            $("#descriptionc").val("");
-            $("#porcentaje").val("");
-            $("#nuevoiva").val("");
-
-            alertify.error('Cancelado por usuario ');
-            frm = document.forms['pepe'];
-            for(i=0; ele=frm.elements[i]; i++)//no lleva ;
-            ele.disabled=false
-          }
-
-          function adeshabx() {
-            console.log("adeshabx guardado");
-            $('.fondo').removeClass('bg-gray-light');
-            $('.bg-white').removeClass('bg-white');
-            var elem3 = $('.mostrar2');
-            elem3.hide();
-            var elem4 = $('.mostrar3');
-            elem4.hide();
-            var elem = $('.mostrar');
-            elem.hide()
-            var elem2 = $('.ocultar');
-            elem2.fadeIn();
-            frm = document.forms['pepe'];
-            $("#nuevacategoria").val("");
-            $("#descriptionc").val("");
-            $("#porcentaje").val("");
-            $("#nuevoiva").val("");
-            $("#contentcategory_id").removeClass("has-success");
-            $("#contentcategory_id").removeClass("has-error");
-            $("#contentcategory_id_iva").removeClass("has-error");
-            $("#contentcategory_id_iva").removeClass("has-success");
-            $("#contentnuevacategoria span").html("");
-            $("#spanameiva").html("");
-            $("#spanporcentajeiva").html("");
-            for(i=0; ele=frm.elements[i]; i++)
-            ele.disabled=false;
-          }
-          function newcategory(){
-            console.log("newcategory");
-            deshab();//DESAVILITA EL FORMULARIO
-            $("#contentcategory_id").addClass("has-success");
-            $('.fondo').addClass('bg-gray-light');
-            $('#bg-white1').addClass('bg-white');
-            var elem = $('.ocultar');
-            elem.hide();
-            var elem2 = $('.mostrar');
-            elem2.fadeIn();
-            $("#nuevacategoria").removeAttr("disabled");
-            $("#descriptionc").removeAttr("disabled");
-            $("#nuevacategoria").focus();
-            alertify.message('Ingrese nombre da la nueva categoría');
-          }
-          function newiva(){
-            console.log("new iva");
-            deshab();//DESAVILITA EL FORMULARIO
-            $("#contentcategory_id_iva").addClass("has-success");
-            $('.fondo').addClass('bg-gray-light');
-            $('#bg-white1').addClass('bg-white');
-            var elem = $('.ocultar');
-            elem.hide();
-            var elem2 = $('.mostrar2');
-            elem2.fadeIn();
-            $("#nuevoiva").removeAttr("disabled");
-            $("#porcentaje ").removeAttr("disabled");
-            $("#nuevoiva").focus();
-            alertify.message('Ingrese datos de nuevo tipo de IVA');
-          }
-          function newmarca(){
-            console.log("new marca");
-            deshab();//DESAVILITA EL FORMULARIO
-            $("#contentmarca").addClass("has-success");
-            $('.fondo').addClass('bg-gray-light');
-            $('#bg-white1').addClass('bg-white');
-            var elem = $('.ocultar');
-            elem.hide();
-            var elem3 = $('.mostrar3');
-            elem3.fadeIn();
-            $("#nuevamarca").removeAttr("disabled");
-            $("#descriptionm ").removeAttr("disabled");
-            $("#nuevamarca").focus();
-            alertify.message('Ingrese datos de marca');
-          }
-
-          function savecategory(){
-            console.log("savecategory")
-            if (validate("nuevacategoria",1,0)){
-              console.log("si valido");
-              $.post("./?action=addcategory",
-              {
-                name:$("#nuevacategoria").val(),
-                description:$("#descriptionc").val(),
-              },function(data){
-                if (data.estado == "true") {
-                  alertify.success('Se agregó categoría correctamente');
-                //  recargarcategoria();
-                //  adeshabx();
-                }else {
-                  alertify.error('No se pudo categoría producto');
-                }
-              });
-            }else {
-              $("#contentcategory_id").removeClass("has-success")
-              $("#contentcategory_id").addClass("has-error")
-              $("#nuevacategoria" ).focus();
-              $("#contentnuevacategoria span").html("Complete este campo.");
-              alertify.error('Complete campo obligatorio');
-              console.log("no valido");
-            }
-          }
-          function saveiva(){
-            console.log("save iva")
-            if (validate("nuevoiva",1,0)){
-              console.log("si valido name iva");
-              $("#spanameiva").html("");
-              if (validate("porcentaje",1,0)){
-                if (validate("porcentaje",2,50)){
-                  if (validate("porcentaje",3,0)){
-                    console.log("si valido porcentaje");
-                    $("#spanporcentajeiva").html("");
-                    $.post("./?action=addiva",
+            function delcategory(id){
+              console.log("del category "+id);
+              $("body").overhang({
+                type: "confirm",
+                custom: true, // Establecer personalizado en verdadero
+                primary: "#e74c3c", // Tu color primario personalizado
+                accent: "#c0392b", // Tu color de acento personalizado
+                yesMessage: "Si",
+                message: "¿Desea realmente eliminar categoría # "+id+" ?",
+                noColor: "#c61200",
+                closeConfirm: "true",
+                overlay: true,
+                overlayColor: "#1B1B1B",
+                callback: function (value) {
+                  if (value){
+                    console.log("respondio si");
+                    $.post("./?action=delcategory",
                     {
-                      name:$("#nuevoiva").val(),
-                      description:$("#porcentaje").val(),
+                      idc: id,
                     },function(data){
                       if (data.estado == "true") {
-                        alertify.success('Se agregó categoría correctamente');
-                        recargarcategoriaiva();
-                        adeshabx();
+                        alertify.success('Se eliminó categoría # '+id+' correctamente');
+                        recargarcategoria()
+                        categorias();
                       }else {
-                        alertify.error('No se pudo categoría producto');
+                        alertify.error('No se pudo eliminar categoría');
                       }
                     });
+                  }else {
+                    alertify.error('Eliminación Cancelado por usuario ');
+                    console.log("respondio no ");
+                  }
+                }
+              });
+            }
+
+            function delcategoryiva(id){
+              console.log("del category "+id);
+              $("body").overhang({
+                type: "confirm",
+                custom: true, // Establecer personalizado en verdadero
+                primary: "#e74c3c", // Tu color primario personalizado
+                accent: "#c0392b", // Tu color de acento personalizado
+                yesMessage: "Si",
+                message: "¿Desea realmente eliminar categoría de I.V.A # "+id+" ?",
+                noColor: "#c61200",
+                closeConfirm: "true",
+                overlay: true,
+                overlayColor: "#1B1B1B",
+                callback: function (value) {
+                  if (value){
+                    console.log("respondio si");
+                    $.post("./?action=delcategoryiva",
+                    {
+                      idc: id,
+                    },function(data){
+                      if (data.estado == "true") {
+                        alertify.success('Se eliminó categoría de I.V.A # '+id+' correctamente');
+                        recargarcategoriaiva()
+                        categoriasiva();
+                      }else {
+                        alertify.error('No se pudo eliminar categoría');
+                      }
+                    });
+                  }else {
+                    alertify.error('Eliminación Cancelado por usuario ');
+                    console.log("respondio no ");
+                  }
+                }
+              });
+            }
+
+            function delmarca(id){
+              console.log("del category "+id);
+              $("body").overhang({
+                type: "confirm",
+                custom: true, // Establecer personalizado en verdadero
+                primary: "#e74c3c", // Tu color primario personalizado
+                accent: "#c0392b", // Tu color de acento personalizado
+                yesMessage: "Si",
+                message: "¿Desea realmente eliminar categoría # "+id+" ?",
+                noColor: "#c61200",
+                closeConfirm: "true",
+                overlay: true,
+                overlayColor: "#1B1B1B",
+                callback: function (value) {
+                  if (value){
+                    console.log("respondio si");
+                    $.post("./?action=delmarca",
+                    {
+                      idc: id,
+                    },function(data){
+                      if (data.estado == "true") {
+                        alertify.success('Se eliminó marca # '+id+' correctamente');
+                        recargarmarca();
+                        marcas();
+                      }else {
+                        alertify.error('No se pudo eliminar marca');
+                      }
+                    });
+                  }else {
+                    alertify.error('Eliminación Cancelado por usuario ');
+                    console.log("respondio no ");
+                  }
+                }
+              });
+            }
+
+            function deshab() {
+              frm = document.forms['pepe'];
+              for(i=0; ele=frm.elements[i]; i++)
+              ele.disabled=true;
+            }
+            function adeshab() {
+              console.log("adeshab Cancelado");
+              $('.fondo').removeClass('bg-gray-light');
+              $('.bg-white').removeClass('bg-white');
+              var elem2 = $('.mostrar');
+              elem2.hide();
+              var elem3 = $('.mostrar2');
+              elem3.hide();
+              var elem4 = $('.mostrar3');
+              elem4.hide();
+              var elem = $('.ocultar');
+              elem.fadeIn();
+              $(".has-success").removeClass("has-success");
+              $("#contentcategory_id").removeClass("has-error");
+              $("#contentcategory_id_iva").removeClass("has-error");
+              $("#contentnuevacategoria span").html("");
+              $("#spanameiva").html("");
+              $("#spanporcentajeiva").html("");
+              $("#nuevacategoria").val("");
+              $("#descriptionc").val("");
+              $("#porcentaje").val("");
+              $("#nuevoiva").val("");
+
+              alertify.error('Cancelado por usuario ');
+              frm = document.forms['pepe'];
+              for(i=0; ele=frm.elements[i]; i++)//no lleva ;
+              ele.disabled=false
+            }
+
+            function adeshabx() {
+              console.log("adeshabx guardado");
+              $('.fondo').removeClass('bg-gray-light');
+              $('.bg-white').removeClass('bg-white');
+              var elem3 = $('.mostrar2');
+              elem3.hide();
+              var elem4 = $('.mostrar3');
+              elem4.hide();
+              var elem = $('.mostrar');
+              elem.hide()
+              var elem2 = $('.ocultar');
+              elem2.fadeIn();
+              frm = document.forms['pepe'];
+              $("#nuevacategoria").val("");
+              $("#descriptionc").val("");
+              $("#porcentaje").val("");
+              $("#nuevoiva").val("");
+              $("#contentcategory_id").removeClass("has-success");
+              $("#contentcategory_id").removeClass("has-error");
+              $("#contentcategory_id_iva").removeClass("has-error");
+              $("#contentcategory_id_iva").removeClass("has-success");
+              $("#contentnuevacategoria span").html("");
+              $("#spanameiva").html("");
+              $("#spanporcentajeiva").html("");
+              for(i=0; ele=frm.elements[i]; i++)
+              ele.disabled=false;
+            }
+            function newcategory(){
+              console.log("newcategory");
+              deshab();//DESAVILITA EL FORMULARIO
+              $("#contentcategory_id").addClass("has-success");
+              $('.fondo').addClass('bg-gray-light');
+              $('#bg-white1').addClass('bg-white');
+              var elem = $('.ocultar');
+              elem.hide();
+              var elem2 = $('.mostrar');
+              elem2.fadeIn();
+              $("#nuevacategoria").removeAttr("disabled");
+              $("#descriptionc").removeAttr("disabled");
+              $("#nuevacategoria").focus();
+              alertify.message('Ingrese nombre da la nueva categoría');
+            }
+            function newiva(){
+              console.log("new iva");
+              deshab();//DESAVILITA EL FORMULARIO
+              $("#contentcategory_id_iva").addClass("has-success");
+              $('.fondo').addClass('bg-gray-light');
+              $('#bg-white1').addClass('bg-white');
+              var elem = $('.ocultar');
+              elem.hide();
+              var elem2 = $('.mostrar2');
+              elem2.fadeIn();
+              $("#nuevoiva").removeAttr("disabled");
+              $("#porcentaje ").removeAttr("disabled");
+              $("#nuevoiva").focus();
+              alertify.message('Ingrese datos de nuevo tipo de IVA');
+            }
+            function newmarca(){
+              console.log("new marca");
+              deshab();//DESAVILITA EL FORMULARIO
+              $("#contentmarca").addClass("has-success");
+              $('.fondo').addClass('bg-gray-light');
+              $('#bg-white1').addClass('bg-white');
+              var elem = $('.ocultar');
+              elem.hide();
+              var elem3 = $('.mostrar3');
+              elem3.fadeIn();
+              $("#nuevamarca").removeAttr("disabled");
+              $("#descriptionm ").removeAttr("disabled");
+              $("#nuevamarca").focus();
+              alertify.message('Ingrese datos de marca');
+            }
+
+            function savecategory(){
+              console.log("savecategory")
+              if (validate("nuevacategoria",1,0)){
+                console.log("si valido");
+                $.post("./?action=addcategory",
+                {
+                  name:$("#nuevacategoria").val(),
+                  description:$("#descriptionc").val(),
+                },function(data){
+                  if (data.estado == "true") {
+                    alertify.success('Se agregó categoría correctamente');
+                    //  recargarcategoria();
+                    //  adeshabx();
+                  }else {
+                    alertify.error('No se pudo categoría producto');
+                  }
+                });
+              }else {
+                $("#contentcategory_id").removeClass("has-success")
+                $("#contentcategory_id").addClass("has-error")
+                $("#nuevacategoria" ).focus();
+                $("#contentnuevacategoria span").html("Complete este campo.");
+                alertify.error('Complete campo obligatorio');
+                console.log("no valido");
+              }
+            }
+            function saveiva(){
+              console.log("save iva")
+              if (validate("nuevoiva",1,0)){
+                console.log("si valido name iva");
+                $("#spanameiva").html("");
+                if (validate("porcentaje",1,0)){
+                  if (validate("porcentaje",2,50)){
+                    if (validate("porcentaje",3,0)){
+                      console.log("si valido porcentaje");
+                      $("#spanporcentajeiva").html("");
+                      $.post("./?action=addiva",
+                      {
+                        name:$("#nuevoiva").val(),
+                        description:$("#porcentaje").val(),
+                      },function(data){
+                        if (data.estado == "true") {
+                          alertify.success('Se agregó categoría correctamente');
+                          recargarcategoriaiva();
+                          adeshabx();
+                        }else {
+                          alertify.error('No se pudo categoría producto');
+                        }
+                      });
+                    }else {
+                      $("#contentcategory_id_iva").removeClass("has-success")
+                      $("#contentcategory_id_iva").addClass("has-error")
+                      $("#porcentaje" ).focus();
+                      $("#spanporcentajeiva").html("No se puede poner impuesto negativo.");
+                      alertify.error('Ingrese valor más bajo.');
+                      console.log("Ingrese un valor entre 0 y 50");
+                    }
                   }else {
                     $("#contentcategory_id_iva").removeClass("has-success")
                     $("#contentcategory_id_iva").addClass("has-error")
                     $("#porcentaje" ).focus();
-                    $("#spanporcentajeiva").html("No se puede poner impuesto negativo.");
+                    $("#spanporcentajeiva").html("Impuesto exageradamente alto.");
                     alertify.error('Ingrese valor más bajo.');
-                    console.log("Ingrese un valor entre 0 y 50");
+                    console.log("Ingrese un porcentaje bajo de IVA");
                   }
                 }else {
                   $("#contentcategory_id_iva").removeClass("has-success")
                   $("#contentcategory_id_iva").addClass("has-error")
                   $("#porcentaje" ).focus();
-                  $("#spanporcentajeiva").html("Impuesto exageradamente alto.");
-                  alertify.error('Ingrese valor más bajo.');
-                  console.log("Ingrese un porcentaje bajo de IVA");
+                  $("#spanporcentajeiva").html("Complete este campo.");
+                  alertify.error('Complete campo obligatorio');
+                  console.log("Ingrese un porcentaje de IVA");
                 }
               }else {
                 $("#contentcategory_id_iva").removeClass("has-success")
                 $("#contentcategory_id_iva").addClass("has-error")
-                $("#porcentaje" ).focus();
-                $("#spanporcentajeiva").html("Complete este campo.");
+                $("#contentnuevacategoria2").addClass("has-error")
+
+                $("#nuevoiva" ).focus();
+                $("#spanameiva").html("Complete este campo.");
                 alertify.error('Complete campo obligatorio');
-                console.log("Ingrese un porcentaje de IVA");
+                console.log("no valido name iva");
               }
-            }else {
-              $("#contentcategory_id_iva").removeClass("has-success")
-              $("#contentcategory_id_iva").addClass("has-error")
-              $("#contentnuevacategoria2").addClass("has-error")
-
-              $("#nuevoiva" ).focus();
-              $("#spanameiva").html("Complete este campo.");
-              alertify.error('Complete campo obligatorio');
-              console.log("no valido name iva");
             }
-          }
 
-          function savemarca(){
-            console.log("save marca")
-            if (validate("nuevamarca",1,0)){
-              console.log("si valido name Marca");
-              $("#spanamemarca").html("");
-              $.post("./?action=addmarca",
+            function savemarca(){
+              console.log("save marca")
+              if (validate("nuevamarca",1,0)){
+                console.log("si valido name Marca");
+                $("#spanamemarca").html("");
+                $.post("./?action=addmarca",
+                {
+                  name:$("#nuevamarca").val(),
+                  description:$("#descriptionm").val(),
+                },function(data){
+                  if (data.estado == "true") {
+                    alertify.success('Se agregó Marca correctamente');
+                    recargarmarca();
+                    adeshabx();
+                  }else {
+                    alertify.error('No se pudo guardar maraca producto');
+                  }
+                });
+              }else {
+                $("#contentmarca").removeClass("has-success")
+                $("#contentmarca").addClass("has-error")
+                $("#contentnuevacategoria2").addClass("has-error")
+
+                $("#nuevamarca" ).focus();
+                $("#spanamemarca").html("Complete este campo.");
+                alertify.error('Complete campo obligatorio');
+                console.log("no valido name marca");
+              }
+            }
+
+
+            function recargarcategoria(){
+              console.log("recargarcategoria")
+              $('#category_id').children('option:not(:first)').remove();
+              $.get("./?action=searchallcategory",
               {
-                name:$("#nuevamarca").val(),
-                description:$("#descriptionm").val(),
+                name:$("#nuevacategoria").val(),
               },function(data){
-                if (data.estado == "true") {
-                  alertify.success('Se agregó Marca correctamente');
-                  recargarmarca();
-                  adeshabx();
-                }else {
-                  alertify.error('No se pudo guardar maraca producto');
-                }
+                data.forEach(function(dat, index){
+                  $('#category_id').append('<option value="'+dat.id+'">'+dat.name+'</option>');
+                  $("#category_id [value="+ dat.id +"]").attr("selected",true);
+                })
               });
-            }else {
-              $("#contentmarca").removeClass("has-success")
-              $("#contentmarca").addClass("has-error")
-              $("#contentnuevacategoria2").addClass("has-error")
-
-              $("#nuevamarca" ).focus();
-              $("#spanamemarca").html("Complete este campo.");
-              alertify.error('Complete campo obligatorio');
-              console.log("no valido name marca");
             }
-          }
+            function recargarcategoriaiva(){
+              console.log("recargarcategoria iva")
+              $('#category_id_iva').children('option:not(:first)').remove();
+              $.get("./?action=searchallcategoryiva",
+              {
+                name:$("#nuevoiva").val(),
+              },function(data){
+                data.forEach(function(dat, index){
+                  $('#category_id_iva').append('<option value="'+dat.id+'">'+dat.name+'  '+dat.porcentage+'%</option>');
+                  $("#category_id_iva [value="+ dat.id +"]").attr("selected",true);
+                })
+              });
+            }
+            function recargarmarca(){
+              console.log("recargarmarca")
+              $('#trademark').children('option:not(:first)').remove();
+              $.get("./?action=searchallmarca",
+              {
+                name:$("#nuevacategoria").val(),
+              },function(data){
+                data.forEach(function(dat, index){
+                  $('#trademark').append('<option value="'+dat.id+'">'+dat.name+'</option>');
+                  $("#trademark [value="+ dat.id +"]").attr("selected",true);
+                })
+              });
+            }
+            </script>
 
+            <!-- /.box-header -->
+            <div class="box-body">
+              <?php
 
-          function recargarcategoria(){
-            console.log("recargarcategoria")
-            $('#category_id').children('option:not(:first)').remove();
-            $.get("./?action=searchallcategory",
-            {
-              name:$("#nuevacategoria").val(),
-            },function(data){
-              data.forEach(function(dat, index){
-                $('#category_id').append('<option value="'+dat.id+'">'+dat.name+'</option>');
-                $("#category_id [value="+ dat.id +"]").attr("selected",true);
-              })
-            });
-          }
-          function recargarcategoriaiva(){
-            console.log("recargarcategoria iva")
-            $('#category_id_iva').children('option:not(:first)').remove();
-            $.get("./?action=searchallcategoryiva",
-            {
-              name:$("#nuevoiva").val(),
-            },function(data){
-              data.forEach(function(dat, index){
-                $('#category_id_iva').append('<option value="'+dat.id+'">'+dat.name+'  '+dat.porcentage+'%</option>');
-                $("#category_id_iva [value="+ dat.id +"]").attr("selected",true);
-              })
-            });
-          }
-          function recargarmarca(){
-            console.log("recargarmarca")
-            $('#trademark').children('option:not(:first)').remove();
-            $.get("./?action=searchallmarca",
-            {
-              name:$("#nuevacategoria").val(),
-            },function(data){
-              data.forEach(function(dat, index){
-                $('#trademark').append('<option value="'+dat.id+'">'+dat.name+'</option>');
-                $("#trademark [value="+ dat.id +"]").attr("selected",true);
-              })
-            });
-          }
-          </script>
+              $products = ProductData::getAll();
+              if(count($products)>0){
+                // si hay usuarios
+                ?>
+                <table style="width:100%;" id="example1" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>Id</th>
+                      <th>Codigo</th>
+                      <th>Imagen</th>
+                      <th>Nombre</th>
+                      <th>Costo</th>
+                      <th>Precio</th>
+                      <th>I.V.A.</th>
+                      <th>Minima</th>
+                      <th>Activo</th>
+                      <th>Disponible</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php
+                    foreach($products as $product){
+                      $q= OperationData::getQYesF($product->id);
+                      ?>
+                      <tr>
+                        <td><?php echo $product->id; ?></td>
+                        <td><?php echo $product->barcode; ?></td>
+                        <td><?php if($product->image!=""):?><img src="res/img/<?php echo $product->image;?>" style="width:64px;"><?php endif;?></td>
+                        <td><?php echo $product->name; ?></td>
+                        <td>$ <?php echo number_format($product->price_in,2,'.',','); ?></td>
+                        <td>$ <?php echo number_format($product->price_out,2,'.',','); ?></td>
+                        <td><?php if($product->category_id!=null && $product->category_id != 0 ){if(isset($product->getCategory()->name)){
+                          echo $product->getCategory()->name;
+                        } else { echo "eliminada";}
+                      }else{ echo "General"; }  ?></td>
+                      <td><?php echo $product->inventary_min; ?></td>
+                      <td><?php if($product->is_active): ?><i class="fa fa-check"></i><?php endif;?></td>
+                      <td><?php echo $q; ?></td>
+                      <td style="width:50px;">
+                        <a href="index.php?view=history&product_id=<?php echo $product->id; ?>" class="btn btn-xs btn-success"><i class="glyphicon glyphicon-time"></i> Historial</a>
 
-          <!-- /.box-header -->
-          <div class="box-body">
-            <?php
-
-            $products = ProductData::getAll();
-            if(count($products)>0){
-              // si hay usuarios
-              ?>
-              <table style="width:100%;" id="example1" class="table table-bordered table-striped">
-                <thead>
+                        <a href="index.php?view=editproduct&id=<?php echo $product->id; ?>" class="btn btn-xs btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
+                        <?php  $u = UserData::getById($_SESSION["user_id"]); if($u->id == 1 or $u->id ==3 ):?>
+                          <a href="index.php?action=delproduct&id=<?php echo $product->id; ?>" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+                        <?php endif;?>
+                      </td>
+                    </tr>
+                    <?php
+                  }?>
+                </tbody>
+                <tfoot>
                   <tr>
                     <th>Id</th>
                     <th>Codigo</th>
@@ -1067,70 +1113,24 @@
                     <th>Disponible</th>
                     <th></th>
                   </tr>
-                </thead>
-                <tbody>
-                  <?php
-                  foreach($products as $product){
-                    $q= OperationData::getQYesF($product->id);
-                    ?>
-                    <tr>
-                      <td><?php echo $product->id; ?></td>
-                      <td><?php echo $product->barcode; ?></td>
-                      <td><?php if($product->image!=""):?><img src="res/img/<?php echo $product->image;?>" style="width:64px;"><?php endif;?></td>
-                      <td><?php echo $product->name; ?></td>
-                      <td>$ <?php echo number_format($product->price_in,2,'.',','); ?></td>
-                      <td>$ <?php echo number_format($product->price_out,2,'.',','); ?></td>
-                      <td><?php if($product->category_id!=null && $product->category_id != 0 ){if(isset($product->getCategory()->name)){
-                        echo $product->getCategory()->name;
-                      } else { echo "eliminada";}
-                    }else{ echo "General"; }  ?></td>
-                    <td><?php echo $product->inventary_min; ?></td>
-                    <td><?php if($product->is_active): ?><i class="fa fa-check"></i><?php endif;?></td>
-                    <td><?php echo $q; ?></td>
-                    <td style="width:50px;">
-                      <a href="index.php?view=history&product_id=<?php echo $product->id; ?>" class="btn btn-xs btn-success"><i class="glyphicon glyphicon-time"></i> Historial</a>
-
-                      <a href="index.php?view=editproduct&id=<?php echo $product->id; ?>" class="btn btn-xs btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
-                      <?php  $u = UserData::getById($_SESSION["user_id"]); if($u->id == 1 or $u->id ==3 ):?>
-                        <a href="index.php?action=delproduct&id=<?php echo $product->id; ?>" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
-                      <?php endif;?>
-                    </td>
-                  </tr>
-                  <?php
-                }?>
-              </tbody>
-              <tfoot>
-                <tr>
-                  <th>Id</th>
-                  <th>Codigo</th>
-                  <th>Imagen</th>
-                  <th>Nombre</th>
-                  <th>Costo</th>
-                  <th>Precio</th>
-                  <th>I.V.A.</th>
-                  <th>Minima</th>
-                  <th>Activo</th>
-                  <th>Disponible</th>
-                  <th></th>
-                </tr>
-              </tfoot>
-            </table>
-          <?php  }else{
-            echo "<p class='alert alert-danger'>No hay productos</p>";
-          }
-          ?>
+                </tfoot>
+              </table>
+            <?php  }else{
+              echo "<p class='alert alert-danger'>No hay productos</p>";
+            }
+            ?>
+          </div>
+          <!-- /.box-body -->
         </div>
-        <!-- /.box-body -->
+        <!-- /.box -->
       </div>
-      <!-- /.box -->
+      <!-- /.col -->
     </div>
-    <!-- /.col -->
-  </div>
-  <!-- /.row -->
-</section>
-<script>
-$("#nav li").removeClass("active");
-$("#inventary").last().addClass("active");
+    <!-- /.row -->
+  </section>
+  <script>
+  $("#nav li").removeClass("active");
+  $("#inventary").last().addClass("active");
 </script>
 <!-- el siguente script traduce las tablas. Opcionalmente, puede agregar complementos Slimscroll y FastClick.
 Se recomiendan estos dos complementos para mejorar la experiencia de usuario -->

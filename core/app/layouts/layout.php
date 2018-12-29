@@ -28,7 +28,7 @@ $skin = $us->value;
   <link rel="stylesheet" href="res/select2.min.css">
   <link rel="stylesheet" href="res/overhang.min.css">
   <link rel="stylesheet" href="res/<?php echo $skin ; ?>/dataTables.bootstrap.min.css">
-  <link rel="shortcut icon" href="res/img/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="res/img/favicon.png" type="image/x-icon">
   <!-- añadir alertas con alertifyjs -->
   <link href="res/alertifyjs/css/alertify.css" rel="stylesheet">
   <link href="res/alertifyjs/css/themes/bootstrap.css"rel="stylesheet">
@@ -220,13 +220,13 @@ $skin = $us->value;
       <ul id="nav" class="sidebar-menu" data-widget="tree">
         <!-- Optionally, you can add icons to the links -->
         <li id="home" class="active1"><a href="index.php?view=home"><i class="fa fa-home"></i><span>Inicio</span></a></li>
-        <li id="sell"><a href="index.php?view=sell"><i class="fa fa-usd"></i><span>Vender</span></a></li>
-        <li id="box"><a href="index.php?view=box"><i class="fa fa-cube"></i><span>Caja</span></a></li>
-        <li id="credits"><a href="index.php?view=credits"><i class="fa fa-book"></i><span>Creditos</span></a></li>
-        <li id="clients"><a href="index.php?view=clients"><i class="fa fa-smile-o"></i><span>Clientes</span></a></li>
+        <li id="sell"><a href="#" onclick="changerview('./?page=sell')"><i class="fa fa-usd"></i><span>Vender</span></a></li>
+        <li id="box"><a href="#"  onclick="changerview('./?page=box')"><i class="fa fa-cube"></i><span>Caja</span></a></li>
+        <li id="credits"><a href="#"  onclick="changerview('./?page=credits')"><i class="fa fa-book"></i><span>Creditos</span></a></li>
+        <li id="clients"><a href="#"  onclick="changerview('./?page=clients')"><i class="fa fa-smile-o"></i><span>Clientes</span></a></li>
         <?php if(isset($_SESSION["user_id"])):  if($u->is_admin):?>
-          <li id="providers"><a href="index.php?view=providers"><i class="fa fa-truck"></i><span>Proveedores</span></a></li>
-          <li id="inventary"><a href="index.php?view=inventary"><i class="fa fa-tags"></i><span>Inventario</span></a></li>
+          <li id="providers"><a href="#" onclick="changerview('./?page=providers')"><i class="fa fa-truck"></i><span>Proveedores</span></a></li>
+          <li id="inventary"><a href="#" onclick="changerview('./?page=inventary')"><i class="fa fa-tags"></i><span>Inventario</span></a></li>
           <li id="res"><a href="index.php?view=res  view=sells"><i class="fa fa-th-list"></i> Compras y Ventas</a></li>
           <li id=""><a href="#"><i class="fa fa-exchange"></i> Devoluciones</a></li>
 
@@ -377,17 +377,36 @@ $skin = $us->value;
 <!--este script hace ajax en el menu de la izquierda -->
 <script>
 function changerview(ruta){
-  console.log("changerview"+ruta)
-  elem.hide()
+  var elem = $('#page_view');
+  console.log("changerview"+ruta);
+  elem.hide();
   $.get(ruta,function(data){
     $("#page_view").html(data);
     elem.fadeIn()
   });
 }
 function validate(id,tipo,m){
-  console.log("validate "+id+"que"+tipo);
   total= $('#' + id).val();
   $('#' + id).val(total);
+  switch (tipo) {
+    case 1:
+    tip = "no este vacio";
+    break
+    case 2:
+    tip = "no sea mayor";
+    break
+    case 3:
+    tip = "no sea menor";
+    break
+    case 4:
+    tip = "no sea igual";
+    break
+    case 5:
+    tip = "sea DECIMAL";
+    break
+    default:
+  }
+  console.log("validate "+id+" que "+tip);
   switch (tipo) {
     case 1:
     if (total == "") {
@@ -410,127 +429,26 @@ function validate(id,tipo,m){
       return true;
     }
     break
+    case 4:
+    if (total == m ) {
+      return false;
+    }else {
+      return true;
+    }
+    break
+    case 5:
+    if (total - Math.floor(total) == 0 ) {
+      return true;
+    }else {
+      return false;
+    }
+    break
     default:
-
   }
 }
-
-$(document).ready(function(){
-  var elem = $('#page_view');
-  $("#home").on("click",function(e){
-    e.preventDefault();
-    elem.hide()
-    $.get("./?page=home",function(data){
-      $("#page_view").html(data);
-      elem.fadeIn()
-    });
-  });
-
-  $("#sell").on("click",function(e){
-    e.preventDefault();
-    elem.hide();//ocultar elemento
-    $.get("./?page=sell",function(data){
-      $("#page_view").html(data);
-      elem.fadeIn()
-      document.getElementById("product_code").focus();
-    });
-  });
-
-  $("#box").on("click",function(e){
-    e.preventDefault();
-    elem.hide()
-    $.get("./?page=box",function(data){
-      $("#page_view").html(data);
-      elem.fadeIn()
-    });
-  });
-
-  $("#credits").on("click",function(e){
-    e.preventDefault();
-    elem.hide()
-    $.get("./?page=credits",function(data){
-      $("#page_view").html(data);
-      elem.fadeIn()
-    });
-  });
-
-  $("#clients").on("click",function(e){
-    e.preventDefault();
-    elem.hide()
-    $.get("./?page=clients",function(data){
-      $("#page_view").html(data);
-      elem.fadeIn()
-    });
-  });
-
-  $("#providers").on("click",function(e){
-    e.preventDefault();
-    elem.hide()
-    $.get("./?page=providers",function(data){
-      $("#page_view").html(data);
-      elem.fadeIn()
-    });
-  });
-
-  $("#inventary").on("click",function(e){
-    e.preventDefault();
-    elem.hide()
-    $.get("./?page=inventary",function(data){
-      $("#page_view").html(data);
-      elem.fadeIn()
-    });
-  });
-
-  $("#sells").on("click",function(e){
-    e.preventDefault();
-    elem.hide()
-    $.get("./?page=sells",function(data){
-      $("#page_view").html(data);
-      elem.fadeIn()
-    });
-  });
-
-  $("#reports").on("click",function(e){
-    e.preventDefault();
-    elem.hide()
-    $.get("./?page=reports",function(data){
-      $("#page_view").html(data);
-      elem.fadeIn()
-    });
-  });
-
-  $("#res").on("click",function(e){
-    e.preventDefault();
-    elem.hide()
-    $.get("./?page=res",function(data){
-      $("#page_view").html(data);
-      elem.fadeIn()
-    });
-  });
-
-  $("#users").on("click",function(e){
-    e.preventDefault();
-    elem.hide()
-    $.get("./?page=users&o=all",function(data){
-      $("#page_view").html(data);
-      elem.fadeIn()
-    });
-  });
-
-  $("#settings").on("click",function(e){
-    e.preventDefault();
-    elem.hide()
-    $.get("./?page=settings",function(data){
-      $("#page_view").html(data);
-      elem.fadeIn()
-    });
-  });
-
-});
 </script>
 <?php
 if(isset($_SESSION["user_id"])){ ?>
-
   <script>
   /////////revisa la secion al cargar la pagina/////////
   $.get("./?action=access&o=logouttime",function(response) {
@@ -544,7 +462,6 @@ if(isset($_SESSION["user_id"])){ ?>
       });
     } else {
       alertify.success('Bienvenido a Evocar');
-
     }
   })
   ////////////////////////////revisa la secion cada 30 segundos/////////////////////////////

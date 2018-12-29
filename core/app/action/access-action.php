@@ -3,7 +3,6 @@
 // este archivo sirve para procesar las opciones de login y logout
 if(isset($_GET["o"])){
 	if($_GET["o"]=="login"){
-
 		if(!isset($_SESSION["user_id"])) {
 			$user = $_POST['username'];
 			$pass = sha1(md5($_POST['password']));
@@ -17,18 +16,18 @@ if(isset($_GET["o"])){
 			while($r = $query->fetch_array()){
 				$found = true ;
 				$userid = $r['id'];
+				$usertime = $r['time'];
 			}
 			header('Content-type: application/json');
 			$resultado = array();
 			if($found==true) {
-
 				$_SESSION["ultimoAcceso"]=time();
 				//setcookie("ultimoAcceso","true");
 				setcookie("ultimoAcceso","true",(time()+40));
 				$_SESSION['user_id']=$userid ;
+				$_SESSION['user_time']=$usertime ;
 				$resultado = array("estado" => "true");
 				return print(json_encode($resultado));
-
 			}else {
 				//setcookie("password_error","true");
 				$resultado = array("estado" => "false");
@@ -38,13 +37,11 @@ if(isset($_GET["o"])){
 			Core::redir("./?view=home");
 		}
 	}
-
 	if(isset($_GET["o"]) && $_GET["o"]=="logout"){
 		unset($_SESSION);
 		session_destroy();
 		Core::redir("./?view=login");
 	}
-
 	if(isset($_GET["o"]) && $_GET["o"]=="logouttime"){
 		header('Content-type: application/json');
 		if(isset($_COOKIE['ultimoAcceso'])){
@@ -57,8 +54,8 @@ if(isset($_GET["o"])){
 				$ahora = time();
 				$tiempo_transcurrido = $ahora-$fechaGuardada;
 				//comparamos el tiempo transcurrido
-				if($tiempo_transcurrido >= 600) {
-					//si pasaron 1 minutos o más
+				if($tiempo_transcurrido >= $_SESSION['user_time']) {
+					//si pasaron 10 minutos o más
 					unset($_SESSION);
 					session_destroy();; // destruyo la sesión
 					//Core::redir("./?view=login"); //envío al usuario a la pag. de autenticación

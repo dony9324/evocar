@@ -9,8 +9,16 @@
         <a href="#" class="btn btn-default" onclick="newuni()"><i class="fa  fa-plus"></i> Nueva Unidad de medida</a>
         <a href="#" class="btn btn-default" onclick="newfra()"><i class="fa  fa-plus"></i> Nueva Fraccion</a>
         <a href="#" class="btn btn-default" onclick="newgru()"><i class="fa  fa-plus"></i> Nuevo Grupo</a>
+        <div id="presentaciones"> </div>
       </div>
-      <div class="uniform" hidden>
+      <div class="uniform box box-default" hidden>
+        <div class="box-header with-border">
+          <h3 class="box-title">Unidad de medida</h3>
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" onclick="canuni()"><i class="fa fa-times"></i>
+            </button>
+          </div>
+        </div>
         <div class="box-body">
           <div class="row">
             <div class="col-xs-4">
@@ -29,6 +37,87 @@
         <div class="box-body">
           <button class="btn btn-danger" onclick="canuni()">Cancel</button>
           <button class="btn btn-success pull-right" onclick="savuni()">Guardar</button>
+        </div>
+      </div>
+      <div class="fraform box box-default" hidden>
+        <div class="box-header with-border">
+          <h3 class="box-title">Nueva Fraccion</h3>
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" onclick="canuni()"><i class="fa fa-times"></i>
+            </button>
+          </div>
+        </div>
+        <div class="box-body">
+          <div class="row">
+            <div class="col-sm-4">
+              <input type="number" id="fracioncantidad" name="cantidad" class="form-control" placeholder="Partes" autocomplete="off">
+              <span id="spanfracioncantidad"></span>
+            </div>
+            <label class="col-sm-2 control-label">Unidad</label>
+            <div class="col-sm-4">
+              <select id="unit_idfra" name="selectmedida" class="form-control">
+                <option value="">--Seleccione--</option>
+                <?php $units = unitData::getAll(); foreach($units as $unit):?>
+                  <option class="<?php switch ($unit->type) {
+                    case 0: echo "text-muted"; break;
+                    case 1: echo "text-aqua"; break;
+                    case 2: echo "text-yellow"; break;
+                    case 3: echo "text-green"; break;
+                    case 4: echo "text-red"; break;
+                    case 5: echo "text-light-blue"; break;
+                    case 5: echo "text-light-blue"; break; default:
+                  }
+                  ?>" value="<?php echo $unit->id;?>"> <?php echo $unit->name;?></option>
+                <?php endforeach;?>
+              </select>
+              <span id="spanunit_idfra"></span>
+            </div>
+          </div>
+        </div>
+        <div class="box-body">
+          <button class="btn btn-danger" onclick="canuni()">Cancel</button>
+          <button class="btn btn-success pull-right" onclick="savfra()">retener</button>
+        </div>
+      </div>
+
+      <div class="gruform box box-default" hidden>
+        <div class="box-header with-border">
+          <h3 class="box-title">Nuevo Grupo</h3>
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" onclick="canuni()"><i class="fa fa-times"></i>
+            </button>
+          </div>
+        </div>
+        <div class="box-body">
+          <div class="row">
+            <div class="col-sm-4">
+              <input type="number" id="grupocantidad" name="grupocantidad" class="form-control" placeholder="Partes" autocomplete="off">
+              <span id="spangrupocantidad"></span>
+            </div>
+            <label class="col-sm-2 control-label">Unidad</label>
+            <div class="col-sm-4">
+              <select id="unit_idgru" name="selectmedidagru" class="form-control">
+                <option value="">--Seleccione--</option>
+                <?php $units = unitData::getAll(); foreach($units as $unit):?>
+                  <option class="<?php switch ($unit->type) {
+                    case 0: echo "text-muted"; break;
+                    case 1: echo "text-aqua"; break;
+                    case 2: echo "text-yellow"; break;
+                    case 3: echo "text-green"; break;
+                    case 4: echo "text-red"; break;
+                    case 5: echo "text-light-blue"; break;
+                    case 5: echo "text-light-blue"; break; default:
+                  }
+                  ?>" value="<?php echo $unit->id;?>"> <?php echo $unit->name;?></option>
+                <?php endforeach;?>
+              </select>
+              <span id="spanunit_idgru"></span>
+            </div>
+          </div>
+        </div>
+        <div class="box-body">
+          <button class="btn btn-danger" onclick="canuni()">Cancel</button>
+          <button class="btn btn-success pull-right" onclick="savgru()">Guardar</button>
         </div>
       </div>
     </div>
@@ -74,13 +163,21 @@
           </div>
         </div>
       </div>
-
     </div>
     <!-- /.tab-pane -->
   </div>
   <!-- /.tab-content -->
 </div>
 <script>
+
+
+$(document).ready(function()
+{
+  $("#presentaciones").load("./?action=viewpresentation");
+});
+
+
+//fomulario para los datos de nueva unidad
 function newuni(){
   console.log("new Unidad");
   var elem = $('.botones');
@@ -90,60 +187,192 @@ function newuni(){
   $("#namuni").focus();
   alertify.message('Ingrese datos de Nueva Unidad de medida');
 }
-
+// cansela cancelar y ocultar formulario
 function canuni() {
-  console.log(" Cancelado newuni");
+  console.log(" ocultar formularios");
   var elem = $('.botones');
   elem.fadeIn();
   var elem2 = $('.uniform');
+  var elem3 = $('.fraform');
+  var elem4 = $('.gruform');
   elem2.hide();
+  elem3.hide();
+  elem4.hide();
   $(".uniform button").val("");
-  alertify.error('Cancelado por usuario ');
+  alertify.error('Cancelado por usuario');
 }
-
+//  ocultar formularios
+//ocultar formulario depues de Guardar
 function savcanuni() {
-  console.log(" guardado Cancelado  newuni");
+  console.log(" ocultar formularios");
   var elem = $('.botones');
   elem.fadeIn();
   var elem2 = $('.uniform');
+  var elem3 = $('.fraform');
+  var elem4 = $('.gruform');
   elem2.hide();
+  elem3.hide();
+  elem4.hide();
   $(".uniform button").val("");
 }
-
+//guardar unidad
 function savuni(){
   console.log("save unidad")
   if (validate("namuni",1,0)){
     if (validate("abruni",1,0)){
-    abruni
-    console.log("si valido name unidad");
-    $("#spanamuni").html("");
-
-    $.post("./?action=addcategory",
-    {
-      name:$("#namuni").val(),
-      description:$("#desuni").val(),
-      abbreviation:$("#abruni").val(),
-    },function(data){
-      if (data.estado == "true") {
-        alertify.success('Se agregó categoría correctamente');
-        recargarcategoria();
-      savcanuni();
-      }else {
-        alertify.error('No se pudo categoría producto');
-      }
-    });
-
-  }else {
-    $("#abruni").focus();
-    $("#spanabruni").html("Complete este campo.");
-    alertify.error('Complete campo obligatorio');
-    console.log("no valido abruni Unidad");
-  }
+      abruni
+      console.log("si valido name unidad");
+      $("#spanamuni").html("");
+      $.post("./?action=addcategory",
+      {
+        name:$("#namuni").val(),
+        description:$("#desuni").val(),
+        abbreviation:$("#abruni").val(),
+      },function(data){
+        if (data.estado == "true") {
+          alertify.success('Se agregó categoría correctamente');
+          recargarcategoria();
+          savcanuni();
+        }else {
+          alertify.error('No se pudo categoría producto');
+        }
+      });
+    }else {
+      $("#abruni").focus();
+      $("#spanabruni").html("Complete este campo.");
+      alertify.error('Complete campo obligatorio');
+      console.log("no valido abruni Unidad");
+    }
   }else {
     $("#namuni").focus();
     $("#spannamuni").html("Complete este campo.");
     alertify.error('Complete campo obligatorio');
     console.log("no valido name Unidad");
+  }
+}
+//fomulario para los datos de nueva fracion
+function newfra(){
+  console.log("new fraccion");
+  var elem = $('.botones');
+  elem.hide();
+  var elem2 = $('.fraform');
+  elem2.fadeIn();
+  $("#namuni").focus();
+  alertify.message('Ingrese datos de Nueva Unidad de medida');
+}
+<!--añade al Carrito de compras-->
+
+function savfra() {
+  console.log("sav fra");
+  //alertify.success('añadiendo a la Lista Producto'+id)
+  if (validate("fracioncantidad",1,0)){
+    if (validate("fracioncantidad",4,0)){
+      if (validate("fracioncantidad",3,0)){
+        $("#spanfracioncantidad").html("");
+        if (validate("unit_idfra",1,0)){
+          $("#spanunit_idfra").html("");
+          $.get("./?action=addfraction&o=fra",
+          {
+            q:$("#fracioncantidad").val(),
+            unit_id: $("#unit_idfra").val(),
+          },function(data){
+            if (data.estado == "true") {
+              alertify.success('Se retuvo fracion correctamente');
+            }else {
+              alertify.error('No se pudo retener fracion');
+            }
+            $("#presentaciones").load("./?action=viewpresentation");
+          });
+          savcanuni();
+        }else {
+          $("#unit_idfra").focus();
+          $("#spanunit_idfra").html("Complete este campo.");
+          alertify.error('Complete campo obligatorio');
+          console.log("no valido Unidad");
+        }
+      }else {
+        $("#fracioncantidad").focus();
+        $("#spanfracioncantidad").html("No puede ser negativo.");
+        alertify.error('Complete campo obligatorio');
+        console.log("no valido partes");
+      }
+    }else {
+      $("#fracioncantidad").focus();
+      $("#spanfracioncantidad").html("No puede ser cero.");
+      alertify.error('Complete campo obligatorio');
+      console.log("no valido partes");
+    }
+  }else {
+    $("#fracioncantidad").focus();
+    $("#spanfracioncantidad").html("Complete este campo.");
+    alertify.error('Complete campo obligatorio');
+    console.log("no valido partes");
+  }
+}
+
+//fomulario para los datos de nuevo grupo
+function newgru(){
+  console.log("new grupo");
+  var elem = $('.botones');
+  elem.hide();
+  var elem2 = $('.gruform');
+  elem2.fadeIn();
+  $("#namuni").focus();
+  alertify.message('Ingrese datos de Nuevo Grupo');
+}
+function savgru() {
+  console.log("sav grupo");
+  //alertify.success('añadiendo a la Lista Producto'+id)
+  if (validate("grupocantidad",1,0)){
+      if (validate("grupocantidad",4,0)){
+      if (validate("grupocantidad",3,2)){
+        if (validate("grupocantidad",5,0)){
+        $("#spangrupocantidad").html("");
+        if (validate("unit_idgru",1,0)){
+          $("#spanunit_idgru").html("");
+          $.get("./?action=addfraction&o=gru",
+          {
+            q:$("#grupocantidad").val(),
+            unit_id: $("#unit_idgru").val(),
+          },function(data){
+            if (data.estado == "true") {
+              alertify.success('Se retuvo grupo correctamente');
+            }else {
+              alertify.error('No se pudo retener grupo');
+            }
+            $("#presentaciones").load("./?action=viewpresentation");
+          });
+          savcanuni();
+
+        }else {
+          $("#unit_idgru").focus();
+          $("#spanunit_idgru").html("Complete este campo.");
+          alertify.error('Complete campo obligatorio');
+          console.log("no valido Unidad");
+        }
+      }else {
+        $("#grupocantidad").focus();
+        $("#spangrupocantidad").html("Debe ser un entero");
+        alertify.error('Complete campo obligatorio');
+        console.log("no valido partes");
+      }
+      }else {
+        $("#grupocantidad").focus();
+        $("#spangrupocantidad").html("No puede ser menor a 2");
+        alertify.error('Complete campo obligatorio');
+        console.log("no valido partes");
+      }
+    }else {
+      $("#grupocantidad").focus();
+      $("#spangrupocantidad").html("No puede ser cero.");
+      alertify.error('Complete campo obligatorio');
+      console.log("no valido partes");
+    }
+  }else {
+    $("#grupocantidad").focus();
+    $("#spangrupocantidad").html("Complete este campo.");
+    alertify.error('Complete campo obligatorio');
+    console.log("no valido partes");
   }
 }
 </script>

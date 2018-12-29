@@ -42,7 +42,7 @@ class UnitData {
 			$data->name = $r['name'];
 			$data->description = $r['description'];
 			$data->abbreviation = $r['abbreviation'];
-			$data->value_equivalent	 = $r['value_equivalent	'];
+			$data->value_equivalent	 = $r['value_equivalent'];
 			$data->fractions = $r['fractions'];
 			$data->type = $r['type'];
 			$data->user_id = $r['user_id'];

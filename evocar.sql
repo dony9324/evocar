@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
+-- version 4.7.4
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 15-11-2018 a las 21:34:56
--- Versión del servidor: 10.1.35-MariaDB
--- Versión de PHP: 7.2.9
+-- Tiempo de generación: 29-12-2018 a las 22:31:12
+-- Versión del servidor: 10.1.30-MariaDB
+-- Versión de PHP: 5.6.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -95,15 +95,9 @@ INSERT INTO `category` (`id`, `name`, `description`, `user_id`, `created_at`) VA
 (96, 'ñañañañaña', '', '1', '2018-11-04 20:25:18'),
 (97, 'oooooooooooooaaaaaaa', '', '1', '2018-11-04 20:25:29'),
 (98, 'sdsd', '', '1', '2018-11-04 20:27:27'),
-(99, 'sdsd', '', '1', '2018-11-04 20:27:59');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `chores`
---
--- Error leyendo la estructura de la tabla evocar.chores: #1932 - Table 'evocar.chores' doesn't exist in engine
--- Error leyendo datos de la tabla evocar.chores: #1064 - Algo está equivocado en su sintax cerca 'FROM `evocar`.`chores`' en la linea 1
+(99, 'sdsd', '', '1', '2018-11-04 20:27:59'),
+(100, 'herramientas', 'herramientas', '1', '2018-12-26 22:06:28'),
+(101, 'otras herramientas', 'otras herramientos', '1', '2018-12-26 22:09:06');
 
 -- --------------------------------------------------------
 
@@ -164,9 +158,6 @@ CREATE TABLE `iva` (
 INSERT INTO `iva` (`id`, `name`, `porcentage`, `user_id`, `created_at`) VALUES
 (70, '1', '10', '1', '2018-10-20 12:45:39'),
 (69, 'final', '40', '1', '2018-10-13 13:14:39'),
-(61, 'aser', '20', '1', '2018-10-10 22:27:31'),
-(62, 'ser', '25', '1', '2018-10-10 22:28:31'),
-(63, 'don', '10', '1', '2018-10-10 22:29:21'),
 (64, 'ju', '1', '1', '2018-10-10 22:31:43'),
 (65, 'wewewe', '0', '1', '2018-10-10 22:32:42'),
 (66, 'atatatata', '20', '1', '2018-10-10 22:43:49'),
@@ -429,15 +420,8 @@ INSERT INTO `operation` (`id`, `product_id`, `q`, `change_price_out`, `change_pr
 (276, 19, 1, 0, 0, 1, 92, '2018-09-22 23:18:28', 0),
 (277, 4, 1, 0, 0, 1, 93, '2018-09-22 23:19:47', 0),
 (278, 4, 1, 0, 0, 1, 94, '2018-09-22 23:20:11', 0),
-(279, 11, 1, 0, 0, 1, 95, '2018-09-22 23:20:43', 0);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `operation_type`
---
--- Error leyendo la estructura de la tabla evocar.operation_type: #1932 - Table 'evocar.operation_type' doesn't exist in engine
--- Error leyendo datos de la tabla evocar.operation_type: #1064 - Algo está equivocado en su sintax cerca 'FROM `evocar`.`operation_type`' en la linea 1
+(279, 11, 1, 0, 0, 1, 95, '2018-09-22 23:20:43', 0),
+(280, 13, 1, 0, 0, 1, 96, '2018-12-28 22:28:36', 0);
 
 -- --------------------------------------------------------
 
@@ -593,7 +577,8 @@ INSERT INTO `person` (`id`, `image`, `name`, `lastname`, `identity`, `address1`,
 (118, NULL, '', '', '', '', '', '', '', '', '', 1, 0, '2018-09-21 17:10:58'),
 (119, NULL, '', '', '', '', '', '', '', '', '', 1, 0, '2018-09-21 17:11:10'),
 (120, 'Captura_1.png', '', '', '', '', '', '', '', '', '', 1, 0, '2018-09-21 17:12:11'),
-(121, NULL, '', '', '', '', '', '', '', '', '', 1, 0, '2018-09-21 17:15:47');
+(121, NULL, '', '', '', '', '', '', '', '', '', 1, 0, '2018-09-21 17:15:47'),
+(122, NULL, '', '', '', '', '', '', '', '', '', 1, 0, '2018-12-28 22:28:46');
 
 -- --------------------------------------------------------
 
@@ -884,7 +869,8 @@ INSERT INTO `sell` (`id`, `person_id`, `user_id`, `operation_type_id`, `accredit
 (92, NULL, 1, 1, 0, 0, NULL, 15921, NULL, NULL, '2018-09-22 23:18:28'),
 (93, NULL, 1, 1, 0, 0, NULL, 22847, NULL, NULL, '2018-09-22 23:19:47'),
 (94, NULL, 1, 1, 0, 0, NULL, 22847, NULL, NULL, '2018-09-22 23:20:11'),
-(95, NULL, 1, 1, 0, 0, NULL, 22847, NULL, NULL, '2018-09-22 23:20:43');
+(95, NULL, 1, 1, 0, 0, NULL, 22847, NULL, NULL, '2018-09-22 23:20:43'),
+(96, NULL, 1, 1, 0, 0, NULL, 22847, NULL, NULL, '2018-12-28 22:28:36');
 
 -- --------------------------------------------------------
 
@@ -912,15 +898,8 @@ INSERT INTO `trademark` (`id`, `name`, `description`, `user_id`, `created_at`) V
 (92, 's', '', '1', '2018-11-04 17:01:16'),
 (93, 'asdsd', '', '1', '2018-11-04 19:29:46'),
 (94, 'asdsdf', '', '1', '2018-11-04 19:30:26'),
-(95, 'asdsdf', '', '1', '2018-11-04 19:30:36');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `type_of_iva`
---
--- Error leyendo la estructura de la tabla evocar.type_of_iva: #1932 - Table 'evocar.type_of_iva' doesn't exist in engine
--- Error leyendo datos de la tabla evocar.type_of_iva: #1064 - Algo está equivocado en su sintax cerca 'FROM `evocar`.`type_of_iva`' en la linea 1
+(95, 'asdsdf', '', '1', '2018-11-04 19:30:36'),
+(96, 'samsun des', 'marca carra', '1', '2018-12-26 22:06:08');
 
 -- --------------------------------------------------------
 
@@ -1017,7 +996,11 @@ INSERT INTO `unit` (`id`, `equivalent_id`, `name`, `description`, `abbreviation`
 (69, 0, '', '', '', 0, 1, 0, '1', '2018-11-04 20:05:59'),
 (70, 0, 'fgdff', '', '', 0, 1, 0, '1', '2018-11-04 20:29:20'),
 (71, 0, 'zzzzzzzzzzzzz', '', '', 0, 1, 0, '1', '2018-11-04 20:29:57'),
-(72, 0, 'sdsd', 'dsd', 'dsd', 0, 1, 0, '1', '2018-11-08 12:36:56');
+(72, 0, 'sdsd', 'dsd', 'dsd', 0, 1, 0, '1', '2018-11-08 12:36:56'),
+(73, 0, 'trita', '30 piesas', 'tr', 0, 1, 0, '1', '2018-12-09 14:52:26'),
+(74, 0, 'a', '', '', 0, 1, 0, '1', '2018-12-09 15:46:17'),
+(75, 0, 'a', '', 'a', 0, 1, 0, '1', '2018-12-09 15:49:23'),
+(76, 0, 'a', '', 'ddd', 0, 1, 0, '1', '2018-12-09 15:54:16');
 
 -- --------------------------------------------------------
 
@@ -1036,6 +1019,7 @@ CREATE TABLE `user` (
   `image` varchar(255) COLLATE utf8_spanish_ci DEFAULT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1',
   `is_admin` tinyint(1) NOT NULL DEFAULT '0',
+  `time` int(5) NOT NULL DEFAULT '600',
   `created_at` datetime DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
@@ -1043,11 +1027,11 @@ CREATE TABLE `user` (
 -- Volcado de datos para la tabla `user`
 --
 
-INSERT INTO `user` (`id`, `name`, `lastname`, `identity`, `username`, `email`, `password`, `image`, `status`, `is_admin`, `created_at`) VALUES
-(1, 'Donaldo ', 'Puentes', 1049939104, 'Donaldo Puentes', 'Donaldo Puentes', 'b0761e2e5aa1306ffb7bac16f5050e27791a482f ', 'user1-160x160.jpg', 1, 1, '2016-11-02 18:44:44'),
-(3, 'Donaldo ', 'Trillos', 1049939104, 'Jose Trillos', 'Jose Trillos', 'b0761e2e5aa1306ffb7bac16f5050e27791a482f ', 'sin-imagen.jpg', 1, 1, '2017-02-17 09:36:53'),
-(10, 'aa', 'a', NULL, 'admin', 'dony9324', 'b0761e2e5aa1306ffb7bac16f5050e27791a482f', '', 1, 0, '2018-09-11 00:11:23'),
-(8, 'no admin', '', 0, '', 'admin', 'b0761e2e5aa1306ffb7bac16f5050e27791a482f ', '', 1, 0, '2016-11-02 18:44:44');
+INSERT INTO `user` (`id`, `name`, `lastname`, `identity`, `username`, `email`, `password`, `image`, `status`, `is_admin`, `time`, `created_at`) VALUES
+(1, 'Donaldo ', 'Puentes', 1049939104, 'Donaldo Puentes', 'Donaldo Puentes', 'b0761e2e5aa1306ffb7bac16f5050e27791a482f ', 'user1-160x160.jpg', 1, 1, 6000, '2016-11-02 18:44:44'),
+(3, 'Donaldo ', 'Trillos', 1049939104, 'Jose Trillos', 'Jose Trillos', 'b0761e2e5aa1306ffb7bac16f5050e27791a482f ', 'sin-imagen.jpg', 1, 1, 600, '2017-02-17 09:36:53'),
+(10, 'aa', 'a', NULL, 'admin', 'dony9324', 'b0761e2e5aa1306ffb7bac16f5050e27791a482f', '', 1, 0, 600, '2018-09-11 00:11:23'),
+(8, 'no admin', '', 0, '', 'admin', '63982e54a7aeb0d89910475ba6dbd3ca6dd4e5a1', '', 1, 0, 600, '2016-11-02 18:44:44');
 
 --
 -- Índices para tablas volcadas
@@ -1168,7 +1152,7 @@ ALTER TABLE `box_id2`
 -- AUTO_INCREMENT de la tabla `category`
 --
 ALTER TABLE `category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
 
 --
 -- AUTO_INCREMENT de la tabla `company`
@@ -1192,7 +1176,7 @@ ALTER TABLE `iva`
 -- AUTO_INCREMENT de la tabla `operation`
 --
 ALTER TABLE `operation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=280;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=281;
 
 --
 -- AUTO_INCREMENT de la tabla `payment`
@@ -1204,7 +1188,7 @@ ALTER TABLE `payment`
 -- AUTO_INCREMENT de la tabla `person`
 --
 ALTER TABLE `person`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=123;
 
 --
 -- AUTO_INCREMENT de la tabla `product`
@@ -1216,19 +1200,19 @@ ALTER TABLE `product`
 -- AUTO_INCREMENT de la tabla `sell`
 --
 ALTER TABLE `sell`
-  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
+  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
 
 --
 -- AUTO_INCREMENT de la tabla `trademark`
 --
 ALTER TABLE `trademark`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
 
 --
 -- AUTO_INCREMENT de la tabla `unit`
 --
 ALTER TABLE `unit`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT de la tabla `user`

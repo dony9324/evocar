@@ -50,9 +50,6 @@ $index=0;
 $q = OperationData::getQYesF($_POST["product_id"],$cut->id);
 
 
-
-
-
 $can = true;
 if($_POST["q"]<=$q){
 }else{

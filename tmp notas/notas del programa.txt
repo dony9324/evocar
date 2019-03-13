@@ -1,0 +1,20 @@
+hacer un campo de agrupar para agrupar los productos
+hcer otro camo en la tabla sell para facionario es decie si es uno se pone en un capo 1 y el otro 1 porque 1/1=1
+si es la mitad se pone en un campo 1 y el otro 2 y asi para resolver el estod no tendrediviciones infinitas sino que are operaciones entre numeros fracionacios que son mas presisas
+el capo agrupar lo uso para productos enteros en grupos es decir un producto que se venta individual y en grupo puede se de 10 o de 12 unidades.
+y la funcion 1/2 , 1/4... que esta en venta indicara al procesador de ventas lo de los campos con base y esponenteo como se llamenesos fracionarios.
+en el formulario de añadir y editar producto poner un boton de agrupado y otro de fraciones permitidas y fracionamiento libre seria el de depende del dinero.
+el de agrupar no sera un boleano sino un definidor, esto se puede con la ventanita de alertyfy
+un boton de mas detalles de un producto tanto en el modulo de ventas como el de inventario. que tambien puede ser con la ventanita de alertyfi
+podria bloquear la pantalla mientras carga el ajax para prevenir errore esto lo puedo hacre con la de lasnotificaciones de arriba o con una modal con la de las notificaciones es merjor ya que esta no se desbloquea con darle click y se le podria pones una animacion para que el usuariose distraiga mientras carga
+la ventanita de alertyfi la deveria paras a una funcion gloval que se pueda yamar desde cualquier lado del proyecto.
+ponle footer te combiene.
+
+funcione globales 
+envio de formulario. 
+solisitar url.
+y estandarisar parametros de repuestas y de peticiones.
+
+trabaja duro. erres el genio mas grande que conoces.
+
+cerrar la secion antes demostrar la vista es decir conprobarla directamente desde php y antes de cargar la pagina en ves de javascript al terninar la de cargar la pagina es mejor. o no se tambien esta bien asi

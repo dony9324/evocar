@@ -179,7 +179,7 @@
                 <div class="mostrar4" hidden="on">
                   <label id="labelmedida" class=" col-sm-2">tata</label>
                   <div class="col-sm-4">
-                    <input type="number" id="cantidad" name="cantidad" class="form-control" onchange="adeshabCuantos()"  placeholder="Cantidad" autocomplete="off">
+                    <input type="number" id="cantidad" name="cantidad" class="form-control" onchange="adeshabCuantos()"  placeholder="Cantidad" autocomplete="off" step="any">
                     <span id="spanmedida"></span>
                   </div>
                 </div>
@@ -195,17 +195,17 @@
                   <label for="switch_right">Si</label>
                 </div>
               </div>
-              <a href="#" class="btn btn-success" onclick="newiva()"><i class="fa  fa-plus"></i> 5</a>
-              <span data-toggle="tooltip" title="" class="btn btn-default bg-yellow" data-original-title="3 New Messages">3</span>
+              <div id="presentacionesresumen" class="otraspresentaciones">
+              </div>
             </div>
             <div class="form-group">
               <label for="price_in" class="col-sm-2 control-label">Precio de Costo</label>
               <div class="col-sm-4">
-                <input type="number" min="0" step="any" name="price_in" required class="form-control" id="price_in" placeholder="Precio de entrada">
+                     <input type="text" name="price_in" required class="form-control money" id="price_in" placeholder="Precio de entrada">
               </div>
               <label for="price_out" class="col-sm-2 control-label">Precio de Venta</label>
               <div class="col-sm-4">
-                <input type="number" min="0" step="any"  name="price_out" required class="form-control" id="price_out" placeholder="Precio de salida">
+                 <input type="text" name="price_out" required class="form-control money" id="price_out" placeholder="Precio de salida">
               </div>
             </div>
             <div class="form-group">
@@ -213,9 +213,6 @@
               <div class="col-sm-4">
                 <input type="number" min="0" step="any" name="q" required class="form-control"  id="q" placeholder="Inventario inicial" value="0">
               </div>
-              <p class="col-sm-4"> <input type="checkbox">No controlar stock</p>
-            </div>
-            <div class="form-group">
               <label for="inventary_min" class="col-sm-2 control-label">Minima en inventario</label>
               <div class="col-sm-4">
                 <input type="number" min="0" step="any"  name="inventary_min" required  value="5" class="form-control" id="inventary_min" placeholder="Minima en Inventario (Default 10)" >
@@ -233,6 +230,48 @@
     </div>
   </div>
   <script>
+    ///funcion para enmascarar 
+
+            jQuery(function($){
+              var options =  {
+  onComplete: function(cep) {
+    ///cep es el valor del campo 
+    //$('#numero1').unmask(); //Quitando la mascara 
+   // $('#numero1').cleanVal();//Obtención del valor escrito desenmascarado
+    alert('CEP completado!:' + $('#numero1').cleanVal());
+
+  },
+  onKeyPress: function(cep, event, currentField, options){
+    NEMEM = $('#price_out').cleanVal();;
+    nuu = numeroALetras(NEMEM, {
+      plural: 'PESOS',
+      singular: 'PESO',
+      centPlural: 'CENTAVOS',
+      centSingular: 'CENTAVO'
+    });
+    console.log(NEMEM +nuu);
+    console.log('Una tecla fue presionada!:', cep, ' evento: ', event,
+                'campo actual: ', currentField, ' optiones: ', options);
+  },
+  onChange: function(cep){
+    console.log('cep ha cambiado! ', cep);
+  },
+  onInvalid: function(val, e, f, invalid, options){
+    var error = invalid[0];
+    console.log ("Digit: ", error.v, " no es válido para la posición: ", error.p, ".  Esperamos algo como: ", error.e);
+  }
+};
+
+              $('.money').mask('#.##0,00',options);
+            $("#numero1").mask("9,99",options);
+            
+ 
+            // Definimos las mascaras para cada input
+           // $("#date").mask("99/99/9999");
+           // $("#movil").mask("999 99 99 99");
+           // $("#letras").mask("aaa");
+           // $("#comodines").mask("?");
+        });
   function medida(value){
     console.log("medida "+value);
     $('#contentselectmedida').removeClass('has-error');
@@ -298,7 +337,6 @@
             }
           };
         });
-        //force focusing password box
         $("#selectmedida").prop('disabled', true);
         $("#cantidad").prop('disabled', true);
         alertify.genericDialog ($('#categorías')[0]).set('selector', 'input[type="password"]');
@@ -313,10 +351,13 @@
             alertify.error('No se pudo retener presentacion');
           }
           $("#presentaciones").load("./?action=viewpresentation");
+          $("#presentacionesresumen").load("./?action=viewpresentation&o=resumido");
         });
         $.get("./?action=presentaciones",function(data){
           $("#categorías").html(data);
         });
+      
+      
       }else{
         document.pepe.switch_2[0].checked = true;
         $("#spanselectmedida").html("Complete este campo.");
@@ -337,10 +378,11 @@
           $("#selectmedida").prop('disabled', false);
           $("#cantidad").prop('disabled', false);
         }else {
-          $("#selectmedida").prop('disabled', true);
+          controlarstock
           $("#cantidad").prop('disabled', true);
         }
         $("#presentaciones").load("./?action=viewpresentation");
+        $("#presentacionesresumen").load("./?action=viewpresentation&o=resumido");
       });
     }
 
@@ -1146,4 +1188,5 @@
         })
       });
     }
+    
     </script>

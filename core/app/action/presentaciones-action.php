@@ -174,6 +174,8 @@
 $(document).ready(function()
 {
   $("#presentaciones").load("./?action=viewpresentation");
+  $("#presentacionesresumen").load("./?action=viewpresentation&o=resumido");
+  
 });
 
 
@@ -268,6 +270,7 @@ function savfra() {
   if (validate("fracioncantidad",1,0)){
     if (validate("fracioncantidad",4,0)){
       if (validate("fracioncantidad",3,0)){
+        if (validate("fracioncantidad",3,2)){
         $("#spanfracioncantidad").html("");
         if (validate("unit_idfra",1,0)){
           $("#spanunit_idfra").html("");
@@ -282,6 +285,7 @@ function savfra() {
               alertify.error('No se pudo retener fracion');
             }
             $("#presentaciones").load("./?action=viewpresentation");
+            $("#presentacionesresumen").load("./?action=viewpresentation&o=resumido");
           });
           savcanuni();
         }else {
@@ -290,6 +294,12 @@ function savfra() {
           alertify.error('Complete campo obligatorio');
           console.log("no valido Unidad");
         }
+      }else {
+        $("#fracioncantidad").focus();
+        $("#spanfracioncantidad").html("No puede ser menor a 2.");
+        alertify.error('Complete campo obligatorio');
+        console.log("no valido partes");
+      }
       }else {
         $("#fracioncantidad").focus();
         $("#spanfracioncantidad").html("No puede ser negativo.");
@@ -341,6 +351,7 @@ function savgru() {
               alertify.error('No se pudo retener grupo');
             }
             $("#presentaciones").load("./?action=viewpresentation");
+            $("#presentacionesresumen").load("./?action=viewpresentation&o=resumido");
           });
           savcanuni();
 

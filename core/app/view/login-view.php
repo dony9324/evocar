@@ -20,7 +20,7 @@ $con = $base->connect();
 		  ?>
               <div class="box box-solid box-info ">
                 <div class="box-header with-border alert alert-info text-center">
-                  <h4 class="box-title">Ingresar</h4>
+                  <h4 class="box-title">Ingresarr</h4>
                </div>
               <!-- /.box-header -->
                 <div class="box-body no-padding">

@@ -1,4 +1,36 @@
 <!--- ver fraciones -->
+<?php if(isset($_GET["o"]) && $_GET["o"]=="resumido"){
+	 	 
+
+ if(isset($_SESSION["presentacionmain"])){
+	$i= 0; foreach($_SESSION["presentacionmain"] as $m){
+		$main = UnitData::getById($m["unit_id"]); 
+		if ($m["q"]==0 or $m["q"]=="") {
+		$m["q"]=1;
+		} echo "<small style='margin: 1px;' class='label  bg-blue'>".$m["q"].$main->name."</small>"; 
+		
+	 }
+ }
+
+ if(isset($_SESSION["fraction"])){
+	 $i= 0; foreach($_SESSION["fraction"] as $p){
+					$fractions = UnitData::getById($p["unit_id"]);
+					echo "<small style='margin: 1px;' class='label  bg-yellow'>".$m["q"]."/".$p["q"]."=". $fractions->name."</small>"; 
+				///echo "(".$m["q"]." ".$main->name." / "; echo $p["q"].") = "; 
+			 }
+} 
+
+ if(isset($_SESSION["grupo"])){
+			 $i= 0; foreach($_SESSION["grupo"] as $g){
+					$grupo = UnitData::getById($g["unit_id"]); 
+					echo "<small style='margin: 1px;' class='label  bg-green'>".$g["q"]."(".$m["q"].")=".$grupo->name."</small>"; 
+				//	echo "1 ".$grupo->name." = "; 
+					// echo $g['q']." (".$m['q']." ".$main->name.")"; 
+}}
+
+}else{
+
+?>
 <br>
 <div class="box box-primary">
 	<div class="box-header ui-sortable-handle">
@@ -93,4 +125,4 @@
 			</ul>
 		</div>
 	</div>
-<?php } ?>
+<?php }} ?>

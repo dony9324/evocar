@@ -14,6 +14,9 @@ $skin = $us->value;
   <title>evocar FB</title>
   <!-- jQuery 3 -->
   <script src = "res/jquery.min.js"> </script>
+  <!-- jQuery mask inpit - enmascara input-->
+  <script src="res/jquery.mask.min.js" type="text/javascript"></script>
+  <script src="res/numeroALetras.js" type="text/javascript"></script>
   <!-- Dile al navegador que responda al ancho de la pantalla -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <link rel="stylesheet" href="res/<?php echo $skin ; ?>/bootstrap/bootstrap.min.css">

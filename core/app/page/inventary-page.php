@@ -46,7 +46,7 @@
           if(count($products)>0){
             // si hay usuarios
             ?>
-            <table style="width:100%;" id="example1" class="table table-bordered table-striped">
+            <table id="example1" class="table table-hover">
               <thead>
                 <tr>
                   <th>Id</th>
@@ -131,6 +131,10 @@ Se recomiendan estos dos complementos para mejorar la experiencia de usuario -->
 <script>
 $(function () {
   $('#example1').DataTable({
+    "bJQuerryUI":true,
+    "sPaginationType": "full_numbers",
+    "sScrollX": "110%",
+    "bScrollCollapse":true,
     "language": {
       "sProcessing":     "Procesando...",
       "sLengthMenu":     "Mostrar _MENU_ registros",

@@ -201,11 +201,11 @@
             <div class="form-group">
               <label for="price_in" class="col-sm-2 control-label">Precio de Costo</label>
               <div class="col-sm-4">
-                     <input type="text" name="price_in" required class="form-control money" id="price_in" placeholder="Precio de entrada">
+              <input type="text" name="price_in" required class="form-control money" id="price_in" placeholder="Precio de entrada">
               </div>
               <label for="price_out" class="col-sm-2 control-label">Precio de Venta</label>
               <div class="col-sm-4">
-                 <input type="text" name="price_out" required class="form-control money" id="price_out" placeholder="Precio de salida">
+              <input type="text" name="price_out" required class="form-control money" id="price_out" placeholder="Precio de salida">
               </div>
             </div>
             <div class="form-group">
@@ -230,13 +230,13 @@
     </div>
   </div>
   <script>
-    ///funcion para enmascarar 
+    ///funcion para enmascarar
 
             jQuery(function($){
               var options =  {
   onComplete: function(cep) {
-    ///cep es el valor del campo 
-    //$('#numero1').unmask(); //Quitando la mascara 
+    ///cep es el valor del campo
+    //$('#numero1').unmask(); //Quitando la mascara
    // $('#numero1').cleanVal();//Obtención del valor escrito desenmascarado
     alert('CEP completado!:' + $('#numero1').cleanVal());
 
@@ -264,8 +264,8 @@
 
               $('.money').mask('#.##0,00',options);
             $("#numero1").mask("9,99",options);
-            
- 
+
+
             // Definimos las mascaras para cada input
            // $("#date").mask("99/99/9999");
            // $("#movil").mask("999 99 99 99");
@@ -356,8 +356,8 @@
         $.get("./?action=presentaciones",function(data){
           $("#categorías").html(data);
         });
-      
-      
+
+
       }else{
         document.pepe.switch_2[0].checked = true;
         $("#spanselectmedida").html("Complete este campo.");
@@ -378,7 +378,6 @@
           $("#selectmedida").prop('disabled', false);
           $("#cantidad").prop('disabled', false);
         }else {
-          controlarstock
           $("#cantidad").prop('disabled', true);
         }
         $("#presentaciones").load("./?action=viewpresentation");
@@ -388,16 +387,39 @@
 
 
     function presentaciones2(){
+
       console.log("presentation 2")
-      alertify.confirm("This is a confirm dialog.",
+      alertify.confirm("Otras presentaciones","Se eliminaran las presentaciones definidas, ¿Desea continuar?",
       function(){
-        presentaciones();
-        alertify.success('Ok');
+        borrarpresentaciones();
+        alertify.message('Presentaciones Descartadas');
       },
       function(){
-        alertify.error('Cancel');
+        document.pepe.switch_2[1].checked = true;
+        presentaciones();
+        alertify.error('Cancelado');
       });
     }
+
+function borrarpresentaciones(){
+  console.log("borrarpresentaciones")
+    $.get("./?action=addfraction&o=borrar",
+    {
+      q:$("#cantidad").val(),
+      unit_id: $("#selectmedida").val(),
+    },function(data){
+      if (data.estado == "true") {
+        alertify.message('Presentaciones descartadas');
+      }else {
+        alertify.error('No se pudo descartar presentacion');
+      }
+      $("#presentacionesresumen").load("./?action=viewpresentation&o=resumido");
+      adeshabx();//avilita formulario
+    });
+}
+
+
+
     /*para dale estilo al campo tipe file*/
     $('input[type=file]').change(function(){
       var filename = jQuery(this).val().split('\\').pop();
@@ -409,6 +431,7 @@
       $("#imagelabel").addClass("btn-success");
       $("#imagelabel").html("<i class='fa fa-fw fa-file-image-o'></i>"+filename);
     });
+
     function categorias(){
       console.log("categorias")
       alertify.genericDialog || alertify.dialog('genericDialog',function(){
@@ -425,10 +448,9 @@
                 select:true
               },
               options:{
-                title: false,
                 basic:true,
                 maximizable:false,
-                resizable:false,
+                resizable:true,
                 padding:false
               }
             };
@@ -1188,5 +1210,45 @@
         })
       });
     }
-    
+
+    function addproduct(){
+          console.log("addproduct");
+/*
+          if (validaformulario()){
+            console.log("si valido formulario");
+
+            $.post("./?action=addmarca",
+            {
+              name:$("#nuevamarca").val(),
+              description:$("#descriptionm").val(),
+            },function(data){
+              if (data.estado == "true") {
+                alertify.success('Se agregó Marca correctamente');
+                recargarmarca();
+                adeshabx();
+              }else {
+                alertify.error('No se pudo guardar maraca producto');
+              }
+            });
+          }else {
+            $("#contentmarca").removeClass("has-success")
+            $("#contentmarca").addClass("has-error")
+            $("#contentnuevacategoria2").addClass("has-error")
+
+            $("#nuevamarca" ).focus();
+            $("#spanamemarca").html("Complete este campo.");
+            alertify.error('Complete campo obligatorio');
+            console.log("no valido name marca");
+          }
+*/
+
+
+
+    }
+
+
+
+    $(document).ready(function(){
+      borrarpresentaciones();
+    });
     </script>

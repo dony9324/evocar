@@ -58,4 +58,23 @@ else if(isset($_GET["o"]) && $_GET["o"]=="is"){
 	}
 	return print(json_encode($resultado));
 }
+///eliminar las presentaciones definidas
+else if(isset($_GET["o"]) && $_GET["o"]=="borrar"){
+	header('Content-type: application/json');
+	$resultado = array();
+	$resultado = array("estado" => "false");
+	if(isset($_SESSION["fraction"])){
+		 unset($_SESSION["fraction"]);
+	}
+	if(isset($_SESSION["presentacionmain"])){
+		 unset($_SESSION["presentacionmain"]);
+	}
+	if(isset($_SESSION["grupo"])){
+		 unset($_SESSION["grupo"]);
+	}
+		$resultado = array("estado" => "true");
+	return print(json_encode($resultado));
+}
+
+
 ?>

@@ -19,7 +19,7 @@
               <label class="col-sm-2 control-label">Imagen</label>
               <div class="col-sm-4">
                 <label id="imagelabel" for="image" class="col-sm-12 btn btn-default">Seleccionar Imagen</label>
-                <input type="file" name="image" id="image" accept="image/*" >
+                <input type="file" name="image" id="image" accept="image/*" peso="">
               </div>
               <label for="name"  class="col-sm-2 control-label">Codigo</label>
               <div class="col-sm-4">
@@ -424,12 +424,42 @@ function borrarpresentaciones(){
     $('input[type=file]').change(function(){
       var filename = jQuery(this).val().split('\\').pop();
       var idname = jQuery(this).attr('id');
+      if (filename == ""){
+        console.log('no hay Imagen');
+      //  var idpeso = jQuery(this).attr('peso'); // esta linea en para recuperar el peso guardado en el atributo personalizado peso
+      $("#imagelabel").removeClass("btn-success");
+      $("#imagelabel").removeClass("btn-danger");
+      $("#imagelabel").addClass("btn-default");
+      $("#imagelabel").html("Seleccionar Imagen");
+        var pesobyte = 0;
+      }else {
+        console.log('si hay Imagen');
+        var pesobyte = jQuery(this.files[0].size);
+        $('#image').attr('peso', pesobyte[0])
+        //comprobamos que no pese mas de 2 MB
+        if(jQuery(this).attr('peso') > 2097152) {
+          $("#imagelabel").removeClass("btn-default");
+          $("#imagelabel").removeClass("btn-success");
+          $("#imagelabel").addClass("btn-danger");
+          $("#imagelabel").html("<i class='fa fa-fw fa-file-image-o'></i>"+filename);
+          console.log('Imagen muy pesada');
+    } else {
+      $("#imagelabel").removeClass("btn-default");
+      $("#imagelabel").removeClass("btn-danger");
+      $("#imagelabel").addClass("btn-success");
+      $("#imagelabel").html("<i class='fa fa-fw fa-file-image-o'></i>"+filename);
+
+    }
+
+      }
+
+      $('#image').attr('peso', pesobyte[0])
+
       console.log(jQuery(this));
       console.log(filename);
       console.log(idname);
-      $("#imagelabel").removeClass("btn-default");
-      $("#imagelabel").addClass("btn-success");
-      $("#imagelabel").html("<i class='fa fa-fw fa-file-image-o'></i>"+filename);
+      console.log(pesobyte);
+
     });
 
     function categorias(){
@@ -1213,10 +1243,9 @@ function borrarpresentaciones(){
 
     function addproduct(){
           console.log("addproduct");
-/*
           if (validaformulario()){
             console.log("si valido formulario");
-
+/*
             $.post("./?action=addmarca",
             {
               name:$("#nuevamarca").val(),
@@ -1230,6 +1259,7 @@ function borrarpresentaciones(){
                 alertify.error('No se pudo guardar maraca producto');
               }
             });
+            */
           }else {
             $("#contentmarca").removeClass("has-success")
             $("#contentmarca").addClass("has-error")
@@ -1238,17 +1268,20 @@ function borrarpresentaciones(){
             $("#nuevamarca" ).focus();
             $("#spanamemarca").html("Complete este campo.");
             alertify.error('Complete campo obligatorio');
-            console.log("no valido name marca");
+            console.log("No valido formulario");
           }
-*/
-
-
 
     }
-
+function validaformulario(){
+    if (validate("name",9,10)){
+      return true;
+    }else {
+      return false
+    }
+}
 
 
     $(document).ready(function(){
       borrarpresentaciones();
-    });
+    })
     </script>

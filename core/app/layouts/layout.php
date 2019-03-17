@@ -407,6 +407,18 @@ function validate(id,tipo,m){
     case 5:
     tip = "sea DECIMAL";
     break
+    case 6:
+    tip = "no se mas largo de";
+    break
+    case 7:
+    tip = "no se mas corto de";
+    break
+    case 8:
+    tip = "sea numero";
+    break
+    case 9:
+    tip = "no pese mas de";
+    break
     default:
   }
   console.log("validate "+id+" que "+tip);
@@ -446,6 +458,35 @@ function validate(id,tipo,m){
       return false;
     }
     break
+    case 6:
+    if (total.length > m) {
+      return false;
+    }else {
+      return true;
+    }
+    break
+    case 7:
+    if (total.length < m) {
+      return false;
+    }else {
+      return true;
+    }
+    break
+    case 8:
+    if (isNaN(total)) {
+      return false;
+    }else {
+      return true;
+    }
+    break
+    case 9:
+    if (isNaN(total)) {
+      return false;
+    }else {
+      return true;
+    }
+    break
+
     default:
   }
 }

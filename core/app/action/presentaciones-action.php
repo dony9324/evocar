@@ -7,8 +7,8 @@
     <div class="tab-pane active" id="tab_1">
       <div class="botones">
         <a href="#" class="btn btn-default" onclick="newuni()"><i class="fa  fa-plus"></i> Nueva Unidad de medida</a>
-        <a href="#" class="btn btn-default" onclick="newfra()"><i class="fa  fa-plus"></i> Nueva Fraccion</a>
         <a href="#" class="btn btn-default" onclick="newgru()"><i class="fa  fa-plus"></i> Nuevo Grupo</a>
+        <a href="#" class="btn btn-default" onclick="newfra()"><i class="fa  fa-plus"></i> Nueva Fraccion</a>
         <div id="presentaciones"> </div>
       </div>
       <div class="uniform box box-default" hidden>
@@ -175,7 +175,7 @@ $(document).ready(function()
 {
   $("#presentaciones").load("./?action=viewpresentation");
   $("#presentacionesresumen").load("./?action=viewpresentation&o=resumido");
-  
+
 });
 
 

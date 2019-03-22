@@ -1,6 +1,6 @@
 var numeroALetras = (function() {
-    // Código basado en el comentario de @sapienman
-    // Código basado en https://gist.github.com/alfchee/e563340276f89b22042a
+    // Cï¿½digo basado en el comentario de @sapienman
+    // Cï¿½digo basado en https://gist.github.com/alfchee/e563340276f89b22042a
     function Unidades(num) {
 
         switch (num) {
@@ -55,7 +55,7 @@ var numeroALetras = (function() {
                     case 0:
                         return 'VEINTE';
                     default:
-                        return 'VEINTI' + Unidades(unidad);
+                        return 'VEINTI ' + Unidades(unidad);
                 }
             case 3:
                 return DecenasY('TREINTA', unidad);
@@ -136,7 +136,7 @@ var numeroALetras = (function() {
         let cientos = Math.floor(num / divisor)
         let resto = num - (cientos * divisor)
 
-        let strMiles = Seccion(num, divisor, 'UN MIL', 'MIL');
+        let strMiles = Seccion(num, divisor, ' UN MIL', 'MIL');
         let strCentenas = Centenas(resto);
 
         if (strMiles == '')
@@ -150,7 +150,7 @@ var numeroALetras = (function() {
         let cientos = Math.floor(num / divisor)
         let resto = num - (cientos * divisor)
 
-        let strMillones = Seccion(num, divisor, 'UN MILLON DE', 'MILLONES DE');
+        let strMillones = Seccion(num, divisor, 'UN MILLON', 'MILLONES');
         let strMiles = Miles(resto);
 
         if (strMillones == '')
@@ -166,10 +166,10 @@ var numeroALetras = (function() {
             enteros: Math.floor(num),
             centavos: (((Math.round(num * 100)) - (Math.floor(num) * 100))),
             letrasCentavos: '',
-            letrasMonedaPlural: currency.plural || 'PESOS CHILENOS', //'PESOS', 'Dólares', 'Bolívares', 'etcs'
-            letrasMonedaSingular: currency.singular || 'PESO CHILENO', //'PESO', 'Dólar', 'Bolivar', 'etc'
-            letrasMonedaCentavoPlural: currency.centPlural || 'CHIQUI PESOS CHILENOS',
-            letrasMonedaCentavoSingular: currency.centSingular || 'CHIQUI PESO CHILENO'
+            letrasMonedaPlural: currency.plural || 'PESOS', //'PESOS', 'Dï¿½lares', 'Bolï¿½vares', 'etcs'
+            letrasMonedaSingular: currency.singular || 'PESO', //'PESO', 'Dï¿½lar', 'Bolivar', 'etc'
+            letrasMonedaCentavoPlural: currency.centPlural || 'CENTAVOS',
+            letrasMonedaCentavoSingular: currency.centSingular || 'CENTAVO'
         };
 
         if (data.centavos > 0) {

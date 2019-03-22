@@ -388,9 +388,17 @@ function changerview(ruta){
     elem.fadeIn()
   });
 }
-function validate(id,tipo,m){
+/*esta funcion es para validar el argumento id es el id del campo a validar
+el argumento tipo es el prosedimiento de validacion campo a validar
+el argumento m es un parametro a tener en cuenta para validar
+el argumento b es para no usar el id del campo a validar sino que validaremos el contenido del parametro
+*/
+function validate(id,tipo,m,b){
   total= $('#' + id).val();
-  $('#' + id).val(total);
+//  $('#' + id).val(total);
+  if (b==1){
+    total = id;
+  }
   switch (tipo) {
     case 1:
     tip = "no este vacio";

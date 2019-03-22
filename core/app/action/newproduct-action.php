@@ -16,36 +16,53 @@
         <form name="pepe" class="form-horizontal" method="post" autocomplete="off" enctype="multipart/form-data"  id="addproduct" role="form" >
           <div class="box-body">
             <div class="form-group">
-              <label class="col-sm-2 control-label">Imagen</label>
+              <label for="image" class="col-sm-2 control-label">Imagen</label>
               <div class="col-sm-4">
-                <label id="imagelabel" for="image" class="col-sm-12 btn btn-default">Seleccionar Imagen</label>
+                <label  id="imagelabel" for="image" class="col-sm-12 btn btn-default">Seleccionar Imagen</label>
                 <input type="file" name="image" id="image" accept="image/*" peso="">
+                <span id="spanimagep"></span>
               </div>
-              <label for="name"  class="col-sm-2 control-label">Codigo</label>
+              <div id="contenedorcodigo">
+              <label for="codigo"  class="col-sm-2 control-label">Codigo</label>
               <div class="col-sm-4">
-                <input type="text"  name="Codigo"  class="form-control" placeholder="Código extra">
+                <input type="text"  name="codigo" id="codigo" class="form-control" placeholder="Código extra">
+                <span id="spancodigop"></span>
               </div>
             </div>
+            </div>
+
             <div class="form-group">
+              <div id="contenedorname">
               <label for="name"  class="col-sm-2 control-label">Nombre*</label>
               <div class="col-sm-4">
                 <input type="text"  name="name"  class="form-control" id="name" placeholder="Nombre" autofocus>
                 <span id="spanamep"></span>
               </div>
-              <label class="col-sm-2 control-label">Codigo de Barras</label>
+            </div>
+            <div id="contenedorbarcode">
+              <label for="barcode" class="col-sm-2 control-label">Codigo de Barras</label>
               <div class="col-sm-4">
                 <input type="text" required name="barcode"  class="form-control" id="barcode" placeholder="Codigo de Barras del Producto">
+                <span id="spanbarcode"></span>
+              </div>
               </div>
             </div>
+
             <div class="form-group">
+              <div id="contenedordescription">
               <label for="description" class="col-sm-2 control-label">Descripcion</label>
               <div class="col-sm-4">
                 <input name="description"  required class="form-control"  id="description" placeholder="Descripcion del Producto">
+                <span id="spandescription"></span>
               </div>
-              <label for="unit" class="col-sm-2 control-label">Ubicación</label>
+              </div>
+              <div id="contenedorlocation">
+              <label for="location" class="col-sm-2 control-label">Ubicación</label>
               <div class="col-sm-4">
-                <input type="text" name="unit" required class="form-control" id="unit" placeholder="Ubicación del Producto">
+                <input type="text" name="location" required class="form-control" id="location" placeholder="Ubicación del Producto">
+                <span id="spanlocation"></span>
               </div>
+            </div>
             </div>
             <div id="bg-white1" class="">
 
@@ -157,7 +174,7 @@
             </div>
             <div id="bg-white2" class="">
               <div id="contentselectmedida" class="form-group">
-                <label class="col-sm-2 control-label">Unidad de medida</label>
+                <label class="col-sm-2 control-label">Unidad de medida*</label>
                 <div class="col-sm-4">
                   <select id="selectmedida" name="selectmedida" class="form-control" onChange="medida(this.value)">
                     <option value="">--Seleccione--</option>
@@ -199,27 +216,40 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="price_in" class="col-sm-2 control-label">Precio de Costo</label>
+              <div id="contenedorpricce_in">
+              <label for="price_in" class="col-sm-2 control-label">Precio de Costo*</label>
               <div class="col-sm-4">
-              <input type="text" name="price_in" required class="form-control money" id="price_in" placeholder="Precio de entrada">
+              <input type="text" onchange="validarprice_in();" name="price_in" required class="form-control money" id="price_in" placeholder="Precio de entrada">
+              <span id="spanprice_in"></span>
               </div>
-              <label for="price_out" class="col-sm-2 control-label">Precio de Venta</label>
+              </div>
+              <div id="contenedorpricce_out">
+              <label for="price_out" class="col-sm-2 control-label">Precio de Venta*</label>
               <div class="col-sm-4">
-              <input type="text" name="price_out" required class="form-control money" id="price_out" placeholder="Precio de salida">
+              <input type="text" onchange="validarprice_out();" name="price_out" required class="form-control money" id="price_out" placeholder="Precio de salida">
+              <span id="spanprice_out"></span>
+              </div>
               </div>
             </div>
             <div class="form-group">
-              <label for="q" class="col-sm-2 control-label">Inventario inicial</label>
+              <label for="q" class="col-sm-2 control-label">Inventario inicial*</label>
               <div class="col-sm-4">
                 <input type="number" min="0" step="any" name="q" required class="form-control"  id="q" placeholder="Inventario inicial" value="0">
               </div>
-              <label for="inventary_min" class="col-sm-2 control-label">Minima en inventario</label>
+              <label for="inventary_min" class="col-sm-2 control-label">Minima en inventario*</label>
               <div class="col-sm-4">
                 <input type="number" min="0" step="any"  name="inventary_min" required  value="5" class="form-control" id="inventary_min" placeholder="Minima en Inventario (Default 10)" >
               </div>
             </div>
             <div class="form-group">
-              <div class="col-lg-offset-2 col-lg-12">
+              <div class="col-sm-offset-2 col-sm-4">
+                    <div class="checkbox">
+                      <label>
+                        <input name="control_stock" id="control_stock" type="checkbox"> No controlar stock
+                      </label>
+                    </div>
+                  </div>
+              <div class="col-sm-offset-2 col-sm-4">
                 <button type="button"  class="btn btn-success" onclick="addproduct();">Guardar Producto</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
               </div>
@@ -230,48 +260,30 @@
     </div>
   </div>
   <script>
-    ///funcion para enmascarar
-
-            jQuery(function($){
-              var options =  {
-  onComplete: function(cep) {
-    ///cep es el valor del campo
-    //$('#numero1').unmask(); //Quitando la mascara
-   // $('#numero1').cleanVal();//Obtención del valor escrito desenmascarado
-    alert('CEP completado!:' + $('#numero1').cleanVal());
-
-  },
-  onKeyPress: function(cep, event, currentField, options){
-    NEMEM = $('#price_out').cleanVal();;
+    ///funcion para enmascarar http://igorescobar.github.io/jQuery-Mask-Plugin/docs.html
+    jQuery(function($){
+      $('.money').mask('000.000.000,00', {reverse: true});
+            });
+  function validarprice_out(){
+    NEMEM = $('#price_out').cleanVal()/100;
     nuu = numeroALetras(NEMEM, {
       plural: 'PESOS',
       singular: 'PESO',
       centPlural: 'CENTAVOS',
       centSingular: 'CENTAVO'
     });
-    console.log(NEMEM +nuu);
-    console.log('Una tecla fue presionada!:', cep, ' evento: ', event,
-                'campo actual: ', currentField, ' optiones: ', options);
-  },
-  onChange: function(cep){
-    console.log('cep ha cambiado! ', cep);
-  },
-  onInvalid: function(val, e, f, invalid, options){
-    var error = invalid[0];
-    console.log ("Digit: ", error.v, " no es válido para la posición: ", error.p, ".  Esperamos algo como: ", error.e);
+    console.log(NEMEM+' ' +nuu);
   }
-};
-
-              $('.money').mask('#.##0,00',options);
-            $("#numero1").mask("9,99",options);
-
-
-            // Definimos las mascaras para cada input
-           // $("#date").mask("99/99/9999");
-           // $("#movil").mask("999 99 99 99");
-           // $("#letras").mask("aaa");
-           // $("#comodines").mask("?");
-        });
+  function validarprice_in(){
+    NEMEM = $('#price_in').cleanVal()/100;
+    nuu = numeroALetras(NEMEM, {
+      plural: 'PESOS',
+      singular: 'PESO',
+      centPlural: 'CENTAVOS',
+      centSingular: 'CENTAVO'
+    });
+    console.log(NEMEM+' ' +nuu);
+  }
   function medida(value){
     console.log("medida "+value);
     $('#contentselectmedida').removeClass('has-error');
@@ -409,7 +421,7 @@ function borrarpresentaciones(){
       unit_id: $("#selectmedida").val(),
     },function(data){
       if (data.estado == "true") {
-        alertify.message('Presentaciones descartadas');
+      
       }else {
         alertify.error('No se pudo descartar presentacion');
       }
@@ -431,6 +443,7 @@ function borrarpresentaciones(){
       $("#imagelabel").removeClass("btn-danger");
       $("#imagelabel").addClass("btn-default");
       $("#imagelabel").html("Seleccionar Imagen");
+      $("#spanimagep").html("");
         var pesobyte = 0;
       }else {
         console.log('si hay Imagen');
@@ -443,11 +456,13 @@ function borrarpresentaciones(){
           $("#imagelabel").addClass("btn-danger");
           $("#imagelabel").html("<i class='fa fa-fw fa-file-image-o'></i>"+filename);
           console.log('Imagen muy pesada');
+          $("#spanimagep").html("Imagen muy pesada, no se guardara Imagen.");
     } else {
       $("#imagelabel").removeClass("btn-default");
       $("#imagelabel").removeClass("btn-danger");
       $("#imagelabel").addClass("btn-success");
       $("#imagelabel").html("<i class='fa fa-fw fa-file-image-o'></i>"+filename);
+      $("#spanimagep").html("");
 
     }
 
@@ -1261,23 +1276,149 @@ function borrarpresentaciones(){
             });
             */
           }else {
-            $("#contentmarca").removeClass("has-success")
-            $("#contentmarca").addClass("has-error")
-            $("#contentnuevacategoria2").addClass("has-error")
 
-            $("#nuevamarca" ).focus();
-            $("#spanamemarca").html("Complete este campo.");
-            alertify.error('Complete campo obligatorio');
+            //alertify.error('Complete campo obligatorio');
             console.log("No valido formulario");
           }
 
     }
 function validaformulario(){
-    if (validate("name",9,10)){
-      return true;
+
+  if (validate("codigo",6,255,0)){
+      $("#spancodigop").html("");
+      $("#contenedorcodigo").removeClass("has-error")
+  }else {
+    $("#contenedorcodigo").addClass("has-error")
+    $("#codigo" ).focus();
+    $("#spancodigop").html("Codigo demasiado largo.");
+    alertify.error('Codigo demasiado largo, reduzca el Codigo.');
+    return false
+  }
+
+    if (validate("name",1,10,0)){
+        $("#spanamep").html("");
+        $("#contenedorname").removeClass("has-error")
+        $("#contenedorname").addClass("has-success")
     }else {
+      $("#contenedorname").removeClass("has-success")
+      $("#contenedorname").addClass("has-error")
+      $("#name" ).focus();
+      $("#spanamep").html("Complete este campo.");
+      alertify.error('Complete campo obligatorio');
+      return false;
+    }
+    if (validate("name",6,255,0)){
+        $("#spanamep").html("");
+        $("#contenedorname").removeClass("has-error")
+        $("#contenedorname").addClass("has-success")
+    }else {
+      $("#contenedorname").removeClass("has-success")
+      $("#contenedorname").addClass("has-error")
+      $("#name" ).focus();
+      $("#spanamep").html("Nombre demasiado largo.");
+      alertify.error('Nombre demasiado largo, reduzca el nombre.');
       return false
     }
+
+    if (validate("barcode",6,255,0)){
+        $("#spanbarcode").html("");
+        $("#contenedorbarcode").removeClass("has-error")
+    }else {
+      $("#contenedorbarcode").addClass("has-error")
+      $("#barcode" ).focus();
+      $("#spanbarcode").html("Codigo demasiado largo.");
+      alertify.error('Codigo demasiado largo, reduzca el Codigo.');
+      return false
+    }
+
+    if (validate("description",6,255,0)){
+        $("#spandescription").html("");
+        $("#contenedordescription").removeClass("has-error")
+    }else {
+      $("#contenedordescription").addClass("has-error")
+      $("#descripcion" ).focus();
+      $("#spandescription").html("Descripcion demasiado larga.");
+      alertify.error('Descripción demasiado larga, reduzca la Descripción.');
+      return false
+    }
+
+    if (validate("location",6,255,0)){
+        $("#spanlocation").html("");
+        $("#contenedorlocation").removeClass("has-error")
+    }else {
+      $("#contenedorlocation").addClass("has-error")
+      $("#location" ).focus();
+      $("#spanlocation").html("Ubicación demasiado larga.");
+      alertify.error('Ubicación demasiado larga, reduzca la Ubicación.');
+      return false
+    }
+
+  if (validate("selectmedida",1,0,0)){
+    $("#spanselectmedida").html("");
+    $("#contentselectmedida").removeClass("has-error")
+    }else {
+      $("#contentselectmedida").addClass("has-error")
+      $("#selectmedida" ).focus();
+      $("#spanselectmedida").html("Complete este campo.");
+      alertify.error('Complete campo obligatorios');
+      return false
+    }
+
+    if (validate("selectmedida",1,0,0)){
+      $("#spanselectmedida").html("");
+      $("#contentselectmedida").removeClass("has-error")
+      }else {
+        $("#contentselectmedida").addClass("has-error")
+        $("#selectmedida" ).focus();
+        $("#spanselectmedida").html("Complete este campo.");
+        alertify.error('Complete campo obligatorios');
+        return false
+      }
+
+      if (validate("price_in",1,0,0)){
+        $("#spanprice_in").html("");
+        $("#contenedorpricce_in").removeClass("has-error")
+        }else {
+          $("#contenedorpricce_in").addClass("has-error")
+          $("#price_in" ).focus();
+          $("#spanprice_in").html("Complete este campo.");
+          alertify.error('Complete campo obligatorios');
+          return false
+        }
+        id = $('#price_in').cleanVal();
+        if (validate(id,3,1,1)){
+          $("#spanprice_in").html("");
+          $("#contenedorpricce_in").removeClass("has-error")
+          }else {
+            $("#contenedorpricce_in").addClass("has-error")
+            $("#price_in" ).focus();
+            $("#spanprice_in").html("No puede se cero ni negativo.");
+            alertify.error('No puede se cero ni negativo.');
+            return false
+          }
+
+        if (validate("price_out",1,0,0)){
+          $("#spanprice_out").html("");
+          $("#contenedorpricce_out").removeClass("has-error")
+          }else {
+            $("#contenedorpricce_out").addClass("has-error")
+            $("#price_out" ).focus();
+            $("#spanprice_out").html("Complete este campo.");
+            alertify.error('Complete campo obligatorios');
+            return false
+          }
+          id = $('#price_out').cleanVal();
+          if (validate(id,3,1,1)){
+            $("#spanprice_out").html("");
+            $("#contenedorpricce_out").removeClass("has-error")
+            }else {
+              $("#contenedorpricce_out").addClass("has-error")
+              $("#price_out" ).focus();
+              $("#spanprice_out").html("No puede se cero ni negativo");
+              alertify.error('Complete campo obligatorios');
+              return false
+            }
+    return true;
 }
 
 

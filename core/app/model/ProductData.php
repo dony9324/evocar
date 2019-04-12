@@ -3,19 +3,24 @@ class ProductData {
 	public static $tablename = "product";
 	public function  __construct(){
 		$this->id = "";
-		$this->id_group = "";
+		$this->id_group = ""; //hace referencia al producto principal en caso de ser una variacion de este si vale cero no es una variacion
+		$this->group_amount = "";
+		$this->fractions = "";
+		$this->total_quantity = ""; // es la cantidad traducida ala presentacion principal
 		$this->image = "";
-		$this->barcode = "";
+		$this->extracode = "";
 		$this->name = "";
+		$this->barcode = "";
 		$this->description = "";
+		$this->location = "";
 		$this->trademark_id = "";
 		$this->category_id = "";
 		$this->type_of_iva_id = "";
-		$this->location = "";
+		$this->unit_id = "";
+		$this->cantidad = "";//es la cantidad de la unidad ej si la unidad es metro y el producto mide 6 metros aki se indica
+		$this->other_presentations = "";//indica si tiene otras presentaciones
 		$this->price_in = "";
 		$this->price_out = "";
-		$this->individual = "";
-		$this->unit_id = "";
 		$this->inventary_min = "";
 		$this->control_stock = "";
 		$this->is_active = "";
@@ -24,8 +29,8 @@ class ProductData {
 	}
 	public function getCategory(){ return CategoryData::getById($this->category_id);}
 	public function add(){
-		$sql = "insert into ".self::$tablename." (barcode,name,description,price_in,price_out,user_id,presentation,unit,category_id,inventary_min,created_at) ";
-		$sql .= "value (\"$this->barcode\",\"$this->name\",\"$this->description\",\"$this->price_in\",\"$this->price_out\",$this->user_id,\"$this->presentation\",\"$this->unit\",$this->category_id,$this->inventary_min,NOW())";
+		$sql = "insert into ".self::$tablename." (id_group,group_amount,fractions,total_quantity,image,extracode,name,barcode,description,location,trademark_id,category_id,type_of_iva_id,unit_id,cantidad,other_presentations,price_in,price_out,presentation,unit,category_id,inventary_min,control_stock,user_id,created_at) ";
+		$sql .= "value (\"$this->id_group\",\"$this->group_amount\",\"$this->fractions\",\"$this->total_quantity\",\"$this->image\",\"$this->extracode\",\"$this->name\",\"$this->barcode\",\"$this->description\",\"$this->location\",\"$this->trademark_id\",\"$this->category_id\",\"$this->type_of_iva_id\",\"$this->unit_id\",\"$this->cantidad\",\"$this->other_presentations\",\"$this->price_in\",\"$this->price_out\",$this->user_id,\"$this->presentation\",\"$this->unit\",$this->category_id,$this->inventary_min,NOW())";
 		return Executor::doit($sql);
 	}
 	public function add_with_image(){

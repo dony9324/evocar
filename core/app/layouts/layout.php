@@ -395,7 +395,6 @@ el argumento b es para no usar el id del campo a validar sino que validaremos el
 */
 function validate(id,tipo,m,b){
   total= $('#' + id).val();
-//  $('#' + id).val(total);
   if (b==1){
     total = id;
   }
@@ -413,7 +412,7 @@ function validate(id,tipo,m,b){
     tip = "no sea igual";
     break
     case 5:
-    tip = "sea DECIMAL";
+    tip = "sea enteros";
     break
     case 6:
     tip = "no se mas largo de";

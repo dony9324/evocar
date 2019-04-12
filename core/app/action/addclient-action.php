@@ -21,16 +21,13 @@ if(count($_POST)>0){
         $use = $user->add_client_with_image();
       }
     }else{
-
   $use= $user->add_client();
     }
   }
   else{
   $use= $user->add_client();
-
   }
 	echo "Se guardó nuevo cliente.";
 }
-
 //$resultado = array("estado" => "true");
 ?>

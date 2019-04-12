@@ -5,7 +5,7 @@
       <div class="box-header with-border">
         <h3 class="box-title">Nuevo Producto</h3>
         <button id="bclose" type="button" class="close" data-dismiss="modal" aria-label="Close" aria-hidden="true">
-          <span >×</span></button>
+          <span>×</span></button>
         </div>
         <?php $categories = CategoryData::getAll();
         $ivas = IvaData::getAll();
@@ -185,7 +185,6 @@
                         case 2: echo "text-yellow"; break;
                         case 3: echo "text-green"; break;
                         case 4: echo "text-red"; break;
-                        case 5: echo "text-light-blue"; break;
                         case 5: echo "text-light-blue"; break; default:
                       }
                       ?>" value="<?php echo $unit->id;?>"> <?php echo $unit->name;?></option>
@@ -203,8 +202,8 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="presentation" class="col-sm-2 control-label">Otras presentaciones</label>
-              <div class="col-sm-4">
+              <label for="presentation" class="col-sm-2 col-xs-6 control-label">Otras presentaciones</label>
+              <div class="col-sm-4 col-xs-5">
                 <div class="switch-field" >
                   <input type="radio" id="switch_left" name="switch_2" value="0" checked="" onchange="presentaciones2()" >
                   <label for="switch_left">No</label>
@@ -219,14 +218,14 @@
               <div id="contenedorpricce_in">
               <label for="price_in" class="col-sm-2 control-label">Precio de Costo*</label>
               <div class="col-sm-4">
-              <input type="text" onchange="validarprice_in();" name="price_in" required class="form-control money" id="price_in" placeholder="Precio de entrada">
+              <input type="text" onchange="validarprice_in();" onkeyup="validarprice_in();" name="price_in" required class="form-control money" id="price_in" placeholder="Precio de entrada">
               <span id="spanprice_in"></span>
               </div>
               </div>
               <div id="contenedorpricce_out">
               <label for="price_out" class="col-sm-2 control-label">Precio de Venta*</label>
               <div class="col-sm-4">
-              <input type="text" onchange="validarprice_out();" name="price_out" required class="form-control money" id="price_out" placeholder="Precio de salida">
+              <input type="text" onchange="validarprice_out();" onkeyup="validarprice_out();" name="price_out" required class="form-control money" id="price_out" placeholder="Precio de salida">
               <span id="spanprice_out"></span>
               </div>
               </div>
@@ -245,7 +244,7 @@
               <div class="col-sm-offset-2 col-sm-4">
                     <div class="checkbox">
                       <label>
-                        <input name="control_stock" id="control_stock" type="checkbox"> No controlar stock
+                        <input name="control_stock" id="control_stock" onchange="alertdecontrol_stock();" type="checkbox"> No controlar stock
                       </label>
                     </div>
                   </div>
@@ -267,12 +266,12 @@
   function validarprice_out(){
     NEMEM = $('#price_out').cleanVal()/100;
     nuu = numeroALetras(NEMEM, {
-      plural: 'PESOS',
-      singular: 'PESO',
+      plural: '',
+      singular: '',
       centPlural: 'CENTAVOS',
       centSingular: 'CENTAVO'
     });
-    console.log(NEMEM+' ' +nuu);
+    $("#spanprice_out").html(nuu);
   }
   function validarprice_in(){
     NEMEM = $('#price_in').cleanVal()/100;
@@ -282,7 +281,7 @@
       centPlural: 'CENTAVOS',
       centSingular: 'CENTAVO'
     });
-    console.log(NEMEM+' ' +nuu);
+    $("#spanprice_in").html(nuu);
   }
   function medida(value){
     console.log("medida "+value);
@@ -362,14 +361,10 @@
           }else {
             alertify.error('No se pudo retener presentacion');
           }
-          $("#presentaciones").load("./?action=viewpresentation");
-          $("#presentacionesresumen").load("./?action=viewpresentation&o=resumido");
         });
         $.get("./?action=presentaciones",function(data){
           $("#categorías").html(data);
         });
-
-
       }else{
         document.pepe.switch_2[0].checked = true;
         $("#spanselectmedida").html("Complete este campo.");
@@ -421,7 +416,7 @@ function borrarpresentaciones(){
       unit_id: $("#selectmedida").val(),
     },function(data){
       if (data.estado == "true") {
-      
+
       }else {
         alertify.error('No se pudo descartar presentacion');
       }
@@ -1260,8 +1255,24 @@ function borrarpresentaciones(){
           console.log("addproduct");
           if (validaformulario()){
             console.log("si valido formulario");
-/*
-            $.post("./?action=addmarca",
+          var parametros = new FormData($("#addproduct")[0]);
+          $.ajax (
+            {
+              data:parametros,
+              url:"./?action=addproduct",
+              type:"POST",
+              contentType: false,
+              processData: false,
+              beforesend: function(){
+
+              },
+              success: function(data){
+                alertify.success('Se envio correctamente');
+              }
+            }
+          )
+          /*
+            $.post("./?action=addproduct",
             {
               name:$("#nuevamarca").val(),
               description:$("#descriptionm").val(),
@@ -1418,7 +1429,27 @@ function validaformulario(){
               alertify.error('Complete campo obligatorios');
               return false
             }
+            id = $('#price_out').cleanVal();
+            id2 = $('#price_in').cleanVal();
+            if (validate(id,3,id2,1)){
+              $("#spanprice_out").html("");
+              $("#contenedorpricce_out").removeClass("has-error")
+              }else {
+                $("#contenedorpricce_out").addClass("has-error")
+                $("#price_out" ).focus();
+                $("#spanprice_out").html("El Precio de venta No puede ser menor al Costo");
+                alertify.error('Complete campo obligatorios');
+                return false
+              }
     return true;
+}
+function alertdecontrol_stock(){
+  console.log("alertdecontrol_stock()");
+  if ($('#control_stock').prop('checked')) {
+    alertify.error('AL no  controlar stock, el sistema no tendrá en cuenta la disponibilidad del producto.');
+  }else {
+      alertify.success('se activo control de stock');
+  }
 }
 
 

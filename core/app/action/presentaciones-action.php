@@ -49,12 +49,12 @@
         </div>
         <div class="box-body">
           <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-3">
               <input type="number" id="fracioncantidad" name="cantidad" class="form-control" placeholder="Partes" autocomplete="off">
               <span id="spanfracioncantidad"></span>
             </div>
             <label class="col-sm-2 control-label">Unidad</label>
-            <div class="col-sm-4">
+            <div class="col-sm-3">
               <select id="unit_idfra" name="selectmedida" class="form-control">
                 <option value="">--Seleccione--</option>
                 <?php $units = unitData::getAll(); foreach($units as $unit):?>
@@ -72,6 +72,13 @@
               </select>
               <span id="spanunit_idfra"></span>
             </div>
+            <div id="contenedorpricce_outf">
+            <div class="col-sm-4">
+            <input type="text" onchange="validarprice_outf();" onkeyup="validarprice_outf();" name="price_outf" required class="form-control money" id="price_outf" placeholder="Precio de salida">
+            <span id="spanprice_outf"></span>
+            </div>
+            </div>
+
           </div>
         </div>
         <div class="box-body">
@@ -90,12 +97,12 @@
         </div>
         <div class="box-body">
           <div class="row">
-            <div class="col-sm-4">
-              <input type="number" id="grupocantidad" name="grupocantidad" class="form-control" placeholder="Partes" autocomplete="off">
+            <div class="col-sm-3">
+              <input type="number" id="grupocantidad" name="grupocantidad" class="form-control" placeholder="Cantidad" autocomplete="off">
               <span id="spangrupocantidad"></span>
             </div>
             <label class="col-sm-2 control-label">Unidad</label>
-            <div class="col-sm-4">
+            <div class="col-sm-3">
               <select id="unit_idgru" name="selectmedidagru" class="form-control">
                 <option value="">--Seleccione--</option>
                 <?php $units = unitData::getAll(); foreach($units as $unit):?>
@@ -113,6 +120,14 @@
               </select>
               <span id="spanunit_idgru"></span>
             </div>
+
+            <div id="contenedorpricce_outg">
+            <div class="col-sm-4">
+            <input type="text" onchange="validarprice_outg();" onkeyup="validarprice_outg();" name="price_outg" required class="form-control money" id="price_outg" placeholder="Precio de salida">
+            <span id="spanprice_outg"></span>
+            </div>
+            </div>
+
           </div>
         </div>
         <div class="box-body">
@@ -173,12 +188,32 @@
 
 $(document).ready(function()
 {
+  $('.money').mask('000.000.000,00', {reverse: true});
   $("#presentaciones").load("./?action=viewpresentation");
   $("#presentacionesresumen").load("./?action=viewpresentation&o=resumido");
 
 });
+function validarprice_outg(){
+  NEMEM = $('#price_outg').cleanVal()/100;
+  nuu = numeroALetras(NEMEM, {
+    plural: '',
+    singular: '',
+    centPlural: 'CENTAVOS',
+    centSingular: 'CENTAVO'
+  });
+  $("#spanprice_outg").html(nuu);
+}
 
-
+function validarprice_outf(){
+  NEMEM = $('#price_outf').cleanVal()/100;
+  nuu = numeroALetras(NEMEM, {
+    plural: '',
+    singular: '',
+    centPlural: 'CENTAVOS',
+    centSingular: 'CENTAVO'
+  });
+  $("#spanprice_outf").html(nuu);
+}
 //fomulario para los datos de nueva unidad
 function newuni(){
   console.log("new Unidad");
@@ -274,10 +309,21 @@ function savfra() {
         $("#spanfracioncantidad").html("");
         if (validate("unit_idfra",1,0)){
           $("#spanunit_idfra").html("");
+
+          if (validate("price_outf",1,0,0)){
+            $("#spanprice_outf").html("");
+            $("#contenedorpricce_outf").removeClass("has-error");
+
+            id = $('#price_outf').cleanVal();
+            if (validate(id,3,1,1)){
+              $("#spanprice_outf").html("");
+              $("#contenedorpricce_outf").removeClass("has-error")
+
           $.get("./?action=addfraction&o=fra",
           {
             q:$("#fracioncantidad").val(),
             unit_id: $("#unit_idfra").val(),
+            price_outf:$("#price_outf").val(),
           },function(data){
             if (data.estado == "true") {
               alertify.success('Se retuvo fracion correctamente');
@@ -288,6 +334,20 @@ function savfra() {
             $("#presentacionesresumen").load("./?action=viewpresentation&o=resumido");
           });
           savcanuni();
+        }else {
+          $("#contenedorpricce_outf").addClass("has-error")
+          $("#price_outf" ).focus();
+          $("#spanprice_outf").html("No puede se cero ni negativo");
+          alertify.error('Complete campo obligatorios');
+          return false
+        }
+      }else {
+        $("#contenedorpricce_outf").addClass("has-error")
+        $("#price_outf" ).focus();
+        $("#spanprice_outf").html("Complete este campo.");
+        alertify.error('Complete campo obligatorios');
+        return false;
+      }
         }else {
           $("#unit_idfra").focus();
           $("#spanunit_idfra").html("Complete este campo.");
@@ -332,41 +392,61 @@ function newgru(){
 }
 function savgru() {
   console.log("sav grupo");
-  //alertify.success('añadiendo a la Lista Producto'+id)
+  //1:"no este vacio" 2:"no sea mayor" 3:"no sea menor" 4:"no sea igual"
+  //5:"sea DECIMAL" 6:"no se mas largo de" 7: "no se mas corto de" 8:"sea numero" 9:"no pese mas de"
   if (validate("grupocantidad",1,0)){
       if (validate("grupocantidad",4,0)){
       if (validate("grupocantidad",3,2)){
-        if (validate("grupocantidad",5,0)){
         $("#spangrupocantidad").html("");
         if (validate("unit_idgru",1,0)){
           $("#spanunit_idgru").html("");
-          $.get("./?action=addfraction&o=gru",
-          {
-            q:$("#grupocantidad").val(),
-            unit_id: $("#unit_idgru").val(),
-          },function(data){
-            if (data.estado == "true") {
-              alertify.success('Se retuvo grupo correctamente');
-            }else {
-              alertify.error('No se pudo retener grupo');
-            }
-            $("#presentaciones").load("./?action=viewpresentation");
-            $("#presentacionesresumen").load("./?action=viewpresentation&o=resumido");
-          });
-          savcanuni();
+                    if (validate("price_outg",1,0,0)){
+                      $("#spanprice_outg").html("");
+                      $("#contenedorpricce_outg").removeClass("has-error");
 
+                      id = $('#price_outg').cleanVal();
+                      if (validate(id,3,1,1)){
+                        $("#spanprice_outg").html("");
+                        $("#contenedorpricce_outg").removeClass("has-error")
+                        $.get("./?action=addfraction&o=gru",
+                        {
+                          price_outg:$("#price_outg").val(),
+                          q:$("#grupocantidad").val(),
+                          unit_id: $("#unit_idgru").val(),
+                        },function(data){
+                          if (data.estado == "true") {
+                            alertify.success('Se retuvo grupo correctamente');
+                            $("#price_outg").val("");
+                            $("#grupocantidad").val("");
+                            $("#unit_idgru").val("");
+                          }else {
+                            alertify.error('No se pudo retener grupo');
+                          }
+                          $("#presentaciones").load("./?action=viewpresentation");
+                          $("#presentacionesresumen").load("./?action=viewpresentation&o=resumido");
+                        });
+                        savcanuni();
+                        }else {
+                          $("#contenedorpricce_outg").addClass("has-error")
+                          $("#price_outg" ).focus();
+                          $("#spanprice_outg").html("No puede se cero ni negativo");
+                          alertify.error('Complete campo obligatorios');
+                          return false
+                        }
+                      }else {
+                        $("#contenedorpricce_outg").addClass("has-error")
+                        $("#price_outg" ).focus();
+                        $("#spanprice_outg").html("Complete este campo.");
+                        alertify.error('Complete campo obligatorios');
+                        return false;
+                      }
         }else {
           $("#unit_idgru").focus();
           $("#spanunit_idgru").html("Complete este campo.");
           alertify.error('Complete campo obligatorio');
           console.log("no valido Unidad");
         }
-      }else {
-        $("#grupocantidad").focus();
-        $("#spangrupocantidad").html("Debe ser un entero");
-        alertify.error('Complete campo obligatorio');
-        console.log("no valido partes");
-      }
+
       }else {
         $("#grupocantidad").focus();
         $("#spangrupocantidad").html("No puede ser menor a 2");

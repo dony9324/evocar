@@ -121,7 +121,7 @@ function validarprice(na,id){
 }
 </script>
 </table>
-<form method="post" class="form-horizontal" name ="processsell" id="processsell" action="index.php?action=processre" >
+<div class="form-horizontal">
 <h3>Resumen</h3>
       <input type="hidden" name="total" value="<?php echo $total; ?>" class="form-control" placeholder="Total">
 <table style="width:100%;" class="table table-bordered">
@@ -129,8 +129,9 @@ function validarprice(na,id){
 	<td class="info" style="width:150px"><p><b>Total</b></p></td>
 	<td class="danger"><p><b>$ <?php echo number_format(($total/100), 2, ',', '.'); ?></b></p></td>
     <td ></td>
-		<td class="info" style="width:180px"><p><b>Descuento</b></p></td>
+		<!--<td class="info" style="width:180px"><p><b>Descuento</b></p></td>
 		<td class="success"><input type="text" step="any" name="discount" onchange="validarprice('discount','');" onkeyup="validarprice('discount','');" class="form-control money" required="" value="" id="discount" placeholder="Descuento"></td>
+	-->
 </tr>
 </table>
 <input type="hidden" name="cost" value="<?php echo $total2; ?>" class="form-control" placeholder="Total">
@@ -200,9 +201,23 @@ $clients = PersonData::getProviders();
 		  });}
 		</script>
         <button class="btn btn-lg btn-success"><i class="glyphicon glyphicon-usd"></i> Finalizar Venta</button>
-        <a href="res/escpos-php-master/cot.php" class="btn btn-default"><i class="glyphicon glyphicon-print"></i> Imprimir Lista</a>
+          <button  onclick="imprimirlista()" class="btn btn-default"><i class="glyphicon glyphicon-print"></i> Imprimir Lista</button>
+				<script>
+				 function imprimirlista() {
+					console.log("imprimirlista")
+					$.get("./?action=printlistre",
+					{
+					},function(data){
+						if (data.estado == "true") {
+						alertify.success('Imprimiendo....');
+						}else {
+							 alertify.error('Algo salio mal');
+							}
+					});}
+				</script>
+
       </div>
-   </form>
+   </div>
 <?php endif; ?>
       <div id="results"></div>
 <script>

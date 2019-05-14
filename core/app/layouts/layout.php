@@ -282,37 +282,71 @@ $skin = $us->value;
                   </div>
                   <div class="col-md-2">
                   </div>
-                  <div class="col-md-9">
+                  <div class="col-md-11">
                     <form class="form-horizontal" method="post" action="index.php?view=updateuser" role="form" >
                       <div class="form-group">
-                        <label for="inputEmail1" class="col-lg-2 control-label">Nombre*</label>
-                        <div class="col-md-6">
+                        <label for="inputEmail1" class="col-md-4 control-label">Nombre*</label>
+                        <div class="col-md-8">
                           <input type="text" name="name" value="<?php echo $u->name;?>" class="form-control" id="nameuser" placeholder="Nombre">
                         </div>
                       </div>
                       <div class="form-group">
-                        <label for="inputEmail1" class="col-lg-2 control-label">Apellido*</label>
-                        <div class="col-md-6">
+                        <label for="inputEmail1" class="col-md-4 control-label">Apellido*</label>
+                        <div class="col-md-8">
                           <input type="text" name="lastname" value="<?php echo $u->lastname;?>" required class="form-control" id="lastname" placeholder="Apellido">
                         </div>
                       </div>
+
                       <div class="form-group">
-                        <label for="inputEmail1" class="col-lg-2 control-label">Usuario*</label>
-                        <div class="col-md-6">
+                        <label for="inputEmail1" id="etiqueta" class="col-md-4 control-label">Salir tras 0 minutos</label>
+                        <div class="col-md-8">
+                          <div class="inputDiv">
+
+                            <input  id="inputrange" type="range" onchange="rangechange(this.value);" value="35" min="0" max="100" autocomplete="off">
+                            <script>
+                            var elInput = document.querySelector('#inputrange');
+                            if (elInput) {
+                              var etiqueta = document.querySelector('#etiqueta');
+                              if (etiqueta) {
+                                etiqueta.innerHTML = elInput.value;
+
+                                elInput.addEventListener('input', function() {
+                                  etiqueta.innerHTML = elInput.value;
+                                }, false);
+                              }
+                            }
+                            function rangechange(val){
+
+                              $("#etiqueta").html("Salir tras " +val+ " minutos");
+
+                            }
+                            </script>
+                          </div>
+
+
+
+                        </div>
+                      </div>
+
+
+
+                      <div class="form-group">
+                        <label for="inputEmail1" class="col-md-4 control-label">Usuario*</label>
+                        <div class="col-md-8">
                           <input type="text" name="username" value="<?php echo $u->username;?>" class="form-control" required id="username" placeholder="Nombre de usuario">
                         </div>
                       </div>
                       <div class="form-group">
-                        <label for="inputEmail1" class="col-lg-2 control-label">Contrase&ntilde;a</label>
-                        <div class="col-md-6">
+                        <label for="inputEmail1" class="col-md-4 control-label">Contrase&ntilde;a</label>
+                        <div class="col-md-8">
                           <a class="btn btn-info" href="index.php?view=configuration">Cambiar</a>
                           <input type="hidden" name="password" class="form-control" id="inputEmail1" placeholder="Contrase&ntilde;a">
                         </div>
                       </div>
 
                       <div class="form-group">
-                        <label for="inputEmail1" class="col-lg-2 control-label" >Esta activo</label>
-                        <div class="col-md-6">
+                        <label for="inputEmail1" class="col-md-4 control-label" >Esta activo</label>
+                        <div class="col-md-8">
                           <div class="checkbox">
                             <label>
                               <input type="checkbox" name="is_active" <?php if($u->status){ echo "checked";}?>>
@@ -321,8 +355,8 @@ $skin = $us->value;
                         </div>
                       </div>
                       <div class="form-group">
-                        <label for="inputEmail1" class="col-lg-2 control-label" >Es administrador</label>
-                        <div class="col-md-6">
+                        <label for="inputEmail1" class="col-md-4 control-label" >Es administrador</label>
+                        <div class="col-md-8">
                           <div class="checkbox">
                             <label>
                               <input type="checkbox" name="is_admin" <?php if($u->is_admin){ echo "checked";}?>>
@@ -394,9 +428,11 @@ el argumento m es un parametro a tener en cuenta para validar
 el argumento b es para no usar el id del campo a validar sino que validaremos el contenido del parametro
 */
 function validate(id,tipo,m,b){
-  total= $('#' + id).val();
+
   if (b==1){
     total = id;
+  }else {
+    total= $('#' + id).val();
   }
   switch (tipo) {
     case 1:
@@ -446,6 +482,7 @@ function validate(id,tipo,m,b){
     break
     case 3:
     if (total < m ) {
+      console.log("total "+total+" m "+m);
       return false;
     }else {
       return true;

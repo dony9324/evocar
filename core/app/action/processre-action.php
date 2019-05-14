@@ -35,15 +35,13 @@ print "<script>window.location='index.php?view=onere&id=$s[1]';</script>";
 	}
 }
 if (isset($_GET["o"]) AND $_GET["o"]="one") {
-			$sell = new SellData();
-			$sell->user_id = $_SESSION["user_id"];
-			$sell->total = $_GET["price_in"] * $_GET["product_q"];
-			$s = $sell->add_re();
 			$op = new OperationData();
 			$op->product_id = $_GET["product_id"]  ;
 			$op->operation_type_id=1;
-			$op->sell_id=$s[1];
 			$op->q= $_GET["product_q"];
+			$op->change_price_in=$_GET["price_in"];
+			$op->sell_id="NULL";
+			$op->user_id=$_SESSION["user_id"];
 			$op->is_oficial = 1;
 
 			if($add = $op->add()){

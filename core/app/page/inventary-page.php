@@ -15,7 +15,7 @@
           <div class="btn-group  pull-right">
             <a class="btn btn-default"><i class="fa fa-refresh"></i> Devoluciones</a>
             <a id="re" class="btn btn-default"><i class="fa fa-refresh"></i> Reabastecer</a>
-            <button type="button" class="btn btn-default" onclick="newproducto()"><i class="fa fa-tags"></i>Nuevo Producto</button>
+            <button type="button" id="btnnewproducto" class="btn btn-default" onclick="newproducto()"><i class="fa fa-tags"></i>Nuevo Producto</button>
             <div class="btn-group pull-right">
               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                 <i class="fa fa-download"></i> Descargar <span class="caret"></span>
@@ -30,10 +30,13 @@
         <script>
         //esta funcion carga el formulario para guardar un nuevo producto
         function newproducto(){
+          //estalinea es por un error de doble ventana he impide que se abra dosveces el modal
+          $("#btnnewproducto").prop('disabled', true);
           console.log("nuevo producto")
           $.get("./?action=newproduct",function(data){
             $("#newproducto").html(data);
             $('#myModal').modal('show');
+            $("#btnnewproducto").prop('disabled', false);
           });
 
         }

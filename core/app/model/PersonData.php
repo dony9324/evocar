@@ -2,38 +2,44 @@
 class PersonData {
 	public static $tablename = "person";
 	public function  __construct(){
+		$this->image = "";
 		$this->name = "";
 		$this->lastname = "";
-		$this->email = "";
 		$this->identity = "";
-		$this->image = "";
-		$this->password = "";
+		$this->address1 = "";
+		$this->email1 = "";
+		$this->phone1 = "";
+		$this->phone2 = "";
+		$this->company = "";
+		$this->nit = "";
+		$this->kind = "";
+		$this->user_id= "";
 		$this->created_at = "NOW()";
 	}
 
 	public function add_client(){
-		$sql = "insert into person (name,lastname,identity,address1,email1,phone1,phone2,company,nit,kind,created_at) ";
-		$sql .= "value (\"$this->name\",\"$this->lastname\",\"$this->identity\",\"$this->address1\",\"$this->email1\",\"$this->phone1\",\"$this->phone2\",\"$this->company\",\"$this->nit\",1,$this->created_at)";
+		$sql = "insert into person (name,lastname,identity,address1,email1,phone1,phone2,company,nit,kind,user_id,created_at) ";
+		$sql .= "value (\"$this->name\",\"$this->lastname\",\"$this->identity\",\"$this->address1\",\"$this->email1\",\"$this->phone1\",\"$this->phone2\",\"$this->company\",\"$this->nit\",1,$this->user_id,$this->created_at)";
 		Executor::doit($sql);
 	}
 
 	public function add_client_with_image(){
-		$sql = "insert into person (name,image,lastname,identity,address1,email1,phone1,phone2,company,nit,kind,created_at) ";
-		$sql .= "value (\"$this->name\",\"$this->image\",\"$this->lastname\",\"$this->identity\",\"$this->address1\",\"$this->email1\",\"$this->phone1\",\"$this->phone2\",\"$this->company\",\"$this->nit\",1,$this->created_at)";
+		$sql = "insert into person (name,image,lastname,identity,address1,email1,phone1,phone2,company,nit,kind,user_id,created_at) ";
+		$sql .= "value (\"$this->name\",\"$this->image\",\"$this->lastname\",\"$this->identity\",\"$this->address1\",\"$this->email1\",\"$this->phone1\",\"$this->phone2\",\"$this->company\",\"$this->nit\",1,$this->user_id,$this->created_at)";
 		Executor::doit($sql);
 	}
 
 
 
 	public function add_provider(){
-		$sql = "insert into person (name,lastname,identity,address1,email1,phone1,phone2,company,nit,kind,created_at) ";
-		$sql .= "value (\"$this->name\",\"$this->lastname\",\"$this->identity\",\"$this->address1\",\"$this->email1\",\"$this->phone1\",\"$this->phone2\",\"$this->company\",\"$this->nit\",2,$this->created_at)";
+		$sql = "insert into person (name,lastname,identity,address1,email1,phone1,phone2,company,nit,kind,user_id,created_at) ";
+		$sql .= "value (\"$this->name\",\"$this->lastname\",\"$this->identity\",\"$this->address1\",\"$this->email1\",\"$this->phone1\",\"$this->phone2\",\"$this->company\",\"$this->nit\",2,$this->user_id,$this->created_at)";
 		Executor::doit($sql);
 	}
 
 	public function add_provider_with_image(){
-		$sql = "insert into person (name,image,lastname,identity,address1,email1,phone1,phone2,company,nit,kind,created_at) ";
-		$sql .= "value (\"$this->name\",\"$this->image\",\"$this->lastname\",\"$this->identity\",\"$this->address1\",\"$this->email1\",\"$this->phone1\",\"$this->phone2\",\"$this->company\",\"$this->nit\",2,$this->created_at)";
+		$sql = "insert into person (name,image,lastname,identity,address1,email1,phone1,phone2,company,nit,kind,user_id,created_at) ";
+		$sql .= "value (\"$this->name\",\"$this->image\",\"$this->lastname\",\"$this->identity\",\"$this->address1\",\"$this->email1\",\"$this->phone1\",\"$this->phone2\",\"$this->company\",\"$this->nit\",2,$this->user_id,$this->created_at)";
 		Executor::doit($sql);
 	}
 
@@ -121,7 +127,7 @@ class PersonData {
 	}
 
 	public static function getClients(){
-		$sql = "select * from ".self::$tablename." where kind=1 order by name,lastname";
+		$sql = "select * from ".self::$tablename." where kind=1 order by id,name";
 		$query = Executor::doit($sql);
 		$array = array();
 		$cnt = 0;
@@ -148,7 +154,7 @@ class PersonData {
 
 
 	public static function getProviders(){
-		$sql = "select * from ".self::$tablename." where kind=2 order by name,lastname";
+		$sql = "select * from ".self::$tablename." where kind=2 order by id,name";
 		$query = Executor::doit($sql);
 		$array = array();
 		$cnt = 0;

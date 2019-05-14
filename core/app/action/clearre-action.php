@@ -1,8 +1,12 @@
 <?php
+header('Content-type: application/json');
+$resultado = array();
+$resultado = array("estado" => "false");
 if(isset($_GET["product_id"])){
 	$cart=$_SESSION["reabastecer"];
 	if(count($cart)==1){
 	 unset($_SESSION["reabastecer"]);
+	 $resultado = array("estado" => "true");
 	}else{
 		$ncart = null;
 		$nx=0;
@@ -13,12 +17,12 @@ if(isset($_GET["product_id"])){
 			$nx++;
 		}
 		$_SESSION["reabastecer"] = $ncart;
+	$resultado = array("estado" => "true");
 	}
 
 }else{
  unset($_SESSION["reabastecer"]);
+ $resultado = array("estado" => "true");
 }
-
-print "<script>window.location='index.php?view=re';</script>";
-
+return print(json_encode($resultado));
 ?>

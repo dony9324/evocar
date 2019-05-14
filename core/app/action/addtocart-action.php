@@ -71,7 +71,6 @@ if(!isset($_SESSION["cart"])){
 			}
 			if($can==true){
 				$_SESSION["cart"] = $cart;
-
 			}
 		}
 		if($found==false){
@@ -82,6 +81,5 @@ if(!isset($_SESSION["cart"])){
 		}
 	}
 }
-
 	return print(json_encode($resultado));
 ?>

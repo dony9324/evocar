@@ -30,26 +30,96 @@ $total2 = 0;//esto es para el descuento
 <thead>
 	<th>Producto</th>
 	<th>Cantidad</th>
-	<th>Precio</th>
-  <th>Costo</th>
+	<th>Precio de Costo*</th>
+	<th>Precio de Venta*</th>
 	<th>Total</th>
 	<th ></th>
 </thead>
 <?php foreach($_SESSION["reabastecer"] as $p):
 $product = ProductData::getById($p["product_id"]);
 ?>
+<form id="f<?php echo $p["product_id"];?>" name="f<?php echo $p["product_id"];?>" class="form-horizontal" method="post" autocomplete="off"  role="form" >
 <tr >
-  <td style="width:auto"><?php echo $product->name; ?></td>
+  <td style="width:auto"> <?php echo $product->name; ?></td>
 	<td ><?php echo $p["q"]; ?></td>
-	<td><b>$ <?php echo $product->price_out; ?></b></td>
-    <td><b>$ <?php echo $product->price_in; ?></b></td>
-	<td><b>$ <?php  $pt = $product->price_in* $p["q"]; $total +=$pt; $pt2 = $product->price_in*$p["q"];
-	 $total2 +=$pt2; echo $pt; ?></b></td>
+    <td> <input type="text" onchange="validarprice('price_in',<?php echo $p["product_id"];?>);" onkeyup="validarprice('price_in',<?php echo $p["product_id"];?>);" name="price_in<?php echo $p["product_id"];?>" required class="form-control money" id="price_in<?php echo $p["product_id"];?>" value="<?php echo $p["price_in"]; ?>" placeholder="Precio de entrada">
+		<span id="spanprice_in<?php echo $p["product_id"];?>"></span></td>
+		<td><input type="text" onchange="validarprice('price_out',<?php echo $p["product_id"];?>);" onkeyup="validarprice('price_out',<?php echo $p["product_id"];?>);" name="price_out<?php echo $p["product_id"];?>" required class="form-control money" id="price_out<?php echo $p["product_id"];?>" value="<?php echo $p["price_out"]; ?>" placeholder="Precio de salida">
+		  <span id="spanprice_out<?php echo $p["product_id"];?>"></span></td>
+	<td>
+<?php  $pt = $p["price_in"]* $p["q"]; $total +=$pt; $pt2 = $p["price_in"]*$p["q"];
+$total2 +=$pt2;  echo number_format(($pt/100), 2, ',', '.'); ?>
+		</td>
 	<td style="width:30px;"><a class="btn btn-danger" onclick="clearre(<?php echo $product->id; ?>)"><i class="glyphicon glyphicon-remove"></i> Eliminar</a></td>
 </tr>
+</form>
+<script>
+//esta funcion actualisar los valores de  $_SESSION["reabastecer"] - blur = perde el focu
+$("#price_in<?php echo $p["product_id"];?>").blur(function(){
+	id = $("#price_out<?php echo $p["product_id"];?>").cleanVal() * 1;
+	id2 = $("#price_in<?php echo $p["product_id"];?>").cleanVal() * 1;
+	if (validate(id,3,id2,1)){
+		$.get("./?action=updatere",
+		{
+		price_in: $("#price_in<?php echo $p["product_id"];?>").cleanVal(),
+		price_out:$("#price_out<?php echo $p["product_id"];?>").cleanVal(),
+		product_id:<?php echo $p["product_id"];?>
+		},function(data){
+			if (data.estado == "true") {
+				console.log('Se actualliso producto correctamente');
+			}else {
+				 	console.log('no se actualliso producto');
+				}
+		$("#cart").load("./?action=viewcartre");
+		});
+		}else {
+			alertify.error('El Precio de venta No puede ser menor al Costo');
+		}
+	});
+
+	$("#price_out<?php echo $p["product_id"];?>").blur(function(){
+		id = $("#price_out<?php echo $p["product_id"];?>").cleanVal() * 1;
+		id2 = $("#price_in<?php echo $p["product_id"];?>").cleanVal() * 1;
+		if (validate(id,3,id2,1)){
+			$.get("./?action=updatere",
+			{
+			price_in: $("#price_in<?php echo $p["product_id"];?>").cleanVal(),
+			price_out:$("#price_out<?php echo $p["product_id"];?>").cleanVal(),
+			product_id:<?php echo $p["product_id"];?>
+			},function(data){
+				if (data.estado == "true") {
+					console.log('Se actualliso producto correctamente');
+				}else {
+					 	console.log('no se actualliso producto');
+					}
+			$("#cart").load("./?action=viewcartre");
+			});
+			}else {
+				alertify.error('El Precio de venta No puede ser menor al Costo');
+			}
+		});
+
+</script>
 <?php endforeach;
 $infoiva= CompanyData::getById(1)->value;
 ?>
+<script>
+	///funcion para enmascarar http://igorescobar.github.io/jQuery-Mask-Plugin/docs.html
+	jQuery(function($){
+		$('.money').mask('000.000.000,00', {reverse: true});
+					});
+function validarprice(na,id){
+	NEMEM = $('#'+na+id).cleanVal()/100;
+	nuu = numeroALetras(NEMEM, {
+		plural: 'PESOS',
+		singular: 'PESO',
+		centPlural: 'CENTAVOS',
+		centSingular: 'CENTAVO'
+	});
+		alertify.message(nuu);
+	//$("#spanprice_in"+id).html(nuu);
+}
+</script>
 </table>
 <form method="post" class="form-horizontal" name ="processsell" id="processsell" action="index.php?action=processre" >
 <h3>Resumen</h3>
@@ -57,24 +127,37 @@ $infoiva= CompanyData::getById(1)->value;
 <table style="width:100%;" class="table table-bordered">
 <tr>
 	<td class="info" style="width:150px"><p><b>Total</b></p></td>
-	<td class="danger"><p><b>$ <?php echo ($total); ?></b></p></td>
+	<td class="danger"><p><b>$ <?php echo number_format(($total/100), 2, ',', '.'); ?></b></p></td>
     <td ></td>
+		<td class="info" style="width:180px"><p><b>Descuento</b></p></td>
+		<td class="success"><input type="text" step="any" name="discount" onchange="validarprice('discount','');" onkeyup="validarprice('discount','');" class="form-control money" required="" value="" id="discount" placeholder="Descuento"></td>
 </tr>
-
 </table>
 <input type="hidden" name="cost" value="<?php echo $total2; ?>" class="form-control" placeholder="Total">
 <div class="form-group">
 <div class="col-lg-2">
     <label  class="col-lg-1 control-label">Proveedor</label></div>
     <div class="col-lg-10">
-<button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal"><i class="fa  fa-plus"></i> Nuevo Proveedor</button>
-
+				<button type="button" id="btnnewp" onclick="newprovider()" class="btn btn-default"><i class="fa  fa-plus"></i> Nuevo Proveedor</button>
+					<div id="newprovider"> </div>
+					<script>
+					//esta funcion carga el formulario para guardar un nuevo provider
+					function newprovider(){
+						//estalinea es por un error de doble ventana he impide que se abra dosveces el modal
+						$("#btnnewp").prop('disabled', true);
+						console.log("nuevo provider")
+						$.get("./?action=newprovider",function(data){
+							$("#newprovider").html(data);
+							$('#myModal').modal('show');
+							$("#btnnewp").prop('disabled', false);
+						});
+					}
+					</script>
   </div>
 </div>
     <?php
 $clients = PersonData::getProviders();
     ?>
-
     <div class="form-group">
     <div class="col-lg-2">
                 <label>Seleccionar Proveedor</label>
@@ -85,295 +168,47 @@ $clients = PersonData::getProviders();
                   <?php foreach($clients as $client):?>
                  <option value="<?php echo $client->id;?>"><?php echo $client->name." ".$client->lastname;?></option>
                   <?php endforeach;?>
-
                 </select>
               </div>
               </div>
-   </br>
-<div class="form-group">
-    <div class="col-lg-2"><label  class="col-lg-1 control-label">Descuento</label></div>
-    <div class="col-lg-10">
-      <input type="number" step="any" name="discount" class="form-control" required value="0" id="discount" placeholder="Descuento">
-    </div>
-  </div>
-  </br>
- <div class="form-group">
- <div class="col-lg-2">
-    <label  class="col-lg-1 control-label">Efectivo</label></div>
-    <div class="col-lg-10">
-      <input type="number" min="0" name="money" required class="form-control" id="money" placeholder="Efectivo">
-    </div>
-  </div>
-  </br>
  <div class="form-group">
  <div class="col-lg-2">
  <label  class="col-lg-1 control-label">Acreditar</label></div>
    <div class="col-lg-10">
-
-  <style>
-      .switch-field {
- 	overflow: hidden;
-}
-
-.switch-field input {
-  display: none;
-}
-
-.switch-field label {
-  float: left;
-}
-
-.switch-field label {
-  display: inline-block;
-  width: 60px;
-  background-color: #ffffff;
-  color: rgba(0, 0, 0, 0.6);
-  font-size: 14px;
-  font-weight: normal;
-  text-align: center;
-  text-shadow: none;
-  padding: 6px 14px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
-  -webkit-transition: all 0.1s ease-in-out;
-  -moz-transition:    all 0.1s ease-in-out;
-  -ms-transition:     all 0.1s ease-in-out;
-  -o-transition:      all 0.1s ease-in-out;
-  transition:         all 0.1s ease-in-out;
-}
-
-.switch-field label:hover {
-	cursor: pointer;
-}
-
-.switch-field input:checked + label {
-  background-color: #5cb85c;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-}
-
-.switch-field label:first-of-type {
-  border-radius: 4px 0 0 4px;
-}
-
-.switch-field label:last-of-type {
-  border-radius: 0 4px 4px 0;
-}
-    </style>
-  <script>
-
-  function desavilita(){
-	 si = $('input:radio[name=switch_2]:checked').val();
-	  mone = document.getElementById("money");
-	  discoun = document.getElementById("discount");
-	    if(si==1){
-		   document.getElementById("money").value=0;
-		   document.getElementById("discount").value=0;
-		   mone.disabled = true;
-		   discoun.disabled = true;
-		}else{
-			mone.disabled = false;
-			discoun.disabled = false;
-			}
-
-   }
-
-  </script>
-
-   <div class="switch-field" onClick="desavilita()">
+   <div class="switch-field" >
       <input type="radio" id="switch_left" name="switch_2" value="0" checked/>
       <label for="switch_left">NO</label>
       <input type="radio" id="switch_right" name="switch_2" value="1" />
       <label for="switch_right">SI</label>
     </div>
       </div></div>
-      </br>
-           <input name="is_oficial" type="hidden" value="1">
+        <input name="is_oficial" type="hidden" value="1">
        <div class="col-lg-10">
-		<a href="index.php?action=clearcart" class="btn btn-lg btn-danger"><i class="glyphicon glyphicon-remove"></i> Cancelar</a>
+		<button class="btn btn-lg btn-danger"	onclick="clearr()" ><i class="glyphicon glyphicon-remove"></i> Cancelar </button>
+		<script>
+		 function clearr() {
+		  console.log("clearr")
+		  $.get("./?action=clearre",
+		  {
+		  },function(data){
+		    if (data.estado == "true") {
+		    alertify.success('Reabastecer cancelado');
+		    }else {
+		       alertify.error('Algo salio mal');
+		      }
+		  $("#cart").load("./?action=viewcartre");
+		  });}
+		</script>
         <button class="btn btn-lg btn-success"><i class="glyphicon glyphicon-usd"></i> Finalizar Venta</button>
-        <a href="res/escpos-php-master/cot.php" class="btn btn-default"><i class="glyphicon glyphicon-print"></i> Imprimir Cotisacion</a>
+        <a href="res/escpos-php-master/cot.php" class="btn btn-default"><i class="glyphicon glyphicon-print"></i> Imprimir Lista</a>
       </div>
    </form>
-<script>/*
-go=false;
-est=false;
-	$("#processsell").submit(function(e){
-		discount = $("#discount").val();
-		money = $("#money").val();
-		cliente = $("#client_id").val();
-		cliente2=$('#client_id option:selected').text();
-		otra = $('input:radio[name=switch_2]:checked').val();
-
-		//override defaults para que se ve el tema
-alertify.defaults.transition = "slide";
-alertify.defaults.theme.ok = "btn btn-info";
-alertify.defaults.theme.cancel = "btn btn-danger";
-alertify.defaults.theme.input = "form-control";
-
-
-		if(discount>(<?php// echo $dicuento;?>)){
-			alertify.alert('ERROR', 'No se puede efectuar la operacion. Descuento muy alto!', function(){ alertify.error('Descuento muy alto'); });
-			e.preventDefault();
-		}else{
-			if(otra==0 ){
-				if(money<(<?php //echo $total;?>-discount)){
-					alertify.alert('ERROR', 'No se puede efectuar la operacion. Falta efectivo!', function(){ alertify.error('Falta efectivo'); });
-					e.preventDefault();
-
-				}else{
-					if(discount==""){ discount=0; }
-
-
-
-			alertify.confirm('Cambio',"Cambio: $"+(money-(<?php// echo $total;?>-discount ) ),
-
-			 function(){ alertify.success('Ok')
-			 setTimeout(function(){ document.processsell.submit() ; }, 500);
-
-			  }
-
-                , function(){ alertify.error('Cancelado por usuario')});
-						e.preventDefault();
-					}
-			}else{
-				if(cliente==""){
-					alertify.alert('ERROR',"No se puede efectuar la operacion falta cliente ", function(){ alertify.error('Falta cliente'); });
-					e.preventDefault();
-				}else{
-
-					alertify.confirm('Acreditar', "desea acreditar: $"+(<?php// echo $total;?>-discount )+" a "+ cliente2,
-					 function(){ alertify.success('si acecto acreditar')
-					   setTimeout(function(){ document.processsell.submit() ; }, 500);
-					 }
-                , function(){ alertify.error('canselado por usuario')});
-
-
-						}
-				e.preventDefault();
-				}
-	}}); */
-</script>
 <?php endif; ?>
-
-
-<!---newclient-->
-<!-- Modal2 -->
-<div id="myModal" class="modal fade in" role="dialog">
-  <div class="modal-dialog">
-    <!-- Modal content-->
-    <div class="box box-info">
-            <div class="box-header with-border">
-              <h3 class="box-title">Nuevo Cliente</h3>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">×</span></button>
-            </div>
-            <!-- /.box-header -->
-            <!-- form start -->
-            <form class="form-horizontal" method="post" enctype="multipart/form-data"  id="newcliente" action="index.php?action=addclient" role="form" >
-              <div class="box-body">
-                <div class="form-group">
-                  <label for="inputEmail1" class="col-lg-2 control-label">Imagen</label>
-
-                  <div class="col-sm-10">
-                   <input type="file" name="image" id="image" placeholder="">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="inputEmail1"  class="col-lg-2 control-label">Nombre*</label>
-
-                  <div class="col-sm-10">
-                    <input type="text" required name="name" class="form-control" id="name" placeholder="Nombre">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="inputEmail1" class="col-lg-2 control-label">Apellido*</label>
-
-                  <div class="col-sm-10">
-                   <input type="text" required  name="lastname"  class="form-control" id="lastname" placeholder="Apellido">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="inputEmail1" class="col-lg-2 control-label">Cedula*</label>
-
-                  <div class="col-sm-10">
-                   <input type="text" required name="identity" class="form-control" id="identity" placeholder="Cedula">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="inputEmail1" class="col-lg-2 control-label">Direccion*</label>
-
-                  <div class="col-sm-10">
-                   <input type="text" required name="address1" class="form-control"  id="address1" placeholder="Direccion">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="inputEmail1" class="col-lg-2 control-label">Email</label>
-
-                  <div class="col-sm-10">
-                   <input type="text" name="email1" class="form-control" id="email1" placeholder="Email">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="inputEmail1" class="col-lg-2 control-label">Telefono</label>
-
-                  <div class="col-sm-10">
-                   <input type="text" name="phone1" class="form-control" id="phone1" placeholder="Telefono">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="inputEmail1" class="col-lg-2 control-label">Telefono 2</label>
-
-                  <div class="col-sm-10">
-                   <input type="text" name="phone2" class="form-control" id="phone2" placeholder="Telefono 2">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="inputEmail1" class="col-lg-2 control-label">Empresa</label>
-
-                  <div class="col-sm-10">
-                   <input type="text" name="company" class="form-control" id="company" placeholder="Empresa">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="inputEmail1" class="col-lg-2 control-label">Nit</label>
-
-                  <div class="col-sm-10">
-                   <input type="text" name="nit" class="form-control" id="nit" placeholder="Nit">
-                  </div>
-                </div>
-                <p class="alert alert-info">* Campos obligatorios</p>
-<div class="form-group">
-    <div class="col-lg-offset-2 col-lg-10">
-      <button type="submit"  class="btn btn-success">guardar Proveedor</button>
-    </div>
-  </div>
-              </div>
-              <!-- /.box-body
-              <div class="box-footer">
-                <button type="submit" class="btn btn-default">Cancel</button>
-                <button type="submit" class="btn btn-info pull-right">Sign in</button>
-              </div>
-              <!-- /.box-footer -->
-            </form>
-          </div>
-          </div>
-          </div>
-
       <div id="results"></div>
 <script>
 //jQuery.noConflict();
-
 	$(document).ready(function(){
 		$('.select2').select2()
-	$("#newcliente").on("submit",function(e){
-		e.preventDefault();
-		$.post("./?action=addclient",$("#newcliente").serialize(),function(data){
-			$("#show_search_results").html(data);
-		});
-
-	});
 	});
  function elegir(valor){
 	  $("#client_id option[value="+ valor +"]").attr("selected",true);

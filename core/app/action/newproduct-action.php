@@ -245,11 +245,14 @@
                     <div class="checkbox">
                       <label>
                         <input name="control_stock" id="control_stock" onchange="alertdecontrol_stock();" type="checkbox"> No controlar stock
+                          </label>
+                            <label>
+                        <input name="divide" id="divide" onchange="divide_stock();" type="checkbox"> Permitir fraccionar Producto
                       </label>
                     </div>
                   </div>
               <div class="col-sm-offset-2 col-sm-4">
-                <button type="button"  class="btn btn-success" onclick="addproduct();">Guardar Producto</button>
+                <button type="button"  class="btn btn-success" id="guardar" onclick="addproduct();">Guardar Producto</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
               </div>
             </div>
@@ -366,7 +369,7 @@
           $("#categorías").html(data);
         });
       }else{
-        document.pepe.switch_2[0].checked = true;
+        $("#switch_left").prop("checked", true);
         $("#spanselectmedida").html("Complete este campo.");
         $( "#selectmedida").focus();
         $("#contentselectmedida").addClass("has-error")
@@ -402,7 +405,8 @@
         alertify.message('Presentaciones Descartadas');
       },
       function(){
-        document.pepe.switch_2[1].checked = true;
+          $("#switch_right").prop("checked", true);
+      //  document.pepe.switch_2[1].checked = true;
         presentaciones();
         alertify.error('Cancelado');
       });
@@ -1253,8 +1257,19 @@ function borrarpresentaciones(){
 
     function addproduct(){
           console.log("addproduct");
+            $("#guardar").prop('disabled', true);
+
+
           if (validaformulario()){
             console.log("si valido formulario");
+            $('.money').unmask();//desnmascaran los campos
+          //  id = $('#price_in').cleanVal();
+          // avilitamos todos los campos
+          frm = document.forms['pepe'];
+          for(i=0; ele=frm.elements[i]; i++){
+            ele.disabled=false;
+          }
+          $("#guardar").prop('disabled', true);
           var parametros = new FormData($("#addproduct")[0]);
           $.ajax (
             {
@@ -1264,34 +1279,31 @@ function borrarpresentaciones(){
               contentType: false,
               processData: false,
               beforesend: function(){
-
               },
               success: function(data){
-                alertify.success('Se envio correctamente');
+                if (data.estado == "true") {
+                  alertify.success('Se guardo product correctamente');
+                  $("body").overhang({
+                      type: "success",
+                      duration: 1,
+                      message: "Se guardo product correctamente",
+                      callback: function() {
+                     $('#myModal').modal('hide');
+                      }
+                  });
+                }else {
+                  $("#guardar").prop('disabled', false);
+                  alertify.error('No se pudo guardar producto');
+                }
               }
             }
           )
-          /*
-            $.post("./?action=addproduct",
-            {
-              name:$("#nuevamarca").val(),
-              description:$("#descriptionm").val(),
-            },function(data){
-              if (data.estado == "true") {
-                alertify.success('Se agregó Marca correctamente');
-                recargarmarca();
-                adeshabx();
-              }else {
-                alertify.error('No se pudo guardar maraca producto');
-              }
-            });
-            */
           }else {
-
-            //alertify.error('Complete campo obligatorio');
+            $("#guardar").prop('disabled', false);
+          //alertify.error('Complete campo obligatorio');
             console.log("No valido formulario");
           }
-
+          $('.money').mask('000.000.000,00', {reverse: true});
     }
 function validaformulario(){
 
@@ -1396,7 +1408,7 @@ function validaformulario(){
           alertify.error('Complete campo obligatorios');
           return false
         }
-        id = $('#price_in').cleanVal();
+        id = $('#price_in').cleanVal() *1;
         if (validate(id,3,1,1)){
           $("#spanprice_in").html("");
           $("#contenedorpricce_in").removeClass("has-error")
@@ -1418,7 +1430,7 @@ function validaformulario(){
             alertify.error('Complete campo obligatorios');
             return false
           }
-          id = $('#price_out').cleanVal();
+          id = $('#price_out').cleanVal() * 1;
           if (validate(id,3,1,1)){
             $("#spanprice_out").html("");
             $("#contenedorpricce_out").removeClass("has-error")
@@ -1429,8 +1441,9 @@ function validaformulario(){
               alertify.error('Complete campo obligatorios');
               return false
             }
-            id = $('#price_out').cleanVal();
-            id2 = $('#price_in').cleanVal();
+            //si no se multiplica por uno no lo detecta como numerico devido a que el campo es un campo de texto
+            id = $('#price_out').cleanVal() * 1;
+            id2 = $('#price_in').cleanVal() * 1;
             if (validate(id,3,id2,1)){
               $("#spanprice_out").html("");
               $("#contenedorpricce_out").removeClass("has-error")
@@ -1449,6 +1462,15 @@ function alertdecontrol_stock(){
     alertify.error('AL no  controlar stock, el sistema no tendrá en cuenta la disponibilidad del producto.');
   }else {
       alertify.success('se activo control de stock');
+  }
+}
+
+function divide_stock(){
+  console.log("divide_stock()");
+  if ($('#divide').prop('checked')) {
+    alertify.error('Permitir fraccionar se ha activado ');
+  }else {
+      alertify.success('Permitir fraccionar se ha desactivado ');
   }
 }
 

@@ -323,7 +323,7 @@ function savfra() {
           {
             q:$("#fracioncantidad").val(),
             unit_id: $("#unit_idfra").val(),
-            price_outf:$("#price_outf").val(),
+            price_outf:id,
           },function(data){
             if (data.estado == "true") {
               alertify.success('Se retuvo fracion correctamente');
@@ -410,7 +410,7 @@ function savgru() {
                         $("#contenedorpricce_outg").removeClass("has-error")
                         $.get("./?action=addfraction&o=gru",
                         {
-                          price_outg:$("#price_outg").val(),
+                          price_outg:id,
                           q:$("#grupocantidad").val(),
                           unit_id: $("#unit_idgru").val(),
                         },function(data){

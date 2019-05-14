@@ -3,7 +3,7 @@
  * This file is part of escpos-php: PHP receipt printer library for use with
  * ESC/POS-compatible thermal and impact printers.
  *
- * Copyright (c) 2014-16 Michael Billington < michael.billington@gmail.com >,
+ * Copyright (c) 2014-18 Michael Billington < michael.billington@gmail.com >,
  * incorporating modifications by others. See CONTRIBUTORS.md for a full list.
  *
  * This software is distributed under the terms of the MIT license. See LICENSE.md
@@ -328,34 +328,34 @@ class Printer
     const UNDERLINE_DOUBLE = 2;
 
     /**
-     * @var PrintBuffer $buffer
+     * @var PrintBuffer|null $buffer
      *  The printer's output buffer.
      */
-    private $buffer;
+    protected $buffer;
 
     /**
      * @var PrintConnector $connector
      *  Connector showing how to print to this printer
      */
-    private $connector;
+    protected $connector;
 
     /**
      * @var CapabilityProfile $profile
      *  Profile showing supported features for this printer
      */
-    private $profile;
+    protected $profile;
 
     /**
      * @var int $characterTable
      *  Current character code table
      */
-    private $characterTable;
+    protected $characterTable;
 
     /**
      * Construct a new print object
      *
      * @param PrintConnector $connector The PrintConnector to send data to. If not set, output is sent to standard output.
-     * @param CapabilityProfile $profile Supported features of this printer. If not set, the "default" CapabilityProfile will be used, which is suitable for Epson printers.
+     * @param CapabilityProfile|null $profile Supported features of this printer. If not set, the "default" CapabilityProfile will be used, which is suitable for Epson printers.
      * @throws InvalidArgumentException
      */
     public function __construct(PrintConnector $connector, CapabilityProfile $profile = null)
@@ -399,7 +399,7 @@ class Printer
                 self::validateStringRegex($content, __FUNCTION__, "/^[0-9]{11,12}$/", "UPCA barcode content");
                 break;
             case self::BARCODE_UPCE:
-                self::validateIntegerMulti($len, array(array(6, 8), array(11, 12)), __FUNCTION__, "UPCE barcode content length");
+                self::validateIntegerMulti($len, [[6, 8], [11, 12]], __FUNCTION__, "UPCE barcode content length");
                 self::validateStringRegex($content, __FUNCTION__, "/^([0-9]{6,8}|[0-9]{11,12})$/", "UPCE barcode content");
                 break;
             case self::BARCODE_JAN13:
@@ -458,7 +458,7 @@ class Printer
     {
         self::validateInteger($size, 0, 3, __FUNCTION__);
         $rasterData = $img -> toRasterFormat();
-        $header = Printer::dataHeader(array($img -> getWidthBytes(), $img -> getHeight()), true);
+        $header = Printer::dataHeader([$img -> getWidthBytes(), $img -> getHeight()], true);
         $this -> connector -> write(self::GS . "v0" . chr($size) . $header);
         $this -> connector -> write($rasterData);
     }
@@ -484,7 +484,7 @@ class Printer
         // Header and density code (0, 1, 32, 33) re-used for every line
         $densityCode = ($highDensityHorizontal ? 1 : 0) + ($highDensityVertical ? 32 : 0);
         $colFormatData = $img -> toColumnFormat($highDensityVertical);
-        $header = Printer::dataHeader(array($img -> getWidth()), true);
+        $header = Printer::dataHeader([$img -> getWidth()], true);
         foreach ($colFormatData as $line) {
             // Print each line, double density etc for printing are set here also
             $this -> connector -> write(self::ESC . "*" . chr($densityCode) . $header . $line);
@@ -537,6 +537,14 @@ class Printer
     public function feedForm()
     {
         $this -> connector -> write(self::FF);
+    }
+
+    /**
+     * Some slip printers require `ESC q` sequence to release the paper.
+     */
+    public function release()
+    {
+        $this -> connector -> write(self::ESC . chr(113));
     }
 
     /**
@@ -605,7 +613,7 @@ class Printer
     {
         self::validateInteger($size, 0, 3, __FUNCTION__);
         $rasterData = $img -> toRasterFormat();
-        $imgHeader = Printer::dataHeader(array($img -> getWidth(), $img -> getHeight()), true);
+        $imgHeader = Printer::dataHeader([$img -> getWidth(), $img -> getHeight()], true);
         $tone = '0';
         $colors = '1';
         $xm = (($size & self::IMG_DOUBLE_WIDTH) == Printer::IMG_DOUBLE_WIDTH) ? chr(2) : chr(1);
@@ -628,15 +636,15 @@ class Printer
      * Print a two-dimensional data code using the PDF417 standard.
      *
      * @param string $content Text or numbers to store in the code
-     * @param number $width Width of a module (pixel) in the printed code.
+     * @param int $width Width of a module (pixel) in the printed code.
      *  Default is 3 dots.
-     * @param number $heightMultiplier Multiplier for height of a module.
+     * @param int $heightMultiplier Multiplier for height of a module.
      *  Default is 3 times the width.
-     * @param number $dataColumnCount Number of data columns to use. 0 (default)
+     * @param int $dataColumnCount Number of data columns to use. 0 (default)
      *  is to auto-calculate. Smaller numbers will result in a narrower code,
      *  making larger pixel sizes possible. Larger numbers require smaller pixel sizes.
-     * @param real $ec Error correction ratio, from 0.01 to 4.00. Default is 0.10 (10%).
-     * @param number $options Standard code Printer::PDF417_STANDARD with
+     * @param float $ec Error correction ratio, from 0.01 to 4.00. Default is 0.10 (10%).
+     * @param int $options Standard code Printer::PDF417_STANDARD with
      *  start/end bars, or truncated code Printer::PDF417_TRUNCATED with start bars only.
      * @throws Exception If this profile indicates that PDF417 code is not supported
      */
@@ -861,7 +869,7 @@ class Printer
      *
      * Some printers will allow you to overlap lines with a smaller line feed.
      *
-     * @param int $height The height of each line, in dots. If not set, the printer
+     * @param int|null $height The height of each line, in dots. If not set, the printer
      *  will reset to its default line spacing.
      */
     public function setLineSpacing($height = null)
@@ -964,7 +972,18 @@ class Printer
         self::validateInteger($underline, 0, 2, __FUNCTION__);
         $this -> connector -> write(self::ESC . "-" . chr($underline));
     }
-    
+
+    /**
+     * Print each line upside-down (180 degrees rotated).
+     *
+     * @param boolean $on True to enable, false to disable.
+     */
+    public function setUpsideDown($on = true)
+    {
+        self::validateBoolean($on, __FUNCTION__);
+        $this -> connector -> write(self::ESC . "{" . ($on ? chr(1) : chr(0)));
+    }
+
     /**
      * Add text to the buffer.
      *
@@ -1018,7 +1037,7 @@ class Printer
      * @param string $m Modifier/variant for function. Often '0' where used.
      * @throws InvalidArgumentException Where the input lengths are bad.
      */
-    private function wrapperSend2dCodeData($fn, $cn, $data = '', $m = '')
+    protected function wrapperSend2dCodeData($fn, $cn, $data = '', $m = '')
     {
         if (strlen($m) > 1 || strlen($cn) != 1 || strlen($fn) != 1) {
             throw new InvalidArgumentException("wrapperSend2dCodeData: cn and fn must be one character each.");
@@ -1035,7 +1054,7 @@ class Printer
      * @param string $data Data to send.
      * @throws InvalidArgumentException Where the input lengths are bad.
      */
-    private function wrapperSendGraphicsData($m, $fn, $data = '')
+    protected function wrapperSendGraphicsData($m, $fn, $data = '')
     {
         if (strlen($m) != 1 || strlen($fn) != 1) {
             throw new InvalidArgumentException("wrapperSendGraphicsData: m and fn must be one character each.");
@@ -1051,9 +1070,9 @@ class Printer
      * @param boolean $long True to use 4 bytes, false to use 2
      * @return string
      */
-    private static function dataHeader(array $inputs, $long = true)
+    protected static function dataHeader(array $inputs, $long = true)
     {
-        $outp = array();
+        $outp = [];
         foreach ($inputs as $input) {
             if ($long) {
                 $outp[] = Printer::intLowHigh($input, 2);
@@ -1071,7 +1090,7 @@ class Printer
      * @param int $input Input number
      * @param int $length The number of bytes to output (1 - 4).
      */
-    private static function intLowHigh($input, $length)
+    protected static function intLowHigh($input, $length)
     {
         $maxInput = (256 << ($length * 8) - 1);
         self::validateInteger($length, 1, 4, __FUNCTION__);
@@ -1127,14 +1146,14 @@ class Printer
      */
     protected static function validateInteger($test, $min, $max, $source, $argument = "Argument")
     {
-        self::validateIntegerMulti($test, array(array($min, $max)), $source, $argument);
+        self::validateIntegerMulti($test, [[$min, $max]], $source, $argument);
     }
     
     /**
      * Throw an exception if the argument given is not an integer within one of the specified ranges
      *
      * @param int $test the input to test
-     * @param arrray $ranges array of two-item min/max ranges.
+     * @param array $ranges array of two-item min/max ranges.
      * @param string $source the name of the function calling this
      * @param string $source the name of the function calling this
      * @param string $argument the name of the invalid parameter

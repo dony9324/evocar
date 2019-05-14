@@ -18,8 +18,25 @@
           <div class="box">
             <div class="box-header">
               <h3 class="box-title">Lista de Clientes</h3>
+<div id="newcliente"> </div>
               <div class="btn-group pull-right">
-	<a href="index.php?view=newclient" class="btn btn-default"><i class='fa fa-smile-o'></i> Nuevo Cliente</a>
+                <button type="button" id="btnnewclient" onclick="newclient()" class="btn btn-default"><i class="fa  fa-plus"></i><i class='fa fa-smile-o'></i> Nuevo Cliente</button>
+
+
+                <script>
+                //esta funcion carga el formulario para guardar un nuevo Cliente
+                function newclient(){
+                  //estalinea es por un error de doble ventana he impide que se abra dosveces el modal
+                  $("#btnnewclient").prop('disabled', true);
+                  console.log("nuevo Cliente")
+                  $.get("./?action=newclient",function(data){
+                    $("#newcliente").html(data);
+                    $('#myModal').modal('show');
+                    $("#btnnewclient").prop('disabled', false);
+                  });
+                }
+                </script>
+
 <div class="btn-group pull-right">
   <?php $u=null;
 if(isset($_SESSION["user_id"]) &&$_SESSION["user_id"]!=""):
@@ -29,7 +46,7 @@ if(isset($_SESSION["user_id"]) &&$_SESSION["user_id"]!=""):
     <i class="fa fa-download"></i> Descargar <span class="caret"></span>
   </button>
   <ul class="dropdown-menu" role="menu">
-  
+
     <li><a href="report/clients-word.php">Word 2007 (.docx)</a></li>
   </ul>
   <?php endif; ?>  <?php endif; ?>
@@ -72,18 +89,17 @@ if(isset($_SESSION["user_id"]) &&$_SESSION["user_id"]!=""):
                 <td><?php echo $user->company; ?></td>
                 <td><?php echo $user->nit; ?></td>
 				<td style="width:130px;">
-                <?php 
+                <?php
                 $u=null;
 if(isset($_SESSION["user_id"]) &&$_SESSION["user_id"]!=""):
   $u = UserData::getById($_SESSION["user_id"]);?>
   <?php if($u->is_admin):?>
 				<a href="index.php?view=editclient&id=<?php echo $user->id;?>" class="btn btn-warning btn-xs">Editar</a>
-				<a href="index.php?action=delclient&id=<?php echo $user->id;?>" class="btn btn-danger btn-xs">Eliminar</a>
 				 <?php endif;?> <?php endif;?>
                 </td>
 				</tr>
 				 <?php } ?>
-            
+
                 </tbody>
                 <tfoot>
                 <tr>
@@ -97,7 +113,7 @@ if(isset($_SESSION["user_id"]) &&$_SESSION["user_id"]!=""):
       		      <th>Nit</th>
 				  <th></th>
                 </tr>
-               
+
                 </tfoot>
               </table>
               <?php
@@ -117,7 +133,7 @@ if(isset($_SESSION["user_id"]) &&$_SESSION["user_id"]!=""):
       <!-- /.row -->
     </section>
 <script>
-$("#nav li").removeClass("active"); 
+$("#nav li").removeClass("active");
 $("#clients").last().addClass("active");
 </script>
 <!-- el siguente script traduce las tablas. Opcionalmente, puede agregar complementos Slimscroll y FastClick.

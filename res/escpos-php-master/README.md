@@ -2,6 +2,7 @@
 [![Build Status](https://travis-ci.org/mike42/escpos-php.svg?branch=master)](https://travis-ci.org/mike42/escpos-php) [![Latest Stable Version](https://poser.pugx.org/mike42/escpos-php/v/stable)](https://packagist.org/packages/mike42/escpos-php)
 [![Total Downloads](https://poser.pugx.org/mike42/escpos-php/downloads)](https://packagist.org/packages/mike42/escpos-php)
 [![License](https://poser.pugx.org/mike42/escpos-php/license)](https://packagist.org/packages/mike42/escpos-php)
+[![Coverage Status](https://coveralls.io/repos/github/mike42/escpos-php/badge.svg?branch=development)](https://coveralls.io/github/mike42/escpos-php?branch=development)
 
 This project implements a subset of Epson's ESC/POS protocol for thermal receipt printers. It allows you to generate and print receipts with basic formatting, cutting, and barcodes on a compatible printer.
 
@@ -66,40 +67,85 @@ This driver is known to work with the following OS/interface combinations:
 ### Printers
 Many thermal receipt printers support ESC/POS to some degree. This driver has been known to work with:
 
+- 3nStar RPT-008
+- Approx APPPOS80AM
 - AURES ODP-333
 - AURES ODP-500
+- Bematech-4200-TH
+- Bematech LR2000E
+- Birch PRP-085III
 - Bixolon SRP-350III
+- Black Copper BC-85AC
 - Citizen CBM1000-II
+- Citizen CT-S310II
+- Dapper-Geyi Q583P 
 - Daruma DR800
+- DR-MP200 (manufacturer unknown)
 - EPOS TEP 220M
+- Epson EU-T332C
+- Epson FX-890 (requires `feedForm()` to release paper).
+- Epson TM-T20
+- Epson TM-T20II
+- Epson TM-T70
+- Epson TM-T70II
+- Epson TM-T81
+- Epson TM-T82II
+- Epson TM-T88II
 - Epson TM-T88III
 - Epson TM-T88IV
-- Epson TM-T70
-- Epson TM-T82II
-- Epson TM-T20
-- Epson TM-T70II
+- Epson TM-T88V
 - Epson TM-U220
-- Epson FX-890 (requires `feedForm()` to release paper).
-- Excelvan HOP-E58 (connect through powered hub)
-- Excelvan HOP-E801 (as above)
-- Excelvan ZJ-8220
+- Epson TM-U295 (requires `release()` to release slip).
+- Epson TM-U590 and TM-U590P
+- Equal (EQ-IT-001) POS-58
+- Excelvan HOP-E200 
+- Excelvan HOP-E58
+- Excelvan HOP-E801
 - Gainscha GP-5890x (Also marketed as EC Line 5890x)
-- Gainscha GP-U80300I
+- Gainscha GP-U80300I (Also marketed as gprinter GP-U80300I)
+- gprinter GP-U80160I
+- HOIN HOP-H58
+- Ithaca iTherm 28
 - Hasar HTP 250
-- Okipos 80 Plus III
+- Metapace T-1
+- Metapace T-25
+- Nexa PX700
+- Nyear NP100
+- OKI RT322
+- OKI 80 Plus III
+- Orient BTP-R580
 - P-822D
 - P85A-401 (make unknown)
+- Partner Tech RP320
+- POSLIGNE ODP200H-III-G
+- QPOS Q58M
 - Rongta RP326US
+- Rongta RP58-U
+- Rongta RP80USE
+- Senor TP-100
+- Sewoo SLK-TS400
 - SEYPOS PRP-300 (Also marketed as TYSSO PRP-300)
+- Sicar POS-80
 - Silicon SP-201 / RP80USE
+- SPRT SP-POS88V
+- Star BSC10
+- Star TSP100 ECO
+- Star TSP100III FuturePRNT
 - Star TSP-650
 - Star TUP-592
-- Xprinter XP-Q800
 - Venus V248T
+- Xeumior SM-8330
+- Xprinter F-900
+- Xprinter XP-365B
+- Xprinter XP-58 Series
+- Xprinter XP-80C
+- Xprinter XP-90
+- XPrinter XP-Q20011
+- Xprinter XP-Q800
 - Zjiang NT-58H
 - Zjiang ZJ-5870
-- Zjiang ZJ-5890T (Marketed as POS 5890T)
-- Zjiang ZJ-5890K
+- Zjiang ZJ-5890 (Also sold as POS-5890 by many vendors; ZJ-5890K, ZJ-5890T also work).
+- Zjiang ZJ-8220 (Also marketed as Excelvan ZJ-8220)
 
 If you use any other printer with this code, please [let us know](https://github.com/mike42/escpos-php/issues/new) so that it can be added to the list.
 
@@ -132,6 +178,20 @@ git clone https://github.com/mike42/escpos-php vendor/mike42/escpos-php
 <?php
 require __DIR__ . '/vendor/mike42/escpos-php/autoload.php';
 ```
+
+#### Requirements
+
+To maintain compatibility with as many systems as possible, this driver has few
+hard dependencies:
+
+- PHP 5.4 or above.
+- `mbstring` extension, since the driver accepts UTF-8 encoding.
+
+It is also suggested that you install either `imagick` or `gd`, so that you can
+print images.
+
+A number of optional packages can be added to enable more specific features. These
+are described in the "suggest" section of [composer.json](https://github.com/mike42/escpos-php/tree/master/composer.json).
 
 ### The 'Hello World' receipt
 
@@ -487,7 +547,7 @@ Posts I've written up for people who are learning how to use receipt printers:
 
 * [What is ESC/POS, and how do I use it?](https://mike42.me/blog/what-is-escpos-and-how-do-i-use-it), which documents the output of `example/demo.php`.
 * [Setting up an Epson receipt printer](https://mike42.me/blog/2014-20-26-setting-up-an-epson-receipt-printer)
-* [Getting a USB receipt printer working on Linux](http:s//mike42.me/blog/2015-03-getting-a-usb-receipt-printer-working-on-linux)
+* [Getting a USB receipt printer working on Linux](https://mike42.me/blog/2015-03-getting-a-usb-receipt-printer-working-on-linux)
 
 # Development
 
@@ -495,7 +555,7 @@ This code is MIT licensed, and you are encouraged to contribute any modification
 
 For development, it's suggested that you load `imagick`, `gd` and `Xdebug` PHP exensions, and install `composer`.
 
-The tests are executed on [Travis CI](https://travis-ci.org/mike42/escpos-php) over PHP 5.3, 5.4, 5.5, 5.7, 7, and HHVM. Earlier versions of PHP are not supported.
+The tests are executed on [Travis CI](https://travis-ci.org/mike42/escpos-php) over PHP 5.4, 5.5, 5.6, 7.0, 7.1 and 7.2, plus the latest LTS version of HHVM, 3.21. Older versions of PHP are not supported in current releases.
 
 Fetch a copy of this code and load dependencies with composer:
 
@@ -505,7 +565,7 @@ Fetch a copy of this code and load dependencies with composer:
 
 Execute unit tests via `phpunit`:
 
-    php vendor/bin/phpunit --configuration test/phpunit.xml --coverage-text
+    php vendor/bin/phpunit --coverage-text
 
 This project uses the PSR-2 standard, which can be checked via [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer):
 
@@ -516,20 +576,3 @@ The developer docs are build with [doxygen](https://github.com/doxygen/doxygen).
     make -C doc clean && make -C doc
 
 Pull requests and bug reports welcome.
-
-<!-- ## Other versions
-TODO: Some notes about related OSS projects will go here.
-Some forks of this project have been developed by others for specific use cases. Improvements from the following projects have been incorporated into escpos-php:
-
-- [wdoyle/EpsonESCPOS-PHP](https://github.com/wdoyle/EpsonESCPOS-PHP)
-- [ronisaha/php-esc-pos](https://github.com/ronisaha/php-esc-pos)-->
-
-<!--
-TODO: A table of printer models vs programming guides available via the web would be good, but should go outside this README
-## Vendor documentation
-Epson notes that not all of its printers support all ESC/POS features, and includes a table in their documentation:
-
-* [FAQ about ESC/POS from Epson](http://content.epson.de/fileadmin/content/files/RSD/downloads/escpos.pdf)
-
-Note that many printers produced by other vendors use the same standard, and are compatible by varying degrees.
--->

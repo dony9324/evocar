@@ -66,7 +66,7 @@
 					$fractions = UnitData::getById($p["unit_id"]); ?>
 					<li>
 						<span class="text">  <?php echo "(".$m["q"]." ".$main->name." / "; echo $p["q"].") = ";?></span>
-						<span class="text"><?php echo"1  ". $fractions->name." = Precio:  ". $p["price_outf"];?></span>
+						<span class="text"><?php echo"1  ". $fractions->name." = Precio:  ". number_format(($p["price_outf"]/100), 2, ',', '.');?></span>
 
 						<div class="tools">
 					<!--		<i class="fa fa-edit"></i>
@@ -96,7 +96,7 @@
 					$grupo = UnitData::getById($g["unit_id"]); ?>
 					<li>
 						<span class="text">  <?php  echo "1 ".$grupo->name." = "; ?></span>
-						<span class="text"><?php echo $g['q']." (".$m['q']." ".$main->name.") "."  =  Precio:  ". $g["price_outg"]; ?></span>
+						<span class="text"><?php echo $g['q']." (".$m['q']." ".$main->name.") "."  =  Precio:  ". number_format(($g["price_outg"]/100), 2, ',', '.'); ?></span>
 						<div class="tools">
 							<a	class="btn btn-block btn-danger btn-xs" onclick="cleargrupo(<?php echo $i; $i++; ?>)"><i class="glyphicon glyphicon-remove"></i> Eliminar</a>
 						</div>

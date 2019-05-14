@@ -6,15 +6,17 @@ class OperationData {
 		$this->name = "";
 		$this->product_id = "";
 		$this->q = "";
-		$this->cut_id = "";
+		$this->change_price_out = "";
+		$this->change_price_in = "";
 		$this->operation_type_id = "";
-		$this->switch_2 = "";
+		$this->sell_id = "";
+		$this->user_id = "";
 		$this->created_at = "NOW()";
 	}
 
 	public function add(){
-		$sql = "insert into ".self::$tablename." (product_id,q,operation_type_id,sell_id,created_at) ";
-		$sql .= "value (\"$this->product_id\",\"$this->q\",$this->operation_type_id,$this->sell_id,$this->created_at)";
+		$sql = "insert into ".self::$tablename." (product_id,q,operation_type_id,sell_id,user_id,created_at) ";
+		$sql .= "value (\"$this->product_id\",\"$this->q\",$this->operation_type_id,$this->sell_id,$this->user_id,$this->created_at)";
 		return Executor::doit($sql);
 	}
 
@@ -87,6 +89,50 @@ class OperationData {
 	}
 
 
+	public static function getQprice($product_id){
+		$q=0;
+		$p=0;
+		$entradas=0;
+		$salidas=0;
+		$qt=0;
+		$operations = self::getAllByProductId($product_id);
+		//obtenemos las entradas y las salidas
+				foreach($operations as $operation){
+				if($operation->operation_type_id==1){
+					 $q+=$operation->q;
+					 $entradas+=$operation->q;
+				 }
+				else if($operation->operation_type_id==2){
+					 $q+=(-$operation->q);
+					 $salidas+=$operation->q;
+				  }
+		}
+//buscamos el precion por donde va la cuenta
+		foreach($operations as $operation){
+		if($operation->operation_type_id==1){
+			$salidas+=(-$operation->q);//al total de las salidas le resto las entradas
+				$qt=$operation->q;
+				if ($salidas<0) {
+					$p=$operation->change_price_out;
+					$qt= $q - ($q-$salidas);
+					break;
+				}
+ 		if ($p==0) {
+			$p=$operation->change_price_out;
+ 		}
+		 }
+		else if($operation->operation_type_id==2){
+			/*  $entradas+=(-$operation->q);//al total de las entradas le reto la salidas
+				if ($entradas==q) {
+					$p=$operation->price_out;
+				}*/
+//	 $salidas+=$operation->q;
+			}
+		}
+		  $resultado = array("Precio" => $p, "Cantidad"=>$qt, "q"=>$q);
+		return $resultado;
+	}
+
 
 	public static function getAllByProductIdCutId($product_id,$cut_id){
 		$sql = "select * from ".self::$tablename." where product_id=$product_id and cut_id=$cut_id order by created_at desc";
@@ -95,7 +141,8 @@ class OperationData {
 	}
 
 	public static function getAllByProductId($product_id){
-		$sql = "select * from ".self::$tablename." where product_id=$product_id  order by created_at desc";
+		$sql = "select * from ".self::$tablename." where product_id=$product_id  order by created_at asc
+		";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new OperationData());
 	}

@@ -23,20 +23,20 @@ class ProductData {
 		$this->price_out = "";
 		$this->inventary_min = "";
 		$this->control_stock = "";
+		$this->divide = "";
 		$this->is_active = "";
 		$this->user_id = "";
 		$this->created_at = "NOW()";
 	}
 	public function getCategory(){ return CategoryData::getById($this->category_id);}
 	public function add(){
-		$sql = "insert into ".self::$tablename." (id_group,group_amount,fractions,total_quantity,image,extracode,name,barcode,description,location,trademark_id,category_id,type_of_iva_id,unit_id,cantidad,other_presentations,price_in,price_out,presentation,unit,category_id,inventary_min,control_stock,user_id,created_at) ";
-		$sql .= "value (\"$this->id_group\",\"$this->group_amount\",\"$this->fractions\",\"$this->total_quantity\",\"$this->image\",\"$this->extracode\",\"$this->name\",\"$this->barcode\",\"$this->description\",\"$this->location\",\"$this->trademark_id\",\"$this->category_id\",\"$this->type_of_iva_id\",\"$this->unit_id\",\"$this->cantidad\",\"$this->other_presentations\",\"$this->price_in\",\"$this->price_out\",$this->user_id,\"$this->presentation\",\"$this->unit\",$this->category_id,$this->inventary_min,NOW())";
-		return Executor::doit($sql);
-	}
-	public function add_with_image(){
-		$sql = "insert into ".self::$tablename." (barcode,image,name,description,price_in,price_out,user_id,presentation,unit,category_id,inventary_min) ";
-		$sql .= "value (\"$this->barcode\",\"$this->image\",\"$this->name\",\"$this->description\",\"$this->price_in\",\"$this->price_out\",$this->user_id,\"$this->presentation\",\"$this->unit\",$this->category_id,$this->inventary_min)";
-		return Executor::doit($sql);
+		$sql = "insert into ".self::$tablename." (id_group,group_amount,fractions,total_quantity,image,extracode,name,barcode,description,location,trademark_id,category_id,type_of_iva_id,unit_id,cantidad,other_presentations,price_in,price_out,inventary_min,control_stock,divide,is_active,user_id,created_at) ";
+		$sql .= "value (\"$this->id_group\",\"$this->group_amount\",\"$this->fractions\",\"$this->total_quantity\",\"$this->image\",\"$this->extracode\",\"$this->name\",\"$this->barcode\",\"$this->description\",\"$this->location\",\"$this->trademark_id\",\"$this->category_id\",\"$this->type_of_iva_id\",\"$this->unit_id\",\"$this->cantidad\",\"$this->other_presentations\",\"$this->price_in\",\"$this->price_out\",\"$this->inventary_min\",\"$this->control_stock\",\"$this->divide\",\"$this->is_active\",\"$this->user_id\",NOW())";
+		//antes -> return Executor::doit($sql);
+		//despues, guardar el id de la ultima incercion en mysql
+		$query = Executor::doit($sql);
+		$_SESSION["insert_id"] = $query[1];
+
 	}
 	public static function delById($id){
 		$sql = "delete from ".self::$tablename." where id=$id";
@@ -89,7 +89,7 @@ class ProductData {
 		return Model::many($query[0],new ProductData());
 	}
 	public static function getLike($p){
-		$sql = "select * from ".self::$tablename." where barcode like '%$p%' or name like '%$p%' or id like '%$p%'";
+		$sql = "select * from ".self::$tablename." where id_group = 0 and (barcode like '%$p%' or name like '%$p%' or id like '%$p%') and is_active = 1";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new ProductData());
 	}

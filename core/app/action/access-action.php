@@ -63,7 +63,7 @@ if(isset($_GET["o"])){
 					$resultado = array("estado" => "true");
 					return print(json_encode($resultado));
 				}else {
-					setcookie("ultimoAcceso","true",(time()+4000));
+					setcookie("ultimoAcceso","true",(time()+400));//40
 					//	$_SESSION["ultimoAcceso"] = time();
 					$resultado = array("estado" => "false");
 					return print(json_encode($resultado));

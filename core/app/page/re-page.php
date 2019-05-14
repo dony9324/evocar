@@ -86,14 +86,43 @@
   <!--añade al Carrito de compras-->
   <script>
   function addtocart(id) {
-  console.log("addtore"+id)
+  console.log("addtocart"+id)
   $.get("./?action=addtore",
   {
   q:$("#"+id).val(),
   product_id:id
   },function(data){
-  $("#cart").load("./?action=viewcartre")
+    if (data.estado == "true") {
+    alertify.success('Se agregó producto correctamente');
+
+    }else {
+       alertify.error('No se pudo agregar producto');
+
+      }
+  $("#cart").load("./?action=viewcartre");
   });}
+
+  function clearre(id) {
+  console.log("clearre"+id)
+  $.get("./?action=clearre",
+  {
+  q:$("#"+id).val(),
+  product_id:id
+  },function(data){
+    if (data.estado == "true") {
+    alertify.success('Se elimino producto correctamente');
+
+    }else {
+       alertify.error('No se pudo Eliminar producto');
+
+      }
+  $("#cart").load("./?action=viewcartre");
+  });}
+
+
+
+
+
   </script>
   <!--mostrar Carrito de compras-->
   <script>
@@ -132,6 +161,15 @@
   $('#ids').val(id);
   console.log("modificando cantidad"+id)
      }
+     function nochangervalor(){
+//	var micapa = document.getElementById('cantidadefectivo');
+    var elem = $('#cantidadefectivo');
+  //elem.slideDown(200)
+  elem.fadeOut(50)
+//$('#' + id).val(5);
+
+console.log(" no modificando cantidad")
+ }
        function cangercantidad(idf){
   	    var elem = $('#cantidadefectivo');
   		//elem.slideDown(500)

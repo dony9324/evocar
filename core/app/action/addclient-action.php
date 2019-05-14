@@ -1,7 +1,8 @@
 <?php
-//header('Content-type: application/json');
-$resultado = array();
 if(count($_POST)>0){
+	header('Content-type: application/json');
+	$resultado = array();
+	$resultado = array("estado" => "false");
 	$user = new PersonData();
 	$user->name = $_POST["name"];
 	$user->lastname = $_POST["lastname"];
@@ -12,6 +13,7 @@ if(count($_POST)>0){
 	$user->phone2 = $_POST["phone2"];
 	$user->company = $_POST["company"];
 	$user->nit = $_POST["nit"];
+	$user->user_id = $_SESSION["user_id"];
 	 if(isset($_FILES["image"])){
 	    $image = new Upload($_FILES["image"]);
     if($image->uploaded){
@@ -19,15 +21,17 @@ if(count($_POST)>0){
       if($image->processed){
         $user->image = $image->file_dst_name;
         $use = $user->add_client_with_image();
+				$resultado = array("estado" => "true" );
       }
     }else{
   $use= $user->add_client();
+	$resultado = array("estado" => "true" );
     }
   }
   else{
   $use= $user->add_client();
+	$resultado = array("estado" => "true" );
   }
-	echo "Se guardó nuevo cliente.";
+return print(json_encode($resultado));
 }
-//$resultado = array("estado" => "true");
 ?>

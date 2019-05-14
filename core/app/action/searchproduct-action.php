@@ -13,7 +13,6 @@
 				<thead>
 					<tr>
 						<th>Nombre</th>
-						<th style="width:30px;">imagen</th>
 						<th>Precio</th>
 						<th >Costo</th>
 						<th>Disponible</th>
@@ -25,23 +24,25 @@
 					$productsnotq="";
 					$products_in_cero=0;
 					foreach($products as $product):
-						$q= OperationData::getQYesF($product->id);
+
+						$precio=OperationData::getQprice($product->id);
+						$q= $precio["q"];
 						?>
 						<?php
 						///
 						?>
 						<tr class="<?php if($q<=$product->inventary_min && $q>0){ echo "warning"; } if(!($q<=$product->inventary_min)){echo "info";} if(!$q>0){ echo "danger"; }?>">
 							<td><?php echo $product->name; ?></td>
-							<td><?php if($product->image!=""):?><img src="storage/products/<?php echo $product->image;?>" style=" max-width:50px;"><?php endif;?></td>
-							<td><b>$<?php echo $product->price_out; ?></b></td>
-							<td><b>$ <?php echo $product->price_in; ?></b></td>
+							<td><b>$<?php if ($precio["Precio"]>0) {echo number_format(($precio["Precio"]/100), 2, ',', '.'); }else{
+								echo number_format(($product->price_out/100), 2, ',', '.');}?></b></td>
+							<td><b>$ <?php echo number_format(($product->price_in/100), 2, ',', '.'); ?></b></td>
 							<td>	<?php echo $q; ?>	</td>
 							<td style="width:250px;">
 								<input type="hidden" id="id<?php echo $product->id; ?>" value="<?php echo $product->price_out; ?>">
 								<input type="hidden" name="product_id" value="<?php echo $product->id; ?>">
 								<div class="input-group">
 									<button onClick="men1(<?php echo $product->id; ?>)" type="button" class="btn btn-warning btn-flat" style="display: block; float: left; vertical-align: middle; width: 34px;">-</button>
-									<input id="<?php echo $product->id; ?>" style="width: 50px; " type="number" min="0" max="<?php echo $q; ?>" value="1" step="any" class="form-control" required name="q" <?php if($product->id_group==1) { ?> onFocus="changervalor(<?php echo $product->id;?>)" <?php }else{ ?> onFocus="nochangervalor()"<?php } ?>)>
+									<input id="<?php echo $product->id; ?>" style="width: 50px; " type="number" min="0" max="<?php echo $q; ?>" value="1" step="<php if($product->divide==1) { <?php echo ani ?> ?>" class="form-control" required name="q" <?php if($product->divide==1) { ?> onFocus="changervalor(<?php echo $product->id;?>)" <?php }else{ ?> onFocus="nochangervalor()"<?php } ?>)>
 									<button onClick="mas1(<?php echo $product->id; ?>)" type="button" class="btn btn-success btn-flat" style="display: block; vertical-align: middle; width: 35px;">+</button>
 									<span class="input-group-btn">
 										<button  class="btn btn-success" onClick="addtocart(<?php echo $product->id; ?>)"> Agregar</button>
@@ -55,8 +56,8 @@
 							$productsnotq = $productsnotq . "
 							<tr class='danger'>
 							<td>". $product->name ."</td>
-							<td><b>$". $product->price_out ."</b></td>
-							<td><b>$ ". $product->price_in ."</b></td>
+							<td><b>$". number_format(($product->price_out/100), 2, ',', '.') ."</b></td>
+							<td><b>$ ". number_format(($product->price_in/100), 2, ',', '.') ."</b></td>
 							<td>	". $q ."	</td>
 							</tr>
 							";
@@ -68,7 +69,6 @@
 				<tfoot>
 					<tr>
 						<th>Nombre</th>
-						<th style="width:30px;">imagen</th>
 						<th>Precio</th>
 						<th>Costo</th>
 						<th>Disponible</th>

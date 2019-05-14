@@ -16,25 +16,31 @@
 				<td><?php echo $product->name; ?></td>
 				<td><b><?php echo $error["message"]; ?></b></td>
 				<th><span class="input-group-btn">
-					<button class="btn btn-success" onclick="processre(<?php echo $product->id; ?>, <?php echo $error["re"] ; ?>, <?php echo $product->price_in; ?>)"> Reabastecer faltante </button>
+					<button id="faltante" class="btn btn-success" onclick="processre(<?php echo $product->id; ?>, <?php echo $error["re"] ; ?>, <?php echo $product->price_in; ?>, <?php echo $product->price_out; ?>)"> Reabastecer faltante </button>
 				</span></th>
 			</tr>
 		<?php endforeach; ?>
 	</table>
 
 	<script>
-	function processre(id, q, pin){
+	function processre(id, q, pin, pout){
+		$("#faltante").prop('disabled', false);
 		console.log("processre"+id+"cant: "+q)
 		//alertify.success('añadiendo a la Lista Producto'+id)
 		$.get("./?action=processre",
 		{
 			o:"one",
 			price_in:pin,
+			price_out:pout,
 			product_q:q,
 			product_id:id
 		},function(data){
 			if (data.estado == "true") {
 				alertify.success('Se Reabasteció producto correctamente');
+				//actualisar busqueda
+				$.get("./?action=searchproduct",$("#searchp").serialize(),function(data){
+				$("#show_search_results").html(data);
+				});
 
 			}else {
 				alertify.error('No se pudo Reabastecer producto');
@@ -90,17 +96,44 @@ endif; ?>
 					<td class="success"><p><b>$ <?php echo $dicuento;  ?></b></p></td>
 
 				</tr>
-
 			</table>
 			<input type="hidden" name="cost" value="<?php echo $total2; ?>" class="form-control" placeholder="Total">
 			<div class="form-group">
-				<div class="col-lg-2">
-					<label  class="col-lg-1 control-label">Cliente</label></div>
-					<div class="col-lg-10">
-						<button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal"><i class="fa  fa-plus"></i> Nuevo Cliente</button>
-						<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal2"><i class="glyphicon glyphicon-search"></i>Buscar Cliente</button>
+					<label  class="col-sm-1 control-label">Cliente</label>
+					<div class="col-sm-5">
+						<button type="button" id="btnnewclient" onclick="newclient()" class="btn btn-default"><i class="fa  fa-plus"></i> Nuevo Cliente</button>
+					<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal2"><i class="glyphicon glyphicon-search"></i>Buscar Cliente</button>
+						<div id="newcliente"> </div>
+						<script>
+						//esta funcion carga el formulario para guardar un nuevo Cliente
+						function newclient(){
+							//estalinea es por un error de doble ventana he impide que se abra dosveces el modal
+							$("#btnnewclient").prop('disabled', true);
+							console.log("nuevo Cliente")
+							$.get("./?action=newclient",function(data){
+								$("#newcliente").html(data);
+								$('#myModal').modal('show');
+								$("#btnnewclient").prop('disabled', false);
+							});
+						}
+						</script>
 					</div>
-				</div>
+					<?php
+					$clients = PersonData::getClients();
+					?>
+						<div class="col-sm-1">
+							<label>Cliente</label>
+						</div>
+						<div class="col-sm-4">
+							<select name="client_id" id="client_id" class="form-control" style="width: 100%;" tabindex="-1" aria-hidden="true">
+								<option selected="selected" value="">-- NINGUNO --</option>
+								<?php foreach($clients as $client):?>
+									<option value="<?php echo $client->id;?>"><?php echo $client->name." ".$client->lastname;?></option>
+								<?php endforeach;?>
+							</select>
+						</div>
+					</div>
+
 				<!-- Modal -->
 				<div id="myModal2" class="modal fade" role="dialog">
 					<div class="modal-dialog">
@@ -143,46 +176,27 @@ endif; ?>
 
 
 
-			<?php
-			$clients = PersonData::getClients();
-			?>
-
-			<div class="form-group col-lg-6">
-				<div class="col-lg-2">
-					<label>Cliente</label>
-				</div>
-				<div class="col-lg-10">
-					<select name="client_id" id="client_id" class="form-control" style="width: 100%;" tabindex="-1" aria-hidden="true">
-						<option selected="selected" value="">-- NINGUNO --</option>
-						<?php foreach($clients as $client):?>
-							<option value="<?php echo $client->id;?>"><?php echo $client->name." ".$client->lastname;?></option>
-						<?php endforeach;?>
-
-					</select>
-				</div>
-			</div>
 
 
-
-			<div class="form-group col-lg-6">
-				<div class="col-lg-2"><label  class="col-lg-1 control-label">Descuento</label></div>
-				<div class="col-lg-10">
+			<div class="form-group col-sm-6">
+				<div class="col-sm-2"><label  class="col-sm-1 control-label">Descuento</label></div>
+				<div class="col-sm-10">
 					<input type="number" step="any" name="discount" class="form-control" required value="0" id="discount" placeholder="Descuento">
 				</div>
 			</div>
 
-			<div class="form-group col-lg-6 ">
-				<div class="col-lg-2">
-					<label  class="col-lg-1 control-label">Efectivo</label></div>
-					<div class="col-lg-10">
+			<div class="form-group col-sm-6 ">
+				<div class="col-sm-2">
+					<label  class="col-sm-1 control-label">Efectivo</label></div>
+					<div class="col-sm-10">
 						<input type="number" min="0" name="money" required class="form-control" id="money" placeholder="Efectivo">
 					</div>
 				</div>
 
-				<div class="form-group col-lg-6">
-					<div class="col-lg-2">
-						<label  class="col-lg-1 control-label">Tipo</label></div>
-						<div class="col-lg-10">
+				<div class="form-group col-sm-6">
+					<div class="col-sm-2">
+						<label  class="col-sm-1 control-label">Tipo</label></div>
+						<div class="col-sm-10">
 							<script>
 							function desavilita(){
 								si = $('input:radio[name=switch_2]:checked').val();
@@ -210,11 +224,29 @@ endif; ?>
 						</div></div>
 
 						<input name="is_oficial" type="hidden" value="1">
-						<div class="col-lg-10">
+						<div class="col-sm-10">
 							<a href="index.php?action=clearcart" class="btn btn-lg btn-danger"><i class="glyphicon glyphicon-remove"></i> Cancelar</a>
-							<button class="btn btn-lg btn-default"><i class="glyphicon glyphicon-print"></i> Imprimir Cotisacion</button>
+
 							<button class="btn btn-lg btn-success"><i class="glyphicon glyphicon-usd"></i> Finalizar Venta</button>
-							<a href="res/escpos-php-master/cot.php" class="btn btn-default"><i class="glyphicon glyphicon-print"></i> Imprimir Cotisacion</a>
+							<button id="btnprintoutcot" class="btn btn-lg" onclick="printoutcot()"><i class="glyphicon glyphicon-print"></i> Imprimir Cotisacion</button>
+							<script>
+							//esta funcion carga el formulario para guardar un nuevo Cliente
+							function printoutcot(){
+								//estalinea es por un error de doble ventana he impide que se abra dosveces el modal
+								$("#btnprintoutcot").prop('disabled', true);
+								console.log("nuevo Cliente")
+								$.get("./?action=printcot",function(data){
+								    if (data.estado == "true") {
+								    alertify.success('Se Imprimio correctamente');
+
+								    }else {
+								       alertify.error('No se pudo Imprimir ');
+
+								      }
+								$("#btnprintoutcot").prop('disabled', false);
+								});
+							}
+							</script>
 						</div>
 					</form>
 					<script>
@@ -277,112 +309,6 @@ endif; ?>
 				}});
 			</script>
 		<?php endif; ?>
-
-
-		<!---newclient-->
-		<!-- Modal2 -->
-		<div id="myModal" class="modal fade in" role="dialog">
-			<div class="modal-dialog">
-				<!-- Modal content-->
-				<div class="box box-info">
-					<div class="box-header with-border">
-						<h3 class="box-title">Nuevo Cliente</h3>
-						<button id="bclose" type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">×</span></button>
-						</div>
-						<!-- /.box-header -->
-						<!-- form start -->
-						<form class="form-horizontal" method="post" autocomplete="off" enctype="multipart/form-data"  id="newcliente" action="./?action=addclient" role="form" >
-							<div class="box-body">
-								<div class="form-group">
-									<label for="inputEmail1" class="col-lg-2 control-label">Imagen</label>
-
-									<div class="col-sm-10">
-										<input type="file" name="image" id="image" accept="image/*" >
-									</div>
-								</div>
-								<div class="form-group">
-									<label for="inputEmail1"  class="col-lg-2 control-label">Nombre</label>
-
-									<div class="col-sm-10">
-										<input type="text" required name="name"  class="form-control" id="name" placeholder="Nombre">
-									</div>
-								</div>
-								<div class="form-group">
-									<label for="inputEmail1" class="col-lg-2 control-label">Apellido</label>
-
-									<div class="col-sm-10">
-										<input type="text"  name="lastname"  class="form-control" id="lastname" placeholder="Apellido">
-									</div>
-								</div>
-								<div class="form-group">
-									<label for="inputEmail1" class="col-lg-2 control-label">Cedula</label>
-
-									<div class="col-sm-10">
-										<input type="text" name="identity" class="form-control" id="identity" placeholder="Cedula">
-									</div>
-								</div>
-								<div class="form-group">
-									<label for="inputEmail1" class="col-lg-2 control-label">Direccion</label>
-
-									<div class="col-sm-10">
-										<input type="text" name="address1" class="form-control"  id="address1" placeholder="Direccion">
-									</div>
-								</div>
-								<div class="form-group">
-									<label for="inputEmail1" class="col-lg-2 control-label">Email</label>
-
-									<div class="col-sm-10">
-										<input type="text" name="email1" class="form-control" id="email1" placeholder="Email">
-									</div>
-								</div>
-								<div class="form-group">
-									<label for="inputEmail1" class="col-lg-2 control-label">Telefono</label>
-
-									<div class="col-sm-10">
-										<input type="text" name="phone1" class="form-control" id="phone1" placeholder="Telefono">
-									</div>
-								</div>
-								<div class="form-group">
-									<label for="inputEmail1" class="col-lg-2 control-label">Telefono 2</label>
-
-									<div class="col-sm-10">
-										<input type="text" name="phone2" class="form-control" id="phone2" placeholder="Telefono 2">
-									</div>
-								</div>
-								<div class="form-group">
-									<label for="inputEmail1" class="col-lg-2 control-label">Empresa</label>
-
-									<div class="col-sm-10">
-										<input type="text" name="company" class="form-control" id="company" placeholder="Empresa">
-									</div>
-								</div>
-								<div class="form-group">
-									<label for="inputEmail1" class="col-lg-2 control-label">Nit</label>
-
-									<div class="col-sm-10">
-										<input type="text" name="nit" class="form-control" id="nit" placeholder="Nit">
-									</div>
-								</div>
-								<div class="form-group">
-
-									<div class="col-lg-offset-2 col-lg-12">
-										<button type="button"  class="btn btn-success" onclick="addclient();">Guardar Cliente</button>
-										<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-									</div>
-								</div>
-							</div>
-							<!-- /.box-body
-							<div class="box-footer">
-							<button type="submit" class="btn btn-default">Cancel</button>
-							<button type="submit" class="btn btn-info pull-right">Sign in</button>
-						</div>
-						<!-- /.box-footer -->
-					</form>
-				</div>
-			</div>
-		</div>
-
 		<script>
 		function addclient(){
 			var elem = $('#page_view');

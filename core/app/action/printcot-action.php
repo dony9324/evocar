@@ -1,20 +1,14 @@
 <?php
-require "/autoload.php";
+header('Content-type: application/json');
+$resultado = array();
+$resultado = array("estado" => "false");
+include "res/escpos-php-master/autoload.php";
 use Mike42\Escpos\Printer;
 use Mike42\Escpos\EscposImage;
 use Mike42\Escpos\PrintConnectors\FilePrintConnector;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
-
-include "../../core/autoload.php";
-include "../../core/app/model/PersonData.php";
-include "../../core/app/model/UserData.php";
-include "../../core/app/model/SellData.php";
-include "../../core/app/model/OperationData.php";
-
-include "../../core/app/model/ProductData.php";
-include "../../core/app/model/CompanyData.php";
 /* Fill in your own connector here */
-$connector = new WindowsPrintConnector("EPSON TM-T20II Receipt5");
+$connector = new WindowsPrintConnector("CutePDF Writer");
 /* Information for the receipt */
 $infoiva= CompanyData::getById(1)->value;
 $infonit= CompanyData::getById(2)->value;
@@ -24,31 +18,23 @@ $infodire= CompanyData::getById(5)->value;
 $total=0;
 $total2=0;
 $items = array();
-
 $user = UserData::getById($_SESSION["user_id"]);
 foreach($_SESSION["cart"] as $p){
 	$product = ProductData::getById($p["product_id"]);
 $pt = $product->price_out*$p["q"];
- $total +=$pt; 
-
-
-
+ $total +=$pt;
     array_push($items, new item("Nombre: ".$product->name, ""),
     new item("Cantida:".$p["q"]."  Valor x 1:"."$".($product->price_out)."  total: "."$".$pt,""), new item("===============================","=================")
     );
-	
 	}
 $subtotal = new item('Base: ', number_format(($total/(($infoiva/100)+1)),2,".",","));
-
-
 $tax = new item('iva'.$infoiva."%", number_format((($total/(($infoiva/100)+1))*($infoiva/100)),2,".",","));
 $total3 = new item('Total', number_format ($total,2,".",","));
 /* Date is kept the same for testing */
  $date = date(' Y-m-d h:i:s A');
 
-
 /* Start the printer */
-$logo = EscposImage::load("storage/escpos-php.png", false);
+$logo = EscposImage::load("res/img/escpos-php.png", false);
 $printer = new Printer($connector);
 
 /* Print top logo */
@@ -97,9 +83,6 @@ $printer -> selectPrintMode();
 $printer -> feed(1);
 $printer -> setJustification(Printer::JUSTIFY_CENTER);
 $printer -> text("Gracias por su compra\n");
-
-
-
 $printer -> text("Atendido por: ".$user->name." ".$user->lastname."\n");
 if($infoweb!=null){
 	$printer -> text("web: ".$infoweb."\n");
@@ -112,7 +95,7 @@ $printer -> cut();
 $printer -> pulse();
 
 $printer -> close();
-
+	$resultado = array("estado" => "true" );
 /* A wrapper to do organise item names & prices into columns */
 class item
 {
@@ -126,7 +109,7 @@ class item
         $this -> price = $price;
         $this -> dollarSign = $dollarSign;
     }
-    
+
     public function __toString()
     {
         $rightCols = 0;
@@ -135,13 +118,11 @@ class item
             $leftCols = $leftCols / 2 - $rightCols / 2;
         }
         $left = str_pad($this -> name, $leftCols) ;
-        
+
         $sign = ($this -> dollarSign ? '$ ' : '');
         $right = str_pad($sign . $this -> price, $rightCols, ' ', STR_PAD_LEFT);
         return "$left$right\n";
     }
 }
+return print(json_encode($resultado));
 ?>
-<script>
-	window.history.back();
-</script>

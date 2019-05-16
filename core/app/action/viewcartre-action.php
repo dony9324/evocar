@@ -159,7 +159,7 @@ function validarprice(na,id){
     <?php
 $clients = PersonData::getProviders();
     ?>
-    <div class="form-group">
+    <div id="contenedornproveedor" class="form-group">
     <div class="col-lg-2">
                 <label>Seleccionar Proveedor</label>
                 </div>
@@ -170,6 +170,7 @@ $clients = PersonData::getProviders();
                  <option value="<?php echo $client->id;?>"><?php echo $client->name." ".$client->lastname;?></option>
                   <?php endforeach;?>
                 </select>
+								<span id="spanproveedor"></span>
               </div>
               </div>
  <div class="form-group">
@@ -199,13 +200,54 @@ $clients = PersonData::getProviders();
 		      }
 		  $("#cart").load("./?action=viewcartre");
 		  });}
+
+
+
 		</script>
-        <button class="btn btn-lg btn-success"><i class="glyphicon glyphicon-usd"></i> Finalizar Venta</button>
-          <button  onclick="imprimirlista()" class="btn btn-default"><i class="glyphicon glyphicon-print"></i> Imprimir Lista</button>
+        <button id="btnprocessre"  onclick="processre()" class="btn btn-lg btn-success"><i class="glyphicon glyphicon-usd"></i> Procesar Reabastecimiento</button>
+				<script>
+				 function processre() {
+					$("#btnprocessre").prop('disabled', true);
+					console.log("processre")
+					  if (validadatos()){
+							console.log("si valido formulario");
+							 $('.money').unmask();//desnmascaran los campos
+				  $.post("./?action=processre",{
+					client_id: $("#client_id").val(),
+					acreditar:$("switch_2").val(),
+
+					},function(data){
+						if (data.estado == "true") {
+						alertify.success('Se proceso Reabastecimiento correctamente');
+						}else {
+							 alertify.error('Algo salio mal');
+							}
+					});
+				}
+				$("#btnprocessre").prop('disabled', false);
+			}
+			function validadatos(){
+				if (validate("client_id",1,10,0)){
+						$("#spanproveedor").html("");
+						$("#contenedornproveedor").removeClass("has-error")
+						$("#contenedornproveedor").addClass("has-success")
+				}else {
+					$("#contenedornproveedor").removeClass("has-success")
+					$("#contenedornproveedor").addClass("has-error")
+					$("#client_id" ).focus();
+					$("#spanproveedor").html("Complete este campo.");
+					alertify.error('Complete campo obligatorio');
+					return false;
+				}
+				return true;
+			}
+				</script>
+          <button id="btnimprimir"  onclick="imprimirlista()" class="btn btn-default"><i class="glyphicon glyphicon-print"></i> Imprimir Lista</button>
 				<script>
 				 function imprimirlista() {
+					 $("#btnimprimir").prop('disabled', true);
 					console.log("imprimirlista")
-					$.get("./?action=printlistre",
+					$.get("./?imprimir=printlistre",
 					{
 					},function(data){
 						if (data.estado == "true") {

@@ -11,5 +11,6 @@ include "controller/Lb.php";
 include "controller/Bootload.php";
 include "controller/Action.php";
 include "controller/Page.php";
+include "controller/imprimir.php";
 include "controller/class.upload.php";
 ?>

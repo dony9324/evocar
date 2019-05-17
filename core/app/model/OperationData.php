@@ -3,20 +3,24 @@ class OperationData {
 	public static $tablename = "operation";
 
 	public function  __construct(){
-		$this->name = "";
-		$this->product_id = "";
-		$this->q = "";
-		$this->change_price_out = "";
-		$this->change_price_in = "";
-		$this->operation_type_id = "";
-		$this->sell_id = "";
-		$this->user_id = "";
+		$this->id = 0;
+		$this->product_id = 0;
+		$this->q = 0;
+		$this->precitotal = 0;
+		$this->discount = 0;
+		$this->change_price_out = 0;
+		$this->change_price_in = 0;
+		$this->operation_type_id = 0;
+		$this->sell_id = 0;
+		$this->user_id = 0;
 		$this->created_at = "NOW()";
 	}
 
 	public function add(){
-		$sql = "insert into ".self::$tablename." (product_id,q,operation_type_id,sell_id,user_id,created_at) ";
-		$sql .= "value (\"$this->product_id\",\"$this->q\",$this->operation_type_id,$this->sell_id,$this->user_id,$this->created_at)";
+		$sql = "INSERT INTO `operation` (`id`, `product_id`, `q`, `precitotal`, `discount`, `change_price_out`, `change_price_in`, `operation_type_id`, `sell_id`, `user_id`, `created_at`) ";
+		$sql .= "VALUES (NULL, $this->product_id, $this->q, $this->precitotal, $this->discount, $this->change_price_out, $this->change_price_in, $this->operation_type_id, $this->sell_id, $this->user_id, $this->created_at)";
+
+			//\"\",\"\",,,,,,,,)";
 		return Executor::doit($sql);
 	}
 

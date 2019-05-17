@@ -1,33 +1,34 @@
 <?php
 class SellData {
 	public static $tablename = "sell";
-
+//en la consulta los campos string deben enserrarce en     \" campo\"
 	public function  __construct(){
 		$this->id = "";
-		$this->person_id = "";
-		$this->total = "";
-		$this->	cost = "";
-		$this->user_id = "";
-		$this->accredit = "";
-		$this->accreditlast = "";
-		$this->box_id = "";
-		$this->didcount = "0";
+		$this->person_id = 0;
+		$this->accredit = 0;
+		$this->accreditlast = 0;
+		$this->total = 0;
+		$this->cost = 0;// si es numerico en la tabla tienes que ser numerico aka sino no guarda
+		$this->operation_type_id = 0;
+		$this->discount = 0;
+		$this->box_id = NULL;//generamente es nulo
+		$this->extracode = "";
+		$this->user_id = 0;
 		$this->created_at = "NOW()";
-
 	}
 
 	public function getPerson(){ return PersonData::getById($this->person_id);}
 	public function getUser(){ return UserData::getById($this->user_id);}
 
 	public function add(){
-		$sql = "insert into ".self::$tablename." (total,cost,discount,user_id,created_at) ";
-		$sql .= "value ($this->total,$this->cost,$this->discount,$this->user_id,$this->created_at)";
+		$sql = "insert into ".self::$tablename." (accredit,total,cost,discount,user_id,created_at) ";
+		$sql .= "value ($this->accredit,$this->total,$this->cost,$this->discount,$this->user_id,$this->created_at)";
 		return Executor::doit($sql);
 	}
 
 	public function add_re(){
-		$sql = "insert into ".self::$tablename." (user_id,operation_type_id,total,created_at) ";
-		$sql .= "value ($this->user_id,1,$this->total,$this->created_at)";
+		$sql = "insert into ".self::$tablename."(`id`, `person_id`, `accredit`, `accreditlast`, `total`, `cost`, `operation_type_id`, `discount`, `box_id`, `extracode`, `user_id`, `created_at`)";
+		$sql .= "value (NULL, $this->person_id, $this->accredit, $this->accreditlast, $this->total, $this->cost, $this->operation_type_id, $this->discount, NULL,\" $this->extracode\", $this->user_id, $this->created_at)";
 		return Executor::doit($sql);
 	}
 
@@ -39,8 +40,8 @@ class SellData {
 	}
 
 	public function add_re_with_client(){
-		$sql = "insert into ".self::$tablename." (person_id,operation_type_id,user_id,total,created_at) ";
-		$sql .= "value ($this->person_id,1,$this->user_id,$this->total,$this->created_at)";
+		$sql = "insert into ".self::$tablename."(`id`, `person_id`, `accredit`, `accreditlast`, `total`, `cost`, `operation_type_id`, `discount`, `box_id`, `extracode`, `user_id`, `created_at`)";
+		$sql .= "value (NULL, $this->person_id, $this->accredit, $this->accreditlast, $this->total, $this->cost, $this->operation_type_id, $this->discount, NULL,\" $this->extracode\", $this->user_id, $this->created_at)";
 		return Executor::doit($sql);
 	}
 

@@ -214,17 +214,22 @@ $clients = PersonData::getProviders();
 							 $('.money').unmask();//desnmascaran los campos
 				  $.post("./?action=processre",{
 					client_id: $("#client_id").val(),
-					acreditar:$("switch_2").val(),
+					acreditar:$('input:radio[name=switch_2]:checked').val(),
+					total:<?php echo $total; ?>,
 
 					},function(data){
+							id = 	data.id;
 						if (data.estado == "true") {
-						alertify.success('Se proceso Reabastecimiento correctamente');
+						alertify.success('Se proceso Reabastecimiento correctamente ' + id);
+
 						}else {
 							 alertify.error('Algo salio mal');
 							}
 					});
 				}
 				$("#btnprocessre").prop('disabled', false);
+
+
 			}
 			function validadatos(){
 				if (validate("client_id",1,10,0)){

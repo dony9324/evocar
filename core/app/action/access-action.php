@@ -54,7 +54,7 @@ if(isset($_GET["o"])){
 				$ahora = time();
 				$tiempo_transcurrido = $ahora-$fechaGuardada;
 				//comparamos el tiempo transcurrido
-				if($tiempo_transcurrido >= $_SESSION['user_time']) {
+				if($tiempo_transcurrido >= $_SESSION['user_time']) { //tiempo de cierre por inactividad
 					//si pasaron 10 minutos o más
 					unset($_SESSION);
 					session_destroy();; // destruyo la sesión

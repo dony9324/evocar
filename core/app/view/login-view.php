@@ -18,9 +18,9 @@ $con = $base->connect();
  $sql = "select * from user where status=1";
  $query = $con->query($sql);
 		  ?>
-              <div class="box box-solid box-info ">
-                <div class="box-header with-border alert alert-info text-center">
-                  <h4 class="box-title">Ingresarr</h4>
+              <div class="box box-solid ">
+                <div class="box-header with-border alert bg-Navy text-center ">
+                  <h4 class="box-title">Ingresar</h4>
                </div>
               <!-- /.box-header -->
                 <div class="box-body no-padding">
@@ -136,7 +136,7 @@ $(document).ready(function() {
                   <!-- /.users-list -->
                 </div>
                 <!-- /.box-body -->
-                <div class="text-center alert alert-info">
+                <div class="text-center alert bg-Navy">
                   <h4>Pulsa sobre tu usuario</h4>
                 </div>
                 <!-- /.box-footer -->

@@ -1,8 +1,8 @@
 <section class="content-header">
    <h1><i class="fa  fa-usd"></i> Vender<small></small></h1>
    <ol class="breadcrumb">
-     <li><a href="#"><i class="fa fa-home"></i> inicio</a></li>
-     <li class="active">Vender</li>
+     <li onclick="changerview('./?page=home')"><a href="#"><i class="fa fa-home"></i> inicio</a></li>
+     <li onclick="changerview('./?page=sell')" class="active"><a href="#"><i class="fa fa-usd"></i>Vender</a></li>
    </ol>
  </section>
  <section class="content">
@@ -15,22 +15,19 @@
 <!--busqueda de productos -->
 	<div class="col-md-12">
     <div style="height:20px;" class="col-md-12">
-
-  </div>
-
+    </div>
 		<div class="row">
-        <form id="searchp" >
-			<div class="col-md-6">
-			<!-- 	<input type="hidden" name="view" value="sell">  -->
+      <form id="searchp" >
+			  <div class="col-md-6">
+			     <!-- 	<input type="hidden" name="view" value="sell">  -->
 				<input type="text" id="product_code" name="product" class="form-control" autocomplete="off" placeholder="Buscar producto por nombre o por codigo:">
-			</div>
-            <div class="col-md-3" hidden="on">
-			<button type="submit" class="btn btn-info"></button><!--si quitas el submit no borra al dar enter-->
-			</div>
-            </form>
-
+			  </div>
+        <div class="col-md-3" hidden="on">
+			   <button type="submit" class="btn btn-info"></button><!--si quitas el submit no borra al dar enter-->
+			 </div>
+      </form>
 			<div class="col-md-6" id="cantidadefectivo" hidden="on">
-            <input type="hidden" id="ids" value=""/>
+        <input  type="hidden" id="ids" value=""/>
         <a class="btn btn-success" onClick="cangercantidad(0.5)">
         1/2
         </a>
@@ -45,19 +42,21 @@
         </a>
         <div class="col-xs-4">
         <form id="changer">
-                  <input type="number" class="form-control" id="cantidade"  placeholder="cantidad en efectivo" autocomplete="off" onKeyDown="">
-                              <div class="col-md-3" hidden="on">
-			<button type="submit" class="btn btn-info"></button><!--si quitas el submit no borra al dar enter-->
-			</div>
-            </form>
-          </div>
-          </div>
-		</div>
-
-    <div id="show_search_results"></div>
+        <input type="text" class="money form-control" id="cantidade"  placeholder="cantidad en efectivo" autocomplete="off" onKeyDown="">
+        <div class="col-md-3" hidden="on">
+			   <button type="submit" class="btn btn-info"></button><!--si quitas el submit no borra al dar enter-->
+			  </div>
+       </form>
+      </div>
+    </div>
 	</div>
+    <div id="show_search_results"></div>
+</div>
   <!--busca al escribir-->
 <script>
+jQuery(function($){
+  $('.money').mask('000.000.000,00', {reverse: true});
+        });
 //jQuery.noConflict();
 ////borra al dar enter
 $(document).ready(function(){
@@ -70,7 +69,7 @@ $(document).ready(function(){
 		$("#changer").on("submit",function(e){
 		e.preventDefault();
 		var elem = $('#cantidadefectivo');
-		var din = $("#cantidade").val();
+		var din = $("#cantidade").cleanVal()*1/100;
 		var val = ($('#ids').val());
 		var price_out = $("#id"+val).val();
 		var total = din / price_out;

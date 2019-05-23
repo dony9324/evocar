@@ -411,8 +411,9 @@ $skin = $us->value;
 <script src = "res/overhang.min.js"> </script>
 
 
-<!--este script hace ajax en el menu de la izquierda -->
+
 <script>
+<!--este script hace ajax en el menu de la izquierda -->
 function changerview(ruta){
   var elem = $('#page_view');
   console.log("changerview"+ruta);

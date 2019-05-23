@@ -11,7 +11,6 @@
 				$op->sell_id="NULL";
 				$op->user_id=$_SESSION["user_id"];
 				$op->is_oficial = 1;
-
 				if($add = $op->add()){
 				$resultado = array("estado" => "true");
 					return print(json_encode($resultado));
@@ -19,7 +18,6 @@
 		$resultado = array("estado" => "false");
 	}
 }else {
-
 if(isset($_SESSION["reabastecer"])){
 	$cart = $_SESSION["reabastecer"];
 	if(count($cart)>0){
@@ -31,13 +29,10 @@ if(isset($_SESSION["reabastecer"])){
 			$sell->accreditlast = $_POST["acreditar"];
 			$sell->extracode = "0";
 		 	$sell->person_id=$_POST["client_id"];
-
 			if( $s = $sell->add_re_with_client()){
-
 		 	}else {
 		 	$resultado = array("estado" => "false");
 		 	}
-
 		foreach($cart as  $c){
 			$op = new OperationData();
 			 $op->product_id = $c["product_id"] ;
@@ -47,21 +42,16 @@ if(isset($_SESSION["reabastecer"])){
 			 $op->change_price_out= $c["price_out"];
 			 $op->change_price_in= $c["price_in"];
 			 $op->operation_type_id=1; // 1 - entrada
-
 			 $op->sell_id=$s[1];
 			 $op->user_id =  $_SESSION["user_id"];
-
 			 if($add = $op->add()){
-
  	 		}else {
 	 		$resultado = array("estado" => "false");
  			}
 		}
 			unset($_SESSION["reabastecer"]);
 			setcookie("selled","selled");
-
 	}
-
 }
 }
 $resultado += array("id" => $s[1]);

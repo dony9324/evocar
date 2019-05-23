@@ -1,9 +1,9 @@
 <section class="content-header">
   <h1><i class="fa  fa-tags"></i>Reabastecer Inventario<small></small></h1>
   <ol class="breadcrumb">
-    <li><a href="#" id="inventaryhome"><i class="fa fa-home"></i> inicio</a></li>
-    <li  class="active"><a id="inventaryinventary" href="#">Inventario</a></li>
-    <li class="active"><a id="inventaryre" href="#">Reabastecer</a></li>
+    <li onclick="changerview('./?page=home')" ><a href="#" id="inventaryhome"><i class="fa fa-home"></i> inicio</a></li>
+    <li onclick="changerview('./?page=inventary')" class="active"><a id="inventaryinventary" href="#">Inventario</a></li>
+    <li onclick="changerview('./?page=re')" class="active"><a id="inventaryre" href="#">Reabastecer</a></li>
   </ol>
 </section>
    <!-- Main content -->
@@ -40,7 +40,7 @@
           </a>
           <div class="col-xs-4">
           <form id="changer">
-                <input type="number" class="form-control" id="cantidade"  placeholder="cantidad en efectivo" autocomplete="off" onKeyDown="">
+                <input type="text"  class="money form-control" id="cantidade"  placeholder="cantidad en efectivo" autocomplete="off" onKeyDown="">
                                 <div class="col-md-3" hidden="on">
   			<button type="submit" class="btn btn-info"></button><!--si quitas el submit no borra al dar enter-->
   			</div>
@@ -56,6 +56,7 @@
   //jQuery.noConflict();
   ////borra al dar enter
   $(document).ready(function(){
+    $('.money').mask('000.000.000.000.000,00', {reverse: true});
     $("#cart").load("./?action=viewcartre")
   	$("#searchp").on("submit",function(e){
   		e.preventDefault();
@@ -118,10 +119,6 @@
       }
   $("#cart").load("./?action=viewcartre");
   });}
-
-
-
-
 
   </script>
   <!--mostrar Carrito de compras-->
@@ -189,40 +186,7 @@ console.log(" no modificando cantidad")
   </div>
   </div>
    </section>
-  <script>
-  $("#nav li").removeClass("active");
-  $( "#sell" ).last().addClass( "active" );
-  </script>
-
-
    <script>
  $("#nav li").removeClass("active");
   $( "#inventary" ).last().addClass( "active" );
-
-  $("#inventaryhome").on("click",function(e){
-    e.preventDefault();
-    elem.fadeOut(50)
-    $.get("./?page=home",function(data){
-      $("#page_view").html(data);
-    elem.fadeIn()
-    });
-  });
-
-  $("#inventaryinventary").on("click",function(e){
-    e.preventDefault();
-    elem.fadeOut(50)
-    $.get("./?page=inventary",function(data){
-      $("#page_view").html(data);
-    elem.fadeIn()
-    });
-  });
-
-  $("#inventaryre").on("click",function(e){
-    e.preventDefault();
-    elem.fadeOut(50)
-    $.get("./?page=re",function(data){
-      $("#page_view").html(data);
-    elem.fadeIn()
-    });
-  });
   </script>

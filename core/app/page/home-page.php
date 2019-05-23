@@ -1,3 +1,7 @@
+<?php if(!isset($_SESSION["user_id"])){
+      Core::redir("./");
+}?>
+
 <section class="content-header">
   <h1>
   <i class="fa fa-home"></i>
@@ -5,7 +9,7 @@
     <small></small>
   </h1>
   <ol class="breadcrumb">
-    <li><a href=""><i class="fa fa-home"></i> Inicio</a></li>
+    <li onclick="changerview('./?page=home')"><a href=""><i class="fa fa-home"></i> Inicio</a></li>
   </ol>
 </section>
 
@@ -13,7 +17,8 @@
 <section class="content container-fluid">
 
 <!--| aquí se muestran datos de bodga |-->
-<div class="col-lg-4">
+<div class="col-lg-4" onclick="changerview('./?page=inventary')">
+  <a href="#">
                  <div class="box box-widget widget-user">
                 <!-- Agregue el color bg al encabezado con cualquiera de los bg-* classes -->
                 <div class="widget-user-header bg-aqua-active">
@@ -77,8 +82,10 @@
                 </div>
               </div>
 <!-- /.widget-user -->
+</a>
 </div>
           <div class="col-lg-4">
+            <a href="#">
           <!-- Widget: user widget style 1 -->
           <div class="box box-widget widget-user">
             <!-- Add the bg color to the header using any of the bg-* classes -->
@@ -149,9 +156,11 @@
             </div>
           </div>
           <!-- /.widget-user -->
+          </a>
         </div>
 
         <div class="col-lg-4">
+          <a href="#">
           <!-- Widget: user widget style 1 -->
           <div class="box box-widget widget-user">
             <!-- Add the bg color to the header using any of the bg-* classes -->
@@ -215,6 +224,7 @@
             </div>
           </div>
           <!-- /.widget-user -->
+          </a>
         </div>
 
 
@@ -223,7 +233,7 @@
 
 $( "#reportes" ).last().removeClass( "menu-open" );
 $( "#treeview-menu" ).last().removeClass( "menu-o" );
-$("#nav li").removeClass("active"); 
+$("#nav li").removeClass("active");
 $( "#home" ).last().addClass( "active" );
 //grafica
 $(document).ready(function(){ today()});
@@ -242,19 +252,19 @@ $fecha = new DateTime();
 $fecha->modify('first day of this month'); //primer dia del mes
 
 ///////////////////////////datos de la tabla abajo de la grafica
-	$totalventashoy = 0; 
+	$totalventashoy = 0;
 	$costosventashoy = 0;
-	$totalventaschoy = 0; 
+	$totalventaschoy = 0;
 
-	$totalventassemana = 0; 
+	$totalventassemana = 0;
 	$costosventassemana = 0;
 	$totalventascsemana = 0;
-	
-	$totalventasmes = 0; 
+
+	$totalventasmes = 0;
 	$costosventasmes = 0;
 	$totalventascmes = 0;
-	
-	$totalventasaño = 0; 
+
+	$totalventasaño = 0;
 	$costosventasaño = 0;
 	$totalventascaño = 0;
 
@@ -264,16 +274,16 @@ $hora = array();
  for($j=0; $j < 24; $j++)
     {
        $hora[$j] = 0;
-	 
+
     }
 
   $sellday = SellData::getAllByDateOp(date("Y-m-d"),date("Y-m-d"),2);
 
   foreach($sellday as $sellday2):
-  
+
     $totalventashoy+= ($sellday2->total-$sellday2->discount);///////////////////////////datos de la tabla abajo de la grafica
 	$costosventashoy+= ($sellday2->cost);///////////////////////////datos de la tabla abajo de la grafica
-	
+
   if( $sellday2 -> created_at < date("Y-m-d 01:00:00")) {
  	$hora[0]  += $sellday2->total - $sellday2->discount;
   }else{
@@ -285,55 +295,55 @@ $hora = array();
 	  	   }else{
 	 		 if( $sellday2 -> created_at < date("Y-m-d 04:00:00")) {
  				$hora[3]  +=  $sellday2->total - $sellday2->discount;
-	  
+
 	 	      }else{
 	 			 if( $sellday2 -> created_at < date("Y-m-d 05:00:00")) {
  					$hora[4]  +=  $sellday2->total - $sellday2->discount;
-	  
+
 	 			 }else{
 	 				 if( $sellday2 -> created_at < date("Y-m-d 06:00:00")) {
  						$hora[5]  +=  $sellday2->total - $sellday2->discount;
-	  
+
 	 				 }else{
 	 				 	if( $sellday2 -> created_at < date("Y-m-d 07:00:00")) {
  							$hora[6]  +=  $sellday2->total - $sellday2->discount;
-	  
+
 	 					 }else{
 	 						 if( $sellday2 -> created_at < date("Y-m-d 08:00:00")) {
  								$hora[7]  +=  $sellday2->total - $sellday2->discount;
-	  
+
 	 						 }else{
 	 							 if( $sellday2 -> created_at < date("Y-m-d 09:00:00")) {
  									$hora[8]  +=  $sellday2->total - $sellday2->discount;
-	  
+
 	 							 }else{
 	 								 if( $sellday2 -> created_at < date("Y-m-d 10:00:00")) {
  										$hora[9]  +=  $sellday2->total - $sellday2->discount;
-	  
+
 	 								 }else{
 	 									 if( $sellday2 -> created_at < date("Y-m-d 11:00:00")) {
  											$hora[10]  +=  $sellday2->total - $sellday2->discount;
-	  
+
 	 									 }else{
 	 										 if( $sellday2 -> created_at < date("Y-m-d 12:00:00")) {
  												$hora[11]  +=  $sellday2->total - $sellday2->discount;
-	  
+
 	 										 }else{
 	 											 if( $sellday2 -> created_at < date("Y-m-d 13:00:00")) {
  													$hora[12]  +=  $sellday2->total - $sellday2->discount;
-	  
+
 	 											 }else{
 	 												 if( $sellday2 -> created_at < date("Y-m-d 14:00:00")) {
  														$hora[13]  +=  $sellday2->total - $sellday2->discount;
-	  
+
 	 												 }else{
 	 													 if( $sellday2 -> created_at < date("Y-m-d 15:00:00")) {
  															$hora[14]  +=  $sellday2->total - $sellday2->discount;
-	  
+
 	 													 }else{
 	 														 if( $sellday2 -> created_at < date("Y-m-d 16:00:00")) {
  																$hora[15]  +=  $sellday2->total - $sellday2->discount;
-	  
+
 	 													 	}else{
 	 														 	if( $sellday2 -> created_at < date("Y-m-d 17:00:00")) {
  																	$hora[16]  +=  $sellday2->total - $sellday2->discount;
@@ -379,25 +389,25 @@ $hora = array();
    				 }
     		  }
 		   }
-       } 
+       }
  }
-  
-  
+
+
   endforeach;
-  
-  
-  
+
+
+
   /////////////////////////valores semana////////////////////////////////////////
-  
-  
-  
+
+
+
   $sellweek = array();
 $dia = array();
  for($j=0; $j < 7; $j++)
     {
        $dia[$j] = 0;
     }
-	
+
   $sellweek = SellData::getAllByDateOp(date('Y-m-d',$primer_dia),date("Y-m-d"),2);
   foreach($sellweek as $sellweek2):
   if( $sellweek2 -> created_at < date('Y-m-d',$primer_dia+1*24*3600)) {
@@ -411,35 +421,35 @@ $dia = array();
 	  	   }else{
 	 		 if( $sellweek2 -> created_at < date('Y-m-d',$primer_dia+4*24*3600)) {
  				$dia[3]  +=  $sellweek2->total - $sellweek2->discount;
-	  
+
 	 	      }else{
 	 			 if( $sellweek2 -> created_at < date('Y-m-d',$primer_dia+5*24*3600)) {
  					$dia[4]  +=  $sellweek2->total - $sellweek2->discount;
-	  
+
 	 			 }else{
 	 				 if( $sellweek2 -> created_at < date('Y-m-d',$primer_dia+6*24*3600)) {
  						$dia[5]  +=  $sellweek2->total - $sellweek2->discount;
-	  
+
 	 				 }else{
 	 				 	if( $sellweek2 -> created_at < date('Y-m-d',$primer_dia+7*24*3600)) {
  							$dia[6]  +=  $sellweek2->total - $sellweek2->discount;
-	  
+
 	 					 }
    					 }
    				 }
     		  }
 		   }
-       } 
+       }
  }
 endforeach;
-/////////////////////////////////este mes///////////////////////////////////////////// 
+/////////////////////////////////este mes/////////////////////////////////////////////
  $sellmonth = array();
 $dia2 = array();
  for($j=0; $j < 31; $j++)
     {
        $dia2[$j] = 0;
     }
-//$mon = _data_first_month_day() ; 
+//$mon = _data_first_month_day() ;
 //	echo "<br> estassaaa: ". $fecha->format('Y-m-d') . "<br>";
 //	$mon=$fecha;
 //$mon ->modify('+1 day');
@@ -461,55 +471,55 @@ $mon= strtotime($fecha->format('Y-m-d'));///linea importante
 	  	   }else{
 	 		 if( $sellmonth2 -> created_at < date('Y-m-d',$mon+4*24*3600)) {
  				$dia2[3]  +=  $sellmonth2->total - $sellmonth2->discount;
-	  
+
 	 	      }else{
 	 			 if( $sellmonth2 -> created_at < date('Y-m-d',$mon+5*24*3600)){
  					$dia2[4]  +=  $sellmonth2->total - $sellmonth2->discount;
-	  
+
 	 			 }else{
 	 				 if( $sellmonth2 -> created_at < date('Y-m-d',$mon+6*24*3600)) {
  						$dia2[5]  +=  $sellmonth2->total - $sellmonth2->discount;
-	  
+
 	 				 }else{
 	 				 	if( $sellmonth2 -> created_at < date('Y-m-d',$mon+7*24*3600)) {
  							$dia2[6]  +=  $sellmonth2->total - $sellmonth2->discount;
-	  
+
 	 					 }else{
 	 						 if( $sellmonth2 -> created_at < date('Y-m-d',$mon+8*24*3600)){
  								$dia2[7]  +=  $sellmonth2->total - $sellmonth2->discount;
-	  
+
 	 						 }else{
 	 							 if( $sellmonth2 -> created_at < date('Y-m-d',$mon+9*24*3600)){
  									$dia2[8]  +=  $sellmonth2->total - $sellmonth2->discount;
-	  
+
 	 							 }else{
 	 								 if( $sellmonth2 -> created_at <  date('Y-m-d',$mon+10*24*3600)){
  										$dia2[9]  +=  $sellmonth2->total - $sellmonth2->discount;
-	  
+
 	 								 }else{
 	 									 if( $sellmonth2 -> created_at <  date('Y-m-d',$mon+11*24*3600)){
  											$dia2[10]  +=  $sellmonth2->total - $sellmonth2->discount;
-	  
+
 	 									 }else{
 	 										 if( $sellmonth2 -> created_at < date('Y-m-d',$mon+12*24*3600)) {
  												$dia2[11]  +=  $sellmonth2->total - $sellmonth2->discount;
-	  
+
 	 										 }else{
 	 											 if( $sellmonth2 -> created_at < date('Y-m-d',$mon+13*24*3600)) {
  													$dia2[12]  +=  $sellmonth2->total - $sellmonth2->discount;
-	  
+
 	 											 }else{
 	 												 if( $sellmonth2 -> created_at < date('Y-m-d',$mon+14*24*3600)) {
  														$dia2[13]  +=  $sellmonth2->total - $sellmonth2->discount;
-	  
+
 	 												 }else{
 	 													 if( $sellmonth2 -> created_at < date('Y-m-d',$mon+15*24*3600)){
  															$dia2[14]  +=  $sellmonth2->total - $sellmonth2->discount;
-	  
+
 	 													 }else{
 	 														 if( $sellmonth2 -> created_at <  date('Y-m-d',$mon+16*24*3600)){
  																$dia2[15]  +=  $sellmonth2->total - $sellmonth2->discount;
-	  
+
 	 													 	}else{
 	 														 	if( $sellmonth2 -> created_at <  date('Y-m-d',$mon+17*24*3600)){
  																	$dia2[16]  +=  $sellmonth2->total - $sellmonth2->discount;
@@ -592,16 +602,16 @@ $mon= strtotime($fecha->format('Y-m-d'));///linea importante
    				 }
     		  }
 		   }
-       } 
+       }
  }
-  
-  
+
+
   endforeach;
-  
-  
- 
+
+
+
  ////////////////////////////////////////este año///////////////////////////////////////////////
- 
+
  $sellyear = array();
 $mes = array();
  for($j=0; $j < 12; $j++)
@@ -609,9 +619,9 @@ $mes = array();
        $mes[$j] = 0;
     }
 //echo date("Y-01-01")."este añor";
-//echo date("Y-01-01", strtotime("+1 year"));  
+//echo date("Y-01-01", strtotime("+1 year"));
   $sellyear = SellData::getAllByDateOp(date("Y-01-01"),date("Y-m-d 23:59:59"),2);
- // echo date("Y-m-d"); 
+ // echo date("Y-m-d");
   foreach($sellyear as $sellyear2):
   if( $sellyear2 -> created_at < date("Y-02-01")) {
  	$mes[0]  +=  $sellyear2->total - $sellyear2->discount;
@@ -624,39 +634,39 @@ $mes = array();
 	  	   }else{
 	 		 if( $sellyear2 -> created_at < date("Y-05-01")) {
  				$mes[3]  +=  $sellyear2->total - $sellyear2->discount;
-	  
+
 	 	      }else{
 	 			 if( $sellyear2 -> created_at < date("Y-06-01")) {
  					$mes[4]  +=  $sellyear2->total - $sellyear2->discount;
-	  
+
 	 			 }else{
 	 				 if( $sellyear2 -> created_at < date("Y-07-01")) {
  						$mes[5]  +=  $sellyear2->total - $sellyear2->discount;
-	  
+
 	 				 }else{
 	 				 	if( $sellyear2 -> created_at < date("Y-08-01")) {
  							$mes[6]  +=  $sellyear2->total - $sellyear2->discount;
-	  
+
 	 					 }else{
 	 						 if( $sellyear2 -> created_at < date("Y-09-01")) {
  								$mes[7]  +=  $sellyear2->total - $sellyear2->discount;
-	  
+
 	 						 }else{
 	 							 if( $sellyear2 -> created_at < date("Y-10-01")) {
  									$mes[8]  +=  $sellyear2->total - $sellyear2->discount;
-	  
+
 	 							 }else{
 	 								 if( $sellyear2 -> created_at < date("Y-11-01")) {
  										$mes[9]  +=  $sellyear2->total - $sellyear2->discount;
-	  
+
 	 								 }else{
 	 									 if( $sellyear2 -> created_at < date("Y-12-01")) {
  											$mes[10]  +=  $sellyear2->total - $sellyear2->discount;
-	  
+
 	 									 }else{
 	 										 if( $sellyear2 -> created_at < date("Y-01-01", strtotime("+1 year"))) {
  												$mes[11]  +=  $sellyear2->total - $sellyear2->discount;
-	  
+
 	 									 }
    									 }
    								  }
@@ -667,7 +677,7 @@ $mes = array();
    				 }
     		  }
 		   }
-       } 
+       }
     }
   endforeach;
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -694,55 +704,55 @@ $horac = array();
 	  	   }else{
 	 		 if( $sellday2 -> created_at < date("Y-m-d 04:00:00")) {
  				$horac[3]  +=  $sellday2->total - $sellday2->discount;
-	  
+
 	 	      }else{
 	 			 if( $sellday2 -> created_at < date("Y-m-d 05:00:00")) {
  					$horac[4]  +=  $sellday2->total - $sellday2->discount;
-	  
+
 	 			 }else{
 	 				 if( $sellday2 -> created_at < date("Y-m-d 06:00:00")) {
  						$horac[5]  +=  $sellday2->total - $sellday2->discount;
-	  
+
 	 				 }else{
 	 				 	if( $sellday2 -> created_at < date("Y-m-d 07:00:00")) {
  							$horac[6]  +=  $sellday2->total - $sellday2->discount;
-	  
+
 	 					 }else{
 	 						 if( $sellday2 -> created_at < date("Y-m-d 08:00:00")) {
  								$horac[7]  +=  $sellday2->total - $sellday2->discount;
-	  
+
 	 						 }else{
 	 							 if( $sellday2 -> created_at < date("Y-m-d 09:00:00")) {
  									$horac[8]  +=  $sellday2->total - $sellday2->discount;
-	  
+
 	 							 }else{
 	 								 if( $sellday2 -> created_at < date("Y-m-d 10:00:00")) {
  										$horac[9]  +=  $sellday2->total - $sellday2->discount;
-	  
+
 	 								 }else{
 	 									 if( $sellday2 -> created_at < date("Y-m-d 11:00:00")) {
  											$horac[10]  +=  $sellday2->total - $sellday2->discount;
-	  
+
 	 									 }else{
 	 										 if( $sellday2 -> created_at < date("Y-m-d 12:00:00")) {
  												$horac[11]  +=  $sellday2->total - $sellday2->discount;
-	  
+
 	 										 }else{
 	 											 if( $sellday2 -> created_at < date("Y-m-d 13:00:00")) {
  													$horac[12]  +=  $sellday2->total - $sellday2->discount;
-	  
+
 	 											 }else{
 	 												 if( $sellday2 -> created_at < date("Y-m-d 14:00:00")) {
  														$horac[13]  +=  $sellday2->total - $sellday2->discount;
-	  
+
 	 												 }else{
 	 													 if( $sellday2 -> created_at < date("Y-m-d 15:00:00")) {
  															$horac[14]  +=  $sellday2->total - $sellday2->discount;
-	  
+
 	 													 }else{
 	 														 if( $sellday2 -> created_at < date("Y-m-d 16:00:00")) {
  																$horac[15]  +=  $sellday2->total - $sellday2->discount;
-	  
+
 	 													 	}else{
 	 														 	if( $sellday2 -> created_at < date("Y-m-d 17:00:00")) {
  																	$horac[16]  +=  $sellday2->total - $sellday2->discount;
@@ -789,7 +799,7 @@ $horac = array();
    				 }
     		  }
 		   }
-       } 
+       }
  }
  endforeach;
  /////////////////////////valores semana////////////////////////////////////////
@@ -799,9 +809,9 @@ $diac = array();
     {
        $diac[$j] = 0;
     }
-	
+
   $sellweek = SellData::getAllByDateOp2(date('Y-m-d',$primer_dia),date("Y-m-d"),2);
- 
+
   foreach($sellweek as $sellweek2):
   if( $sellweek2 -> created_at < date('Y-m-d',$primer_dia+1*24*3600)) {
  	$diac[0]  +=  $sellweek2->total - $sellweek2->discount;
@@ -814,40 +824,40 @@ $diac = array();
 	  	   }else{
 	 		 if( $sellweek2 -> created_at < date('Y-m-d',$primer_dia+4*24*3600)) {
  				$diac[3]  +=  $sellweek2->total - $sellweek2->discount;
-	  
+
 	 	      }else{
 	 			 if( $sellweek2 -> created_at < date('Y-m-d',$primer_dia+5*24*3600)) {
  					$diac[4]  +=  $sellweek2->total - $sellweek2->discount;
-	  
+
 	 			 }else{
 	 				 if( $sellweek2 -> created_at < date('Y-m-d',$primer_dia+6*24*3600)) {
  						$diac[5]  +=  $sellweek2->total - $sellweek2->discount;
-	  
+
 	 				 }else{
 	 				 	if( $sellweek2 -> created_at < date('Y-m-d',$primer_dia+7*24*3600)) {
  							$diac[6]  +=  $sellweek2->total - $sellweek2->discount;
-	  
+
 	 					 }
    					 }
    				 }
     		  }
 		   }
-       } 
+       }
  }
-  
-  
+
+
   endforeach;
-  
-/////////////////////////////////este mes///////////////////////////////////////////// 
+
+/////////////////////////////////este mes/////////////////////////////////////////////
  $sellmonth = array();
 $dia2c = array();
  for($j=0; $j < 31; $j++)
     {
        $dia2c[$j] = 0;
     }
-	
-	
-//$mon = _data_first_month_day() ; 
+
+
+//$mon = _data_first_month_day() ;
 //	echo "<br> estassaaa: ". $fecha->format('Y-m-d') . "<br>";
 //	$mon=$fecha;
 	//$mon ->modify('+1 day');
@@ -871,55 +881,55 @@ $mon= strtotime($fecha->format('Y-m-d')); //linea importante
 	  	   }else{
 	 		 if( $sellmonth2 -> created_at < date('Y-m-d',$mon+4*24*3600)) {
  				$dia2c[3]  +=  $sellmonth2->total - $sellmonth2->discount;
-	  
+
 	 	      }else{
 	 			 if( $sellmonth2 -> created_at < date('Y-m-d',$mon+5*24*3600)){
  					$dia2c[4]  +=  $sellmonth2->total - $sellmonth2->discount;
-	  
+
 	 			 }else{
 	 				 if( $sellmonth2 -> created_at < date('Y-m-d',$mon+6*24*3600)) {
  						$dia2c[5]  +=  $sellmonth2->total - $sellmonth2->discount;
-	  
+
 	 				 }else{
 	 				 	if( $sellmonth2 -> created_at < date('Y-m-d',$mon+7*24*3600)) {
  							$dia2c[6]  +=  $sellmonth2->total - $sellmonth2->discount;
-	  
+
 	 					 }else{
 	 						 if( $sellmonth2 -> created_at < date('Y-m-d',$mon+8*24*3600)){
  								$dia2c[7]  +=  $sellmonth2->total - $sellmonth2->discount;
-	  
+
 	 						 }else{
 	 							 if( $sellmonth2 -> created_at < date('Y-m-d',$mon+9*24*3600)){
  									$dia2c[8]  +=  $sellmonth2->total - $sellmonth2->discount;
-	  
+
 	 							 }else{
 	 								 if( $sellmonth2 -> created_at <  date('Y-m-d',$mon+10*24*3600)){
  										$dia2c[9]  +=  $sellmonth2->total - $sellmonth2->discount;
-	  
+
 	 								 }else{
 	 									 if( $sellmonth2 -> created_at <  date('Y-m-d',$mon+11*24*3600)){
  											$dia2c[10]  +=  $sellmonth2->total - $sellmonth2->discount;
-	  
+
 	 									 }else{
 	 										 if( $sellmonth2 -> created_at < date('Y-m-d',$mon+12*24*3600)) {
  												$dia2c[11]  +=  $sellmonth2->total - $sellmonth2->discount;
-	  
+
 	 										 }else{
 	 											 if( $sellmonth2 -> created_at < date('Y-m-d',$mon+13*24*3600)) {
  													$dia2c[12]  +=  $sellmonth2->total - $sellmonth2->discount;
-	  
+
 	 											 }else{
 	 												 if( $sellmonth2 -> created_at < date('Y-m-d',$mon+14*24*3600)) {
  														$dia2c[13]  +=  $sellmonth2->total - $sellmonth2->discount;
-	  
+
 	 												 }else{
 	 													 if( $sellmonth2 -> created_at < date('Y-m-d',$mon+15*24*3600)){
  															$dia2c[14]  +=  $sellmonth2->total - $sellmonth2->discount;
-	  
+
 	 													 }else{
 	 														 if( $sellmonth2 -> created_at <  date('Y-m-d',$mon+16*24*3600)){
  																$dia2c[15]  +=  $sellmonth2->total - $sellmonth2->discount;
-	  
+
 	 													 	}else{
 	 														 	if( $sellmonth2 -> created_at <  date('Y-m-d',$mon+17*24*3600)){
  																	$dia2c[16]  +=  $sellmonth2->total - $sellmonth2->discount;
@@ -1003,16 +1013,16 @@ $mon= strtotime($fecha->format('Y-m-d')); //linea importante
    				 }
     		  }
 		   }
-       } 
+       }
  }
-  
-  
+
+
   endforeach;
-  
-  
- 
+
+
+
  ////////////////////////////////////////este año///////////////////////////////////////////////
- 
+
  $sellyear = array();
 $mesc = array();
  for($j=0; $j < 12; $j++)
@@ -1033,39 +1043,39 @@ $mesc = array();
 	  	   }else{
 	 		 if( $sellyear2 -> created_at < date("Y-05-01")) {
  				$mesc[3]  +=  $sellyear2->total - $sellyear2->discount;
-	  
+
 	 	      }else{
 	 			 if( $sellyear2 -> created_at < date("Y-06-01")) {
  					$mesc[4]  +=  $sellyear2->total - $sellyear2->discount;
-	  
+
 	 			 }else{
 	 				 if( $sellyear2 -> created_at < date("Y-07-01")) {
  						$mesc[5]  +=  $sellyear2->total - $sellyear2->discount;
-	  
+
 	 				 }else{
 	 				 	if( $sellyear2 -> created_at < date("Y-08-01")) {
  							$mesc[6]  +=  $sellyear2->total - $sellyear2->discount;
-	  
+
 	 					 }else{
 	 						 if( $sellyear2 -> created_at < date("Y-09-01")) {
  								$mesc[7]  +=  $sellyear2->total - $sellyear2->discount;
-	  
+
 	 						 }else{
 	 							 if( $sellyear2 -> created_at < date("Y-10-01")) {
  									$mesc[8]  +=  $sellyear2->total - $sellyear2->discount;
-	  
+
 	 							 }else{
 	 								 if( $sellyear2 -> created_at < date("Y-11-01")) {
  										$mesc[9]  +=  $sellyear2->total - $sellyear2->discount;
-	  
+
 	 								 }else{
 	 									 if( $sellyear2 -> created_at < date("Y-12-01")) {
  											$mesc[10]  +=  $sellyear2->total - $sellyear2->discount;
-	  
+
 	 									 }else{
 	 										 if( $sellyear2 -> created_at < date("Y-01-01", strtotime("+1 year"))) {
  												$mesc[11]  +=  $sellyear2->total - $sellyear2->discount;
-	  
+
 	 									 }
    									 }
    								  }
@@ -1076,10 +1086,10 @@ $mesc = array();
    				 }
     		  }
 		   }
-       } 
+       }
     }
-  
-  
+
+
   endforeach;
    ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1135,7 +1145,7 @@ $mesc = array();
                   </p>
 
                   <div class="progress-group">
-                    <span class="progress-text">Ventas</span> 
+                    <span class="progress-text">Ventas</span>
                     <span class="progress-number"><b></b></span>
 
                     <div class="progress sm">
@@ -1186,17 +1196,17 @@ $mesc = array();
 
 
 <script>
-dias=[0,31,29,31,30,31,30,31,31,30,31,30,31]; 
-function saber(mes,anio){ 
-ultimo=0; 
-if (mes==2){ 
-fecha=new Date(anio,1,29) 
-vermes=fecha.getMonth(); 
-if((vermes+1)!=mes){ultimo=28} 
-} 
-if(ultimo==0){ultimo=dias[mes]} 
-return ultimo; 
-}  
+dias=[0,31,29,31,30,31,30,31,31,30,31,30,31];
+function saber(mes,anio){
+ultimo=0;
+if (mes==2){
+fecha=new Date(anio,1,29)
+vermes=fecha.getMonth();
+if((vermes+1)!=mes){ultimo=28}
+}
+if(ultimo==0){ultimo=dias[mes]}
+return ultimo;
+}
 
 
   function today() {
@@ -1228,7 +1238,7 @@ return ultimo;
         }
       ]
     }
-   
+
  //   barChartData.datasets[1].strokeColor = '#00a65a'
     var barChartOptions                  = {
       //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
@@ -1260,7 +1270,7 @@ return ultimo;
     barChartOptions.datasetFill = false
     barChart.Bar(barChartData, barChartOptions)
   }
-  
+
   function this_week() {
 	/*  Aquí crearemos algunos gráficos usando ChartJS   */
     var barChartCanvas                   = $('#barChart').get(0).getContext('2d')
@@ -1290,7 +1300,7 @@ return ultimo;
         }
       ]
     }
-   
+
  //   barChartData.datasets[1].strokeColor = '#00a65a'
     var barChartOptions                  = {
       //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
@@ -1322,9 +1332,9 @@ return ultimo;
     barChartOptions.datasetFill = false
     barChart.Bar(barChartData, barChartOptions)
   }
-  
+
    function this_month() {
-	 
+
 	   switch (saber(new Date().getMonth()+1,new Date().getFullYear()) ) {
     case 28:
         daylabels = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23","24", "25", "26", "27", "28"];
@@ -1339,7 +1349,7 @@ return ultimo;
         daylabels = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23","24", "25", "26", "27", "28", "29", "30", "31"];
 }
 
-	   
+
 	/*  Aquí crearemos algunos gráficos usando ChartJS   */
     var barChartCanvas                   = $('#barChart').get(0).getContext('2d')
     var barChart                         = new Chart(barChartCanvas)
@@ -1368,7 +1378,7 @@ return ultimo;
         }
       ]
     }
-   
+
  //   barChartData.datasets[1].strokeColor = '#00a65a'
     var barChartOptions                  = {
       //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
@@ -1400,9 +1410,9 @@ return ultimo;
     barChartOptions.datasetFill = false
     barChart.Bar(barChartData, barChartOptions)
   }
-  
+
    function this_year() {
-	   
+
 	/*  Aquí crearemos algunos gráficos usando ChartJS   */
     var barChartCanvas                   = $('#barChart').get(0).getContext('2d')
     var barChart                         = new Chart(barChartCanvas)
@@ -1431,7 +1441,7 @@ return ultimo;
         }
       ]
     }
-   
+
  //   barChartData.datasets[1].strokeColor = '#00a65a'
     var barChartOptions                  = {
       //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value

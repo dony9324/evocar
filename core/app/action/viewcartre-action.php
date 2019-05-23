@@ -45,12 +45,12 @@ $product = ProductData::getById($p["product_id"]);
     <td> <input type="text" onchange="validarprice('price_in',<?php echo $p["product_id"];?>);" onkeyup="validarprice('price_in',<?php echo $p["product_id"];?>);" name="price_in<?php echo $p["product_id"];?>" required class="form-control money" id="price_in<?php echo $p["product_id"];?>" value="<?php echo $p["price_in"]; ?>" placeholder="Precio de entrada">
 		<span id="spanprice_in<?php echo $p["product_id"];?>"></span></td>
 		<td><input type="text" onchange="validarprice('price_out',<?php echo $p["product_id"];?>);" onkeyup="validarprice('price_out',<?php echo $p["product_id"];?>);" name="price_out<?php echo $p["product_id"];?>" required class="form-control money" id="price_out<?php echo $p["product_id"];?>" value="<?php echo $p["price_out"]; ?>" placeholder="Precio de salida">
-		  <span id="spanprice_out<?php echo $p["product_id"];?>"></span></td>
+	  <span id="spanprice_out<?php echo $p["product_id"];?>"></span></td>
 	<td>
 <?php  $pt = $p["price_in"]* $p["q"]; $total +=$pt; $pt2 = $p["price_in"]*$p["q"];
 $total2 +=$pt2;  echo number_format(($pt/100), 2, ',', '.'); ?>
 		</td>
-	<td style="width:30px;"><a class="btn btn-danger" onclick="clearre(<?php echo $product->id; ?>)"><i class="glyphicon glyphicon-remove"></i> Eliminar</a></td>
+	<td style="width:30px;"><a class="btn btn-danger" onclick="clearre(<?php echo $product->id; ?>)"><i class="glyphicon glyphicon-remove"></i></a></td>
 </tr>
 </form>
 <script>
@@ -220,8 +220,8 @@ $clients = PersonData::getProviders();
 					},function(data){
 							id = 	data.id;
 						if (data.estado == "true") {
-						alertify.success('Se proceso Reabastecimiento correctamente ' + id);
-
+						alertify.success('Se proceso Reabastecimiento correctamente ');
+						changerview('./?page=onere&id='+ id)
 						}else {
 							 alertify.error('Algo salio mal');
 							}

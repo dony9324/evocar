@@ -1,8 +1,8 @@
 <section class="content-header">
   <h1> <i class='fa fa-tags'></i> Inventario <small></small> </h1>
   <ol class="breadcrumb">
-    <li><a><i class="fa fa-home"></i> Inicio</a></li>
-    <li><a>Inventario</a></li>
+    <li onclick="changerview('./?page=home')"><a href="#" id="inventaryhome"><i class="fa fa-home"></i> inicio</a></li>
+    <li onclick="changerview('./?page=inventary')" class="active"><a id="inventaryinventary" href="#">Inventario</a></li>
   </ol>
 </section>
 <!-- Main content -->
@@ -14,7 +14,7 @@
           <h3 class="box-title">Lista de Productos</h3>
           <div class="btn-group  pull-right">
             <a class="btn btn-default"><i class="fa fa-refresh"></i> Devoluciones</a>
-            <a id="re" class="btn btn-default"><i class="fa fa-refresh"></i> Reabastecer</a>
+            <a onclick="changerview('./?page=re')" id="re" class="btn btn-default"><i class="fa fa-refresh"></i> Reabastecer</a>
             <button type="button" id="btnnewproducto" class="btn btn-default" onclick="newproducto()"><i class="fa fa-tags"></i>Nuevo Producto</button>
             <div class="btn-group pull-right">
               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -163,15 +163,5 @@ $(function () {
       }
     }
   })
-})
-//este es para el menu de arbor de la cabecera
-var elem = $('#page_view');
-$("#re").on("click",function(e){
-  e.preventDefault();
-  elem.hide(50)
-  $.get("./?page=re",function(data){
-    $("#page_view").html(data);
-    elem.fadeIn()
-  });
 });
 </script>

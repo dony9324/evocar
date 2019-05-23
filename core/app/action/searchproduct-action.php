@@ -31,7 +31,7 @@
 						<?php
 						///
 						?>
-						<tr class="<?php if($q<=$product->inventary_min && $q>0){ echo "warning"; } if(!($q<=$product->inventary_min)){echo "info";} if(!$q>0){ echo "danger"; }?>">
+						<tr class="<?php if($product->control_stock==1){ if($q<=$product->inventary_min && $q>0){ echo "warning"; } if(!($q<=$product->inventary_min)){echo "success";}  if(!$q>0){ echo "danger"; }}else { 	}?>">
 							<td><?php echo $product->name; ?></td>
 							<td><b>$<?php if ($precio["Precio"]>0) {echo number_format(($precio["Precio"]/100), 2, ',', '.'); }else{
 								echo number_format(($product->price_out/100), 2, ',', '.');}?></b></td>
@@ -42,7 +42,7 @@
 								<input type="hidden" name="product_id" value="<?php echo $product->id; ?>">
 								<div class="input-group">
 									<button onClick="men1(<?php echo $product->id; ?>)" type="button" class="btn btn-warning btn-flat" style="display: block; float: left; vertical-align: middle; width: 34px;">-</button>
-									<input id="<?php echo $product->id; ?>" style="width: 50px; " type="number" min="0" max="<?php echo $q; ?>" value="1" step="<php if($product->divide==1) { <?php echo ani ?> ?>" class="form-control" required name="q" <?php if($product->divide==1) { ?> onFocus="changervalor(<?php echo $product->id;?>)" <?php }else{ ?> onFocus="nochangervalor()"<?php } ?>)>
+									<input id="<?php echo $product->id; ?>" style="width: 50px; " type="<?php if($product->divide==0) { echo 'text'; }else{ echo "number";}?>" min="0" value="1" autocomplete="off" step="<php if($product->divide==1) { <?php echo ani ?> ?>" class="form-control <?php if($product->divide==0) { echo 'entero'; }?>"  required name="q" <?php if($product->divide==1) { ?> onFocus="changervalor(<?php echo $product->id;?>)" <?php }else{ ?> onFocus="nochangervalor()"<?php } ?>)>
 									<button onClick="mas1(<?php echo $product->id; ?>)" type="button" class="btn btn-success btn-flat" style="display: block; vertical-align: middle; width: 35px;">+</button>
 									<span class="input-group-btn">
 										<button  class="btn btn-success" onClick="addtocart(<?php echo $product->id; ?>)"> Agregar</button>
@@ -65,6 +65,10 @@
 							?>
 						<?php  endif; ?>
 					<?php endforeach;?>
+					<script>
+					///aqui enmascaramos los campos que no tengan avilitado la divicion del producto para que solo admitan enteros
+					$('.entero').mask('000.000');
+					</script>
 				</tbody>
 				<tfoot>
 					<tr>
@@ -83,7 +87,7 @@
 				<div class='modal-content'>
 				<div class='box'id='testDiv2'>
 				<div class='box-header'>
-				<h3 class='box-title'>Productos omitidos</h3>
+				<h3 class='box-title'>Productos sin existencias</h3>
 				</div>
 				<!-- /.box-header -->
 				<div class='box-body no-padding'>

@@ -45,7 +45,7 @@
 									<input id="<?php echo $product->id; ?>" style="width: 50px; " type="<?php if($product->divide==0) { echo 'text'; }else{ echo "number";}?>" min="0" value="1" autocomplete="off" step="<php if($product->divide==1) { <?php echo ani ?> ?>" class="form-control <?php if($product->divide==0) { echo 'entero'; }?>"  required name="q" <?php if($product->divide==1) { ?> onFocus="changervalor(<?php echo $product->id;?>)" <?php }else{ ?> onFocus="nochangervalor()"<?php } ?>)>
 									<button onClick="mas1(<?php echo $product->id; ?>)" type="button" class="btn btn-success btn-flat" style="display: block; vertical-align: middle; width: 35px;">+</button>
 									<span class="input-group-btn">
-										<button  class="btn btn-success" onClick="addtocart(<?php echo $product->id; ?>)"> Agregar</button>
+										<button id="btnaddtocar<?php echo $product->id; ?>" class="btn btn-success" onClick="addtocart(<?php echo $product->id; ?>)"> Agregar</button>
 									</span>
 								</div>
 							</td>

@@ -19,8 +19,24 @@
             <div class="row">
               <form id="searchp" >
                 <div class="col-md-6">
-                  <!-- 	<input type="hidden" name="view" value="sell">  -->
-                  <input type="text" id="product_code" name="product" class="form-control" autocomplete="off" placeholder="Buscar producto por nombre o por codigo:">
+
+
+
+                  <div class="input-group">
+                    <!-- 	<input type="hidden" name="view" value="sell">  -->
+                    <input type="text" id="product_code" name="product" class="form-control" autocomplete="off" placeholder="Buscar producto por nombre o por codigo:">
+                <div class="input-group-btn">
+                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Busqueda
+                    <span class="fa fa-caret-down"></span></button>
+                  <ul class="dropdown-menu">
+                    <li><a href="#">Nombre</a></li>
+                    <li><a href="#">id</a></li>
+                    <li><a href="#">Codigo de barras</a></li>
+                    <li><a href="#">Codigo extra</a></li>
+                    <li class="divider"></li>
+                  </ul>
+                </div>
+              </div>
                 </div>
                 <div class="col-md-3" hidden="on">
                   <button type="submit" class="btn btn-info"></button><!--si quitas el submit no borra al dar enter-->
@@ -28,21 +44,13 @@
               </form>
               <div class="col-md-6" id="cantidadefectivo" hidden="on">
                 <input  type="hidden" id="ids" value=""/>
-                <a class="btn btn-success" onClick="cangercantidad(0.5)">
-                  1/2
-                </a>
-                <a class="btn btn-success" onClick="cangercantidad(0.25)">
-                  1/4
-                </a>
-                <a class="btn btn-success"  onClick="cangercantidad(0.125)">
-                  1/8
-                </a>
-                <a class="btn btn-success"  onClick="cangercantidad(0.0625)">
-                  1/16
-                </a>
+                <a class="btn btn-success" onClick="cangercantidad(0.5)">1/2</a>
+                <a class="btn btn-success" onClick="cangercantidad(0.25)">1/4</a>
+                <a class="btn btn-success"  onClick="cangercantidad(0.125)">1/8</a>
+                <a class="btn btn-success"  onClick="cangercantidad(0.0625)">1/16</a>
                 <div class="col-xs-4">
                   <form id="changer">
-                    <input type="text" class="money form-control" id="cantidade"  placeholder="cantidad en efectivo" autocomplete="ÑÖcompletes"  onKeyDown="">
+                    <input type="text" class="money form-control" id="cantidade"  placeholder="cantidad en efectivo" autocomplete="off"  onKeyDown="">
                     <div class="col-md-3" hidden="on">
                       <button type="submit" class="btn btn-info"></button><!--si quitas el submit no borra al dar enter-->
                     </div>
@@ -69,7 +77,7 @@
             $("#changer").on("submit",function(e){
               e.preventDefault();
               var elem = $('#cantidadefectivo');
-              var din = $("#cantidade").cleanVal()*1/100;
+              var din = $("#cantidade").cleanVal()*1;
               var val = ($('#ids').val());
               var price_out = $("#id"+val).val();
               var total = din / price_out;
@@ -81,6 +89,7 @@
             ///busca los productos al escribir
             $("#searchp").on("keyup","#product_code",function(e){
               e.preventDefault();
+              nochangervalor();
               $.get("./?action=searchproduct",$("#searchp").serialize(),function(data){
                 $("#show_search_results").html(data);
               });
@@ -90,9 +99,9 @@
         <!--añade al Carrito de compras-->
         <script>
         function addtocart(id) {
+          nochangervalor();
           $("#btnaddtocar"+id).prop('disabled', true);
           console.log("addtocart"+id)
-          //alertify.success('añadiendo a la Lista Producto'+id)
           $.get("./?action=addtocart",
           {
             q:$("#"+id).val(),
@@ -136,10 +145,12 @@
   </div>
   <script>
   function mas1(id){
+    nochangervalor();
     total= ($('#' + id).val())*1+1;
     $('#' + id).val(total);
   }
   function men1(id){
+    nochangervalor();
     total= ($('#' + id).val())*1-1;
     $('#' + id).val(total);
   }

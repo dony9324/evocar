@@ -71,7 +71,6 @@ $product->id_group = $_SESSION["insert_id"];//leemos el id del ultimo registro s
      $product->fractions = $p["q"];//partes a dividir
      $product->total_quantity =  $product->cantidad / $product->fractions ; // la equibalencia a la unidad principal
      $product->unit_id =$p["unit_id"];//id de la undida de medida
-     $product->other_presentations = 0; //0 no, 1 si
      $product->price_in =  $product->price_in / $product->fractions;
      $product->price_out = $p["price_outf"];
      $prod= $product->add();
@@ -84,7 +83,6 @@ if(isset($_SESSION["grupo"])){
       $product->fractions = 1; //partes a dividir
       $product->total_quantity =  $product->cantidad * $product->group_amount ; // la equibalencia a la unidad principal
       $product->unit_id =$g["unit_id"];//id de la undida de medida
-      $product->other_presentations = 0; //0 no, 1 si
       $product->price_in =  $product->price_in * $product->group_amount;
       $product->price_out = $g["price_outg"];
       $prod= $product->add();

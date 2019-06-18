@@ -75,12 +75,74 @@ endif; ?>
 			<?php $dicuento=0; foreach($_SESSION["cart"] as $p):
 				$product = ProductData::getById($p["product_id"]);
 				?>
-
-				<tr >
+				<tr style="width:11%;">
 					<td style="width:auto"><?php echo $product->name; ?></td>
-					<td ><?php echo $p["q"]; ?></td>
+					<td  style="width:11%;" >
+						<div class="input-group">
+							<style>
+							input[type=number]::-webkit-outer-spin-button,
+							input[type=number]::-webkit-inner-spin-button {	-webkit-appearance: none;	margin: 0;}
+							input[type=number] {-moz-appearance:textfield; text-align:center; }
+							</style>
+								<input style="min-width: 50px; -webkit-appearance: none; " class="form-control <?php if($product->divide==0) { echo 'entero'; }?>" type="<?php if($product->divide==0) { echo 'text'; }
+								else{ echo "number";}?>" id="q<?php echo $p["product_id"];?>" value="<?php echo $p["q"];?>" step=" <?php  if($product->divide==1) {  echo 'ani'; }?>">
+								<?php if ($product->other_presentations==1) {
+									if ($product->id_group==0) {
+										$other_presentations = ProductData::getById_group($p["product_id"]);
+									}else {
+										$other_presentations = ProductData::getById_group($product->id_group);
+									}
+								} ?>
+
+                <div class="input-group-btn">
+                  <button type="button" class="btn btn-default dropdown-toggle"
+									<?php if (isset($other_presentations)){
+										echo "data-toggle='dropdown' aria-expanded='false'";
+									}else {
+										echo "style='cursor: default'";
+									}?>
+										>	<?php if($product->unit_id!=null && $product->unit_id != 0 ){
+											if(isset($product->getUnit_id()->abbreviation)){
+
+										if ($product->cantidad!=0 && $product->cantidad != 1) {
+											echo "x ".$product->cantidad;
+										} if ($product->getUnit_id()->abbreviation=="") {
+										echo $product->getUnit_id()->name;
+									}else {
+										echo $product->getUnit_id()->abbreviation;
+									}
+
+										} else { echo "eliminada";}
+										}else{ echo "Gen"; }  ?>
+											<?php if (isset($other_presentations)){
+                    	echo "<span class='fa fa-caret-down'></span>";
+										}?></button>
+///aki
+                  <ul class="dropdown-menu">
+										<?php if (isset($other_presentations)){
+											if ($product->id_group==0) {
+														foreach ( $other_presentations as $other) {
+															if($other->unit_id!=null && $other->unit_id != 0 ){
+																	if(isset($other->getUnit_id()->name)){
+																		echo "<li><a href='#'>";
+																if ($other->cantidad!=0 && $other->cantidad != 1) {
+																	echo "x ".$other->cantidad;
+																}echo $other->getUnit_id()->name." = ";
+																echo $product->cantidad. $product->getUnit_id()->name."x ". $other->total_quantity;
+																} else { echo "eliminada";}
+																}else{ echo "Gen"; }
+															echo "</a></li>";
+											}
+										}
+										}
+										unset($other_presentations); ?>
+                  </ul>
+                </div>
+              </div>
+						</td>
+
 					<td style="width:11%;"> <?php echo number_format(($product->price_in/100), 2, ',', '.'); ?><input type="hidden" id="price_in<?php echo $p["product_id"];?>" value="<?php echo $product->price_in * $p["q"];?>">
-					<input type="hidden" id="q<?php echo $p["product_id"];?>" value="<?php echo $p["q"];?>"> </td>
+ 				</td>
 					<td style="width:11%;"><input type="text" onchange="validarprice('price_out',<?php echo $p["product_id"];?>);" onkeyup="validarprice('price_out',<?php echo $p["product_id"];?>);" name="price_out<?php echo $p["product_id"];?>" required class="form-control money" id="price_out<?php echo $p["product_id"];?>" value="<?php echo $p["price_out"]; ?>" placeholder="Precio de salida" autocomplete="off" >
 						<span id="spanprice_out<?php echo $p["product_id"];?>"></span></td>
 						<td style="width:11%;"><b>$ <?php  $pt = $p["price_out"]*$p["q"]; $total +=$pt; $pt2 = $product->price_in*$p["q"];
@@ -149,6 +211,9 @@ endif; ?>
 						//funcion para enmascarar http://igorescobar.github.io/jQuery-Mask-Plugin/docs.html
 						jQuery(function($){
 							$('.money').mask('000.000.000,00', {reverse: true});
+
+							///aqui enmascaramos los campos que no tengan avilitado la divicion del producto para que solo admitan enteros
+							$('.entero').mask('000.000');
 						});
 						function validarprice(na,id){
 							NEMEM = $('#'+na+id).cleanVal()/100;
@@ -165,16 +230,18 @@ endif; ?>
 					</tbody>
 				</table>
 				<h3>Resumen</h3>
-				<table style="width:100%;" class="table table-bordered">
+				<table style="width:auto;" class="table table-bordered">
 					<tr>
-						<td class="info" style="width:150px"><p><b>Total</b></p></td>
+						<td class="info" style="width:150px"><p><b>SubTotal</b></p></td>
 						<td class="danger"><p><b>$ <?php echo number_format(($total /100), 2, ',', '.'); ?></b></p></td>
 						<td ></td>
-						<td class="info" style="width:180px"><p><b>Descuento</b></p></td>
+						<td class="info"> <b>Descuento</b> <button type="button" class="btn btn-default">General</button></td>
 						<td class="success">  <?php echo number_format(($descuento/100), 2, ',', '.');?>
-
 							<span id="spandescuento<?php echo $p["product_id"];?>"></span></td>
-							<td class="danger"><p><b>$ <?php echo number_format((($total-$descuento )/100), 2, ',', '.'); ?></b></p></td>
+						<td ></td>
+						<td class="info"><b>Total</b></td>
+
+						<td class="danger"><p><b>$ <?php echo number_format((($total-$descuento )/100), 2, ',', '.'); ?></b></p></td>
 						</tr>
 					</table>
 					<form method="post" class="form-horizontal" name ="processsell" id="processsell" action="index.php?action=process-sell" >
@@ -232,7 +299,7 @@ endif; ?>
 							<input type="radio" id="switch_left" name="switch_2" value="0" checked/ onchange="savedatos()">
 							<label for="switch_left">No</label>
 							<input type="radio" id="switch_right" name="switch_2" value="1" /onchange="savedatos()">
-							<label for="switch_right">Si</label>
+							<label id="lswitch_right" for="switch_right">Si</label>
 						</div>
 						<script>
 						function desavilita(){
@@ -255,12 +322,12 @@ endif; ?>
 			</div>
 			<div class="mostrar form-group" hidden="on">
 				<label for="adelanto" class="col-sm-2 control-label">Adelanto</label>
-				<div class="col-sm-2 ">
+				<div class="col-sm-4 ">
 					<div class="switch-field">
 						<input type="radio" id="switch_left2" name="adelanto" value="0" checked="" onchange="actadelanto()">
 						<label for="switch_left2">No</label>
 						<input type="radio" id="switch_right2" name="adelanto" value="1" onchange="actadelanto()">
-						<label for="switch_right2">Si</label>
+						<label id="lswitch_right2" for="switch_right2">Si</label>
 					</div>
 				</div>
 			</div>
@@ -343,10 +410,10 @@ endif; ?>
 				</div>
 				<div class="col-sm-7">
 					<div class="switch-field">
-						<input type="radio" id="entrega_left" name="entrega" value="0">
-						<label for="entrega_left">No</label>
-						<input type="radio" id="entrega_right" name="entrega" value="1" checked="" >
-						<label for="entrega_right">Si</label>
+						<input type="radio" id="entrega_left" name="entrega" value="0" onchange="savedatos()">
+						<label id="lentrega_left" for="entrega_left">No</label>
+						<input type="radio" id="entrega_right" name="entrega" value="1" checked="" onchange="savedatos()">
+						<label id="lentrega_right" for="entrega_right">Si</label>
 					</div>
 				</div>
 			</div>
@@ -391,13 +458,14 @@ endif; ?>
 
 
 
+
 				<script>
 				//esta funcion carga el formulario para guardar un nuevo Cliente
 				function printoutcot(){
 					//estalinea es por un error de doble ventana he impide que se abra dosveces el modal
 					$("#btnprintoutcot").prop('disabled', true);
 					console.log("nuevo Cliente")
-					$.get("./?action=printcot",function(data){
+					$.get("./?imprimir=printcot",function(data){
 						if (data.estado == "true") {
 							alertify.success('Se Imprimio correctamente');
 
@@ -463,6 +531,31 @@ endif; ?>
 								echo "elegir(".$_COOKIE['cliente_id'].")";
 							}
 							?>
+							<?php 	if(isset($_COOKIE['acreditar']) && $_COOKIE['acreditar']==1) {
+								echo "$('#lswitch_right').click();";
+								echo "console.log('que passa');";
+							}
+							?>
+							<?php 	if(isset($_COOKIE['adelanto']) && $_COOKIE['adelanto']==1) {
+								echo "$('#lswitch_right2').click();";
+								echo "console.log('que passa');";
+							}
+							?>
+							<?php 	if(isset($_COOKIE['cantidad_adelanto'])) {
+								echo "$('#cantidad_adelanto').val('".$_COOKIE['cantidad_adelanto']."');";
+								echo "console.log('que passa');";
+							}
+							?>
+							<?php 	if(isset($_COOKIE['efectivo'])) {
+								echo "$('#money').val('".$_COOKIE['efectivo']."');";
+								echo "console.log('que passa');";
+							}	?>
+							<?php 	if(isset($_COOKIE['entrega'])&& $_COOKIE['entrega']==0) {
+									echo "$('#lentrega_left').click();";
+								echo "console.log('que passa');";
+							}
+							?>
+
 						});
 						function savedatos(){
 							console.log("savedatos");
@@ -470,7 +563,7 @@ endif; ?>
 							{
 								cliente_id: $("#client_id").val(),
 								discount:0,
-								acreditar:$('input:radio[name=adelanto]:checked').val(),
+								acreditar:$('input:radio[name=switch_2]:checked').val(),
 								adelanto: $('input:radio[name=adelanto]:checked').val(),
 								cantidad_adelanto:$("#cantidad_adelanto").cleanVal(),
 								efectivo: $("#money").cleanVal(),

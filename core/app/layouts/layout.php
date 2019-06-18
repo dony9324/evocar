@@ -4,8 +4,6 @@ if(!isset($_SESSION["user_id"])){
     Core::redir("./");
   }
 }
-$us = CompanyData::getById(6);
-$skin = $us->value;
 ?>
 <html>
 <head>
@@ -19,18 +17,18 @@ $skin = $us->value;
   <script src="res/numeroALetras.js" type="text/javascript"></script>
   <!-- Dile al navegador que responda al ancho de la pantalla -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <link rel="stylesheet" href="res/<?php echo $skin ; ?>/bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="res/AdminLTE/bootstrap/bootstrap.min.css">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="res/<?php echo $skin ; ?>/font-awesome/font-awesome.min.css">
+  <link rel="stylesheet" href="res/AdminLTE/font-awesome/font-awesome.min.css">
   <!-- Ionicons -->
-  <link rel="stylesheet" href="res/<?php echo $skin ; ?>/Ionicons/ionicons.min.css">
+  <link rel="stylesheet" href="res/AdminLTE/Ionicons/ionicons.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="res/<?php echo $skin ; ?>/AdminLTE.css">
+  <link rel="stylesheet" href="res/AdminLTE/AdminLTE.css">
   <!-- AdminLTE Skins. este archivo tiene los colores de menu es nesesario poner la clse skin al body. -->
-  <link rel="stylesheet" href="res/<?php echo $skin ; ?>/skin.css">
+  <link rel="stylesheet" href="res/AdminLTE/skin.css">
   <link rel="stylesheet" href="res/select2.min.css">
   <link rel="stylesheet" href="res/overhang.min.css">
-  <link rel="stylesheet" href="res/<?php echo $skin ; ?>/dataTables.bootstrap.min.css">
+  <link rel="stylesheet" href="res/AdminLTE/dataTables.bootstrap.min.css">
   <link rel="shortcut icon" href="res/img/favicon.png" type="image/x-icon">
   <!-- añadir alertas con alertifyjs -->
   <link href="res/alertifyjs/css/alertify.css" rel="stylesheet">
@@ -397,13 +395,13 @@ $skin = $us->value;
 <!-- REQUIRED JS SCRIPTS -->
 
 <!-- Bootstrap 3.3.7 -->
-<script src="res/<?php echo $skin ; ?>/bootstrap/bootstrap.min.js"></script>
+<script src="res/AdminLTE/bootstrap/bootstrap.min.js"></script>
 <!-- AdminLTE App -->
-<script src="res/<?php echo $skin ; ?>/adminlte.min.js"></script>
+<script src="res/AdminLTE/adminlte.min.js"></script>
 <!-- DataTables -->
-<script src="res/<?php echo $skin ; ?>/jquery.dataTables.min.js"></script>
-<script src="res/<?php echo $skin ; ?>/dataTables.bootstrap.min.js"></script>
-<script src="res/<?php echo $skin ; ?>/Chart.js/Chart.js"></script>
+<script src="res/AdminLTE/jquery.dataTables.min.js"></script>
+<script src="res/AdminLTE/dataTables.bootstrap.min.js"></script>
+<script src="res/AdminLTE/Chart.js/Chart.js"></script>
 <script src = "res/jquery-ui.min.js"> </script>
 <!-- slimscroll -->
 <script src = "res/jquery.slimscroll.min.js"> </script>

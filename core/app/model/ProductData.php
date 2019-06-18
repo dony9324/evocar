@@ -73,8 +73,13 @@ class ProductData {
 		$query = Executor::doit($sql);
 		return Model::one($query[0],new ProductData());
 	}
+	public static function getById_group($id){
+		$sql = "select * from ".self::$tablename." where id_group = $id and is_active = 1";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new ProductData());
+	}
 	public static function getAll(){
-		$sql = "select * from ".self::$tablename." ORDER BY id asc" ;
+		$sql = "select * from ".self::$tablename." where id_group = 0 ORDER BY id asc" ;
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new ProductData());
 	}
@@ -108,5 +113,6 @@ class ProductData {
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new ProductData());
 	}
+		public function getUnit_id(){ return UnitData::getById($this->unit_id);}
 }
 ?>

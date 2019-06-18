@@ -5,7 +5,12 @@ $resultado = array("estado" => "true");
 	$errors = array();
 if(!isset($_SESSION["cart"])){
 	$p = ProductData::getById($_GET["product_id"]);
-	$product = array("product_id"=>$_GET["product_id"],"q"=>$_GET["q"], "price_out"=>$p->price_out, "descuento"=>0);
+		$precio=OperationData::getQprice($_GET["product_id"]);
+		 if ($precio["Precio"]==0){
+			 $precio["Precio"]=$p->price_out;
+		 }
+
+	$product = array("product_id"=>$_GET["product_id"],"q"=>$_GET["q"], "price_out"=>$precio["Precio"], "descuento"=>0);
 	$_SESSION["cart"] = array($product);
 	$cart = $_SESSION["cart"];
 	$num_succ = 0;
@@ -90,9 +95,14 @@ if(!isset($_SESSION["cart"])){
 		if($found==false){
 			$p = ProductData::getById($_GET["product_id"]);
 			$q = OperationData::getQYesF($c["product_id"]);
+			$precio=OperationData::getQprice($_GET["product_id"]);
+			if ($precio["Precio"]==0){
+				$precio["Precio"]=$p->price_out;
+			}
 			if($c["q"]<=$q){
+				//////////////////////////////////
 				$nc = count($cart);
-				$product = array("product_id"=>$_GET["product_id"],"q"=>$_GET["q"], "price_out"=>$p->price_out, "descuento"=>0);
+				$product = array("product_id"=>$_GET["product_id"],"q"=>$_GET["q"], "price_out"=>$precio["Precio"] , "descuento"=>0);
 				$cart[$nc] = $product;
 				$_SESSION["cart"] = $cart;
 			}else{
@@ -103,7 +113,7 @@ if(!isset($_SESSION["cart"])){
 					$errors[count($errors)] = $error;
 				}else {
 					$nc = count($cart);
-					$product = array("product_id"=>$_GET["product_id"],"q"=>$_GET["q"], "price_out"=>$p->price_out, "descuento"=>0);
+					$product = array("product_id"=>$_GET["product_id"],"q"=>$_GET["q"], "price_out"=>$precio["Precio"], "descuento"=>0);
 					$cart[$nc] = $product;
 					$_SESSION["cart"] = $cart;
 				}

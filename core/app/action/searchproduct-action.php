@@ -6,15 +6,16 @@
 			?>
 			<style>
 			input[type=number]::-webkit-outer-spin-button,
-			input[type=number]::-webkit-inner-spin-button {	-webkit-appearance: none;	margin: 0; text-align:center;}
-			input[type=number] {-moz-appearance:textfield; text-align:center; }
+			input[type=number]::-webkit-inner-spin-button {	-webkit-appearance: none;	margin: 0; }
+			input[type=number] {-moz-appearance:textfield; }
 			</style>
 			<table style="width:100%;"  class="table table-bordered text-center">
 				<thead>
 					<tr>
+						<th style="width:auto;">id</th>
 						<th>Nombre</th>
-						<th>Precio</th>
 						<th >Costo</th>
+						<th>Precio</th>
 						<th>Disponible</th>
 						<th>Cantidad</th>
 					</tr>
@@ -32,17 +33,22 @@
 						///
 						?>
 						<tr class="<?php if($product->control_stock==1){ if($q<=$product->inventary_min && $q>0){ echo "warning"; } if(!($q<=$product->inventary_min)){echo "success";}  if(!$q>0){ echo "danger"; }}else { 	}?>">
+								<td style="width:auto;"><?php echo $product->id; ?></td>
 							<td><?php echo $product->name; ?></td>
+
+							<td><b>$ <?php echo number_format(($product->price_in/100), 2, ',', '.'); ?></b></td>
 							<td><b>$<?php if ($precio["Precio"]>0) {echo number_format(($precio["Precio"]/100), 2, ',', '.'); }else{
 								echo number_format(($product->price_out/100), 2, ',', '.');}?></b></td>
-							<td><b>$ <?php echo number_format(($product->price_in/100), 2, ',', '.'); ?></b></td>
 							<td>	<?php echo $q; ?>	</td>
 							<td style="width:250px;">
 								<input type="hidden" id="id<?php echo $product->id; ?>" value="<?php echo $product->price_out; ?>">
 								<input type="hidden" name="product_id" value="<?php echo $product->id; ?>">
 								<div class="input-group">
 									<button onClick="men1(<?php echo $product->id; ?>)" type="button" class="btn btn-warning btn-flat" style="display: block; float: left; vertical-align: middle; width: 34px;">-</button>
-									<input id="<?php echo $product->id; ?>" style="width: 50px; " type="<?php if($product->divide==0) { echo 'text'; }else{ echo "number";}?>" min="0" value="1" autocomplete="off" step="<php if($product->divide==1) { <?php echo ani ?> ?>" class="form-control <?php if($product->divide==0) { echo 'entero'; }?>"  required name="q" <?php if($product->divide==1) { ?> onFocus="changervalor(<?php echo $product->id;?>)" <?php }else{ ?> onFocus="nochangervalor()"<?php } ?>)>
+									<input id="<?php echo $product->id; ?>" style="width: 50px; " type="<?php if($product->divide==0) { echo 'text'; }
+									else{ echo "number";}?>"  min="0" value="1" autocomplete="off"
+									step=" <?php  if($product->divide==1) {  echo 'ani'; }?>"
+										class="form-control <?php if($product->divide==0) { echo 'entero'; }?>" name="q"<?php if($product->divide==1) { ?> onFocus="changervalor(<?php echo $product->id;?>)" <?php }else{ ?> onFocus="nochangervalor()"<?php } ?>)>
 									<button onClick="mas1(<?php echo $product->id; ?>)" type="button" class="btn btn-success btn-flat" style="display: block; vertical-align: middle; width: 35px;">+</button>
 									<span class="input-group-btn">
 										<button id="btnaddtocar<?php echo $product->id; ?>" class="btn btn-success" onClick="addtocart(<?php echo $product->id; ?>)"> Agregar</button>
@@ -72,9 +78,10 @@
 				</tbody>
 				<tfoot>
 					<tr>
+						<th style="width:auto;">id</th>
 						<th>Nombre</th>
-						<th>Precio</th>
 						<th>Costo</th>
+						<th>Precio</th>
 						<th>Disponible</th>
 						<th>Cantidad</th>
 					</tr>

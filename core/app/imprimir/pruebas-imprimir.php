@@ -107,21 +107,17 @@ foreach ($items as $item) {
         }
         $printer->text($line . "\n");
     }
-
     //Current item ROW 2
     $igst_lines = str_split($item['igst'], 18);
     foreach ($igst_lines as $k => $l) {
         $l = trim($l);
         $igst_lines[$k] = addSpaces($l, 20);
     }
-
     $cgst_price = str_split($item['cgst'], 28);
     foreach ($cgst_price as $k => $l) {
         $l = trim($l);
         $cgst_price[$k] = addSpaces($l, 28);
     }
-
-
     $counter = 0;
     $temp = [];
     $temp[] = count($igst_lines);
@@ -141,16 +137,9 @@ foreach ($items as $item) {
     }
     $printer->feed();
 }
-
-
-
-
-
 $printer->cut();
 $printer->pulse();
 $printer->close();
-
-/*
   $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);//MODO DOBLE ANCHO
   $printer -> text("TEXTO mas ancho.\n");
   $printer -> selectPrintMode();

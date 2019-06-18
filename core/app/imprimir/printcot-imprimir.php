@@ -1,19 +1,18 @@
 <?php
 header('Content-type: application/json');
 $resultado = array();
-$resultado = array("estado" => "false");
+$resultado = array("estado" => "true");
 include "res/escpos-php-master/autoload.php";
 use Mike42\Escpos\Printer;
 use Mike42\Escpos\EscposImage;
-use Mike42\Escpos\PrintConnectors\FilePrintConnector;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 /* Fill in your own connector here */
-$connector = new WindowsPrintConnector("CutePDF Writer");
+$connector = new WindowsPrintConnector("EPSON TM-T20II Receipt");
 /* Information for the receipt */
 $infoiva= CompanyData::getById(1)->value;
 $infonit= CompanyData::getById(2)->value;
 $infocell= CompanyData::getById(3)->value;
-$infoweb= CompanyData::getById(4)->value;
+$mensaje= CompanyData::getById(4)->value;
 $infodire= CompanyData::getById(5)->value;
 $total=0;
 $total2=0;
@@ -24,7 +23,7 @@ foreach($_SESSION["cart"] as $p){
 $pt = $product->price_out*$p["q"];
  $total +=$pt;
     array_push($items, new item("Nombre: ".$product->name, ""),
-    new item("Cantida:".$p["q"]."  Valor x 1:"."$".($product->price_out)."  total: "."$".$pt,""), new item("===============================","=================")
+    new item("Cant:".$p["q"]."  Valor x 1:"."$".($product->price_out)."  total: "."$".$pt,""), new item("===============================","=================")
     );
 	}
 $subtotal = new item('Base: ', number_format(($total/(($infoiva/100)+1)),2,".",","));
@@ -34,38 +33,38 @@ $total3 = new item('Total', number_format ($total,2,".",","));
  $date = date(' Y-m-d h:i:s A');
 
 /* Start the printer */
-$logo = EscposImage::load("res/img/escpos-php.png", false);
+
 $printer = new Printer($connector);
 
 /* Print top logo */
 $printer -> setJustification(Printer::JUSTIFY_CENTER);
-$printer -> graphics($logo);
+try{
+ $logo = EscposImage::load("res/img/logo.png", false);
+		$printer->bitImage($logo);
+}catch(Exception $e){}//No hacemos nada si hay error
 
-/* Name of shop */
-$printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-$printer -> text("Ferreteria la Bendicion.\n");
-$printer -> selectPrintMode();
+$printer -> setFont(Printer::FONT_B);//texto pequeño
 $printer -> text("NIT: ".$infonit.".\n");
 $printer -> text("Direccion: ".$infodire.".\n");
 $printer -> text("TELL: ".$infocell.".\n");
+$printer -> setFont(); // Reset
+$printer -> selectPrintMode(Printer::MODE_EMPHASIZED);//Modo enfatizado NEGRITA
 $printer -> text("Cotisacion .\n");
-$printer -> setEmphasis(true);
-
+  $printer -> selectPrintMode(); // Reset
+$printer -> setEmphasis(true);//Modo enfatizado NEGRITA
 $printer -> feed();
-
 /* Title of receipt */
 $printer -> setEmphasis(true);
 $printer -> text("PRODUCTOS\n");
 $printer -> setEmphasis(false);
 
 /* Items */
+$printer -> setFont(Printer::FONT_B);//texto pequeño
 $printer -> setJustification(Printer::JUSTIFY_LEFT);
-$printer -> setEmphasis(true);
-//$printer -> text(new item('', '$'));
-$printer -> setEmphasis(false);
 foreach ($items as $item) {
     $printer -> text($item);
 }
+$printer -> setFont(); // Reset
 $printer -> feed();
 $printer -> setEmphasis(true);
 $printer -> text($subtotal);
@@ -84,8 +83,8 @@ $printer -> feed(1);
 $printer -> setJustification(Printer::JUSTIFY_CENTER);
 $printer -> text("Gracias por su compra\n");
 $printer -> text("Atendido por: ".$user->name." ".$user->lastname."\n");
-if($infoweb!=null){
-	$printer -> text("web: ".$infoweb."\n");
+if($mensaje!=null){
+	$printer -> text("web: ".$mensaje."\n");
 	}
 $printer -> feed(1);
 $printer -> text($date . "\n");
@@ -112,16 +111,12 @@ class item
 
     public function __toString()
     {
-        $rightCols = 0;
-        $leftCols = 27;
-        if ($this -> dollarSign) {
-            $leftCols = $leftCols / 2 - $rightCols / 2;
-        }
-        $left = str_pad($this -> name, $leftCols) ;
-
-        $sign = ($this -> dollarSign ? '$ ' : '');
-        $right = str_pad($sign . $this -> price, $rightCols, ' ', STR_PAD_LEFT);
-        return "$left$right\n";
+    	$rightCols = 0;
+      $leftCols = 27;
+  		$left = str_pad($this -> name, $leftCols) ;
+      $sign = ($this -> dollarSign ? '$ ' : '');
+      $right = str_pad($sign . $this -> price, $rightCols, ' ', STR_PAD_LEFT);
+      return "$left$right\n";
     }
 }
 return print(json_encode($resultado));

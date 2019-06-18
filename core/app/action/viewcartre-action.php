@@ -188,7 +188,7 @@ endif; ?>
 		</div>
 		<input name="is_oficial" type="hidden" value="1">
 		<div class="col-lg-10">
-			<button class="btn btn-lg btn-danger"	onclick="clearr()" ><i class="glyphicon glyphicon-remove"></i> Cancelar </button>
+			<button class="btn btn-danger"	onclick="clearr()" ><i class="glyphicon glyphicon-remove"></i> Cancelar </button>
 					<script>
 					function clearr() {
 						console.log("clearr")
@@ -206,7 +206,7 @@ endif; ?>
 
 
 						</script>
-						<button id="btnprocessre"  onclick="processre()" class="btn btn-lg btn-success"><i class="glyphicon glyphicon-usd"></i> Procesar Reabastecimiento</button>
+						<button id="btnprocessre"  onclick="processre()" class="btn btn-success"><i class="glyphicon glyphicon-usd"></i> Procesar Reabastecimiento</button>
 						<script>
 						function processre() {
 							$("#btnprocessre").prop('disabled', true);
@@ -262,7 +262,9 @@ endif; ?>
 								}else {
 									alertify.error('Algo salio mal');
 								}
-							});}
+							});
+								$("#btnimprimir").prop('disabled', false);
+						}
 							</script>
 
 						</div>

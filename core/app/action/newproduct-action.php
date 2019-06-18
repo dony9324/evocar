@@ -297,12 +297,16 @@
       <?php foreach($units as $unit):
         if ($unit->type >1) {
           echo "case ".$unit->id.": mesaje ='Cuantos ".$unit->name."'; break;";
+        }else if ($unit->type ==1) {
+          echo "case ".$unit->id.": mesaje ='Cuantas ".$unit->name."'; break;";
+        }else{
+          echo "case ".$unit->id.": mesaje ='Cuantos ".$unit->name."'; break;";
         }
         ?>
         <?php endforeach;?>
         default:
       }
-      if (value<=7){
+      if (value<=8 && value!=2){
         elem2.hide();
         adeshabx();
       }else {

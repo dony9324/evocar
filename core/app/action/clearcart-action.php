@@ -16,7 +16,7 @@ if(isset($_GET["product_id"])){
 	setcookie("efectivo","",time()-18600);
 	setcookie("entrega","",time()-18600);
 	}else{
-		$ncart = null;
+		$ncart = array();
 		$nx=0;
 		foreach($cart as $c){
 			if($c["product_id"]!=$_GET["product_id"]){
@@ -24,7 +24,7 @@ if(isset($_GET["product_id"])){
 			}
 			$nx++;
 		}
-		$_SESSION["cart"] = $ncart;
+		$_SESSION["cart"] =  array_merge($ncart);
 	}
 }else{
  unset($_SESSION["cart"]);

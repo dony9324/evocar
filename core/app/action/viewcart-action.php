@@ -59,8 +59,10 @@ endif; ?>
 	$total = 0;// total costo de todos los productos
 	$total2 = 0;//esto es para el descuento salida
 	$descuento = 0; // descuento hecho
+		// print_r($_SESSION["cart"]); // ver que hay en esta variable texteo
 	?>
 	<h3>Lista de venta</h3>
+
 	<table style="width:100%;" class="text-center table table-bordered table-hover">
 		<thead>
 			<th>Producto</th>
@@ -113,7 +115,7 @@ endif; ?>
 									}
 
 										} else { echo "eliminada";}
-										}else{ echo "Gen"; }  ?>
+										}else{ echo "indef"; }  ?>
 											<?php if (isset($other_presentations)){
                     	echo "<span class='fa fa-caret-down'></span>";
 										}?></button>
@@ -121,16 +123,17 @@ endif; ?>
                   <ul class="dropdown-menu">
 										<?php if (isset($other_presentations)){
 											if ($product->id_group==0) {
+												//si llego aki este producto tiene mas presentaciones y esta la presentacion principal
 														foreach ( $other_presentations as $other) {
 															if($other->unit_id!=null && $other->unit_id != 0 ){
 																	if(isset($other->getUnit_id()->name)){
-																		echo "<li><a href='#'>";
+																		 echo "<li><a href='#' id='btncam".$other->id."' onclick='cambioPresentacion(".$other->id.", ".$p['q'].", ".$p['product_id'].");'>";
 																if ($other->cantidad!=0 && $other->cantidad != 1) {
 																	echo "x ".$other->cantidad;
 																}echo $other->getUnit_id()->name." = ";
 																echo $product->cantidad. $product->getUnit_id()->name."x ". $other->total_quantity;
 																} else { echo "eliminada";}
-																}else{ echo "Gen"; }
+															}else{ echo "indef"; }
 															echo "</a></li>";
 											}
 										}
@@ -225,7 +228,38 @@ endif; ?>
 							});
 							alertify.message(nuu);
 						}
+						function cambioPresentacion(idp, q, id){
+			          nochangervalor();
+			          $("#btncam"+idp).prop('disabled', true);
+			          console.log("addtocart"+idp)
+			          $.get("./?action=addtocart",
+			          {
+			            q:q,
+			            product_id:idp
+			          },function(data){
+			            if (data.estado == "true") {
+										console.log('Se agregó producto correctamente');
+										console.log("clearcart"+id)
+										$.get("./?action=clearcart",
+										{
+											product_id:id
+										},function(data){
+											if (data.estado == "true") {
+												alertify.success('Se cambio presentacion correctamente');
+											console.log('Se elimino producto correctamente');
+											}else {
+												console.log('No se pudo Eliminar producto');
+											}
+										});
 
+			            }else {
+			              alertify.error('No se pudo cambio presentacion');
+
+			            }
+			            $("#cart").load("./?action=viewcart")
+			          });
+			          $("#btncam"+idp).prop('disabled', false);
+			        }
 						</script>
 					</tbody>
 				</table>

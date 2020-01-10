@@ -103,19 +103,19 @@ endif; ?>
 									}else {
 										echo "style='cursor: default'";
 									}?>
-										>	<?php if($product->unit_id!=null && $product->unit_id != 0 ){
-											if(isset($product->getUnit_id()->abbreviation)){
+									>	<?php if($product->unit_id!=null && $product->unit_id != 0 ){
+										if(isset($product->getUnit_id()->abbreviation)){
 
-										if ($product->cantidad!=0 && $product->cantidad != 1) {
-											echo "x ".$product->cantidad;
-										} if ($product->getUnit_id()->abbreviation=="") {
-										echo $product->getUnit_id()->name;
-									}else {
-										echo $product->getUnit_id()->abbreviation;
-									}
+											if ($product->cantidad!=0 && $product->cantidad != 1) {
+												echo "x ".$product->cantidad;
+											} if ($product->getUnit_id()->abbreviation=="") {
+												echo $product->getUnit_id()->name;
+											}else {
+												echo $product->getUnit_id()->abbreviation;
+											}
 
 										} else { echo "eliminada";}
-										}else{ echo "indef"; }  ?>
+									}else{ echo "indef"; }  ?>
 											<?php if (isset($other_presentations)){
                     	echo "<span class='fa fa-caret-down'></span>";
 										}?></button>
@@ -136,6 +136,37 @@ endif; ?>
 															}else{ echo "indef"; }
 															echo "</a></li>";
 											}
+										}else {
+											//si llego aki este producto tiene mas presentaciones y esta NO ES la presentacion principal
+												//$product = ProductData::getById($p["product_id"]);
+												//$product->id_group
+												$producttmp = ProductData::getById($product->id_group);
+												if($producttmp->unit_id!=null && $producttmp->unit_id != 0 ){
+														if(isset($producttmp->getUnit_id()->name)){
+															 echo "<li><a href='#' id='btncam".$producttmp->id."' onclick='cambioPresentacion(".$producttmp->id.", ".$p['q'].", ".$p['product_id'].");'>";
+													if ($producttmp->cantidad!=0 && $producttmp->cantidad != 1) {
+														echo "x ".$producttmp->cantidad;
+													}echo $producttmp->getUnit_id()->name;
+													//echo $product->cantidad. $product->getUnit_id()->name."x ". $producttmp->total_quantity;
+													} else { echo "eliminada";}
+												}else{ echo "indef"; }
+												echo "</a></li>";
+											foreach ( $other_presentations as $other) {
+												if ($other->id != $product->id) {
+
+
+												if($other->unit_id!=null && $other->unit_id != 0 ){
+														if(isset($other->getUnit_id()->name)){
+															 echo "<li><a href='#' id='btncam".$other->id."' onclick='cambioPresentacion(".$other->id.", ".$p['q'].", ".$p['product_id'].");'>";
+													if ($other->cantidad!=0 && $other->cantidad != 1) {
+														echo "x ".$other->cantidad;
+													}echo $other->getUnit_id()->name." = ";
+													echo $product->cantidad. $producttmp->getUnit_id()->name."x ". $other->total_quantity;
+													} else { echo "eliminada";}
+												}else{ echo "indef"; }
+												echo "</a></li>";
+											}
+												}
 										}
 										}
 										unset($other_presentations); ?>
@@ -156,8 +187,32 @@ endif; ?>
 								class="btn btn-danger" onclick="clearcart(<?php echo $product->id; ?>)"><i class="glyphicon glyphicon-remove"></i></a></td>
 							</tr>
 							<script>
+
+//esta funcion actualizar la cantidad en los valores de   $_SESSION["cart"] - blur = perde el focu
+$("#q<?php echo $p["product_id"];?>").blur(function(){
+	console.log('updatecartq');
+	console.log("addtocart"+"<?php echo $p["product_id"];?>" );
+	//q:($('#<?php echo $p["product_id"];?>').val())*1+1;
+
+	console.log($("#q<?php echo $p["product_id"];?>").cleanVal() * 1);
+				$.get("./?action=addtocart",
+				{
+					q:($("#q<?php echo $p["product_id"];?>").cleanVal() * 1)- <?php echo $p["q"];?>,
+					product_id:"<?php echo $p["product_id"];?>",
+				},function(data){
+					if (data.estado == "true") {
+						alertify.success('Se actualizo cantidad correctamente');
+					}else {
+						alertify.error('No se pudo actualizar cantidad');
+					}
+					$("#cart").load("./?action=viewcart")
+				});
+});
+
 							//esta funcion actualisar los valores de  $_SESSION["reabastecer"] - blur = perde el focu
+
 							$("#descuento<?php echo $p["product_id"];?>").blur(function(){
+								console.log('updatecart');
 								id = $("#descuento<?php echo $p["product_id"];?>").cleanVal() * 1;
 								id2 = (<?php echo $p["q"]; ?> * $("#price_out<?php echo $p["product_id"];?>").cleanVal()) - ($("#price_in<?php echo $p["product_id"];?>").val()*1);
 								console.log("id:"+id+" id2:"+id2);
@@ -269,13 +324,15 @@ endif; ?>
 						<td class="info" style="width:150px"><p><b>SubTotal</b></p></td>
 						<td class="danger"><p><b>$ <?php echo number_format(($total /100), 2, ',', '.'); ?></b></p></td>
 						<td ></td>
-						<td class="info"> <b>Descuento</b> <button type="button" class="btn btn-default">General</button></td>
+						<td class="info"> <b>Descuento total</b> </td>
 						<td class="success">  <?php echo number_format(($descuento/100), 2, ',', '.');?>
+							<div class="" hidden="on">
+								<input type="number" step="any" name="discount" class="form-control"  value="<?php echo $descuento;?>" id="discount" placeholder="Descuento">
+							</div>
 							<span id="spandescuento<?php echo $p["product_id"];?>"></span></td>
 						<td ></td>
 						<td class="info"><b>Total</b></td>
-
-						<td class="danger"><p><b>$ <?php echo number_format((($total-$descuento )/100), 2, ',', '.'); ?></b></p></td>
+						<td class="danger"><p><b>$ <?php echo number_format((($total-$descuento )/100), 2, ',', '.'); ?></b></p><p id="totalletras"></p></td>
 						</tr>
 					</table>
 					<form method="post" class="form-horizontal" name ="processsell" id="processsell" action="index.php?action=process-sell" >
@@ -288,8 +345,6 @@ endif; ?>
 								<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal2"><i class="glyphicon glyphicon-search"></i>Buscar Cliente</button>
 								<div id="newcliente"> </div>
 								<script>
-
-
 								//esta funcion carga el formulario para guardar un nuevo Cliente
 								function newclient(){
 									//estalinea es por un error de doble ventana he impide que se abra dosveces el modal
@@ -323,7 +378,7 @@ endif; ?>
 						<!--div class="form-group col-sm-6">
 						<div class="col-sm-4"><label  class="col-sm-1 control-label">Descuento</label></div>
 						<div class="col-sm-8">
-						<input type="number" step="any" name="discount" class="form-control" required value="0" id="discount" placeholder="Descuento">
+
 					</div>
 				</div-->
 				<div id="contenedorlastname">
@@ -340,11 +395,14 @@ endif; ?>
 							console.log("desabilta");
 							si = $('input:radio[name=switch_2]:checked').val();
 							var elem = $('.mostrar');
+							var elem2 = $('.mostrar2');
 							if(si==1){
 								elem.fadeIn();
+							  actadelanto()
 								$("#money").prop('disabled', true);	//	mone.disabled = true;
 							}else{
 								elem.hide();
+								elem2.hide();
 								$("#money").prop('disabled', false);	//mone.disabled = false;
 							}
 						}
@@ -369,14 +427,14 @@ endif; ?>
 				<div id="contenedorcantidad_adelanto" class=" mostrar2" hidden="on" >
 					<label for="adelanto" class="col-sm-2 control-label">Cantidad adelanto*</label>
 					<div class="col-sm-4">
-						<input type="text"  onchange="validarcantidad_adelanto();" onkeyup="validarcantidad_adelanto()"  name="cantidad_adelanto" required class="form-control money" id="cantidad_adelanto" placeholder="Cuantos" autocomplete="off" >
+						<input type="text"  onchange="validarcantidad_adelanto();" onkeyup="validarcantidad_adelanto()"  name="cantidad_adelanto" class="form-control money" id="cantidad_adelanto" placeholder="Cuantos" autocomplete="off" >
 						<span id="spancantidad_adelanto"></span>
 					</div>
 				</div>
 				<div id="contenedormoney">
 					<label for="name" class="col-sm-2 control-label">Efectivo*</label>
 					<div class="col-sm-4">
-						<input onchange="validarmoney();" onkeyup="validarmoney();"  type="text" min="0" name="money" required class="form-control money" id="money" placeholder="Efectivo" autocomplete="ÑÖcompletes" >
+						<input onchange="validarmoney();" onkeyup="validarmoney();"  type="text" min="0" name="money" class="form-control money" id="money" placeholder="Efectivo" autocomplete="ÑÖcompletes" >
 						<span id="spanmoney"></span>
 					</div>
 				</div>
@@ -454,7 +512,7 @@ endif; ?>
 
 				<div class="col-sm-7">
 					<button id="btnprintoutcot" class="btn btn-default pull-right" onclick="printoutcot()"><i class="fa fa-print"></i>Imprimir</button>
-					<button class="btn btn-success pull-right"><i class="glyphicon glyphicon-usd"></i> Finalizar Venta</button>
+					<button id="btnfinventa" class="btn btn-success pull-right"><i class="glyphicon glyphicon-usd"></i> Finalizar Venta</button>
 
 					<a onclick="clearcartotal()" href="#" class="btn btn-danger pull-right"><i class="glyphicon glyphicon-remove"></i> Cancelar</a>
 				</div>
@@ -462,11 +520,6 @@ endif; ?>
 					<script>
 					function clearcartotal() {
 						console.log("clearcartotal");
-						alertify.defaults.transition = "slide";
-						alertify.defaults.theme.ok = "btn btn-success";
-						alertify.defaults.theme.cancel = "btn btn-danger";
-						alertify.defaults.theme.input = "form-control";
-
 						alertify.confirm("confirmar","¿Seguro deseas cancelar venta?",
 		  function(){
 		    alertify.success('Ok');
@@ -553,6 +606,16 @@ endif; ?>
 								$("#clients").val("");
 							});
 
+								NEMEM =<?php echo ($total-$descuento)/100;?>;
+								nuu = numeroALetras(NEMEM, {
+									plural: 'PESOS',
+									singular: 'PESO',
+									centPlural: 'CENTAVOS',
+									centSingular: 'CENTAVO'
+								});
+								$("#totalletras").html("<b>"+nuu+"</b>");
+
+
 							$("#buscar").on("click",function(e){
 								e.preventDefault();
 								$.get("./?action=searchclients",$("#cliente").serialize(),function(data){
@@ -562,7 +625,7 @@ endif; ?>
 							});
 
 							<?php 	if(isset($_COOKIE['cliente_id'])) {
-								echo "elegir(".$_COOKIE['cliente_id'].")";
+								echo "elegir(".$_COOKIE['cliente_id'].");";
 							}
 							?>
 							<?php 	if(isset($_COOKIE['acreditar']) && $_COOKIE['acreditar']==1) {
@@ -610,10 +673,7 @@ endif; ?>
 								}
 							});
 						}
-						function elegir(valor){
-							$("#client_id option[value="+ valor +"]").attr("selected",true);
-							savedatos();
-						}
+
 
 						</script>
 						<div class="modal-footer">
@@ -628,18 +688,15 @@ endif; ?>
 			go=false;
 			est=false;
 			$("#processsell").submit(function(e){
-				//discount = $("#discount").val();
-				money = $("#money").cleanVal();
-				cliente = $("#client_id").val();
-				cliente2=$('#client_id option:selected').text();
-				otra = $('input:radio[name=switch_2]:checked').val();
-
-				//override defaults para que se ve el tema
-				alertify.defaults.transition = "slide";
-				alertify.defaults.theme.ok = "btn btn-info";
-				alertify.defaults.theme.cancel = "btn btn-danger";
-				alertify.defaults.theme.input = "form-control";
-
+				e.preventDefault();
+					console.log("processsell 1");
+					discount = $("#discount").val();
+					money = $("#money").cleanVal();
+					totalnumero = <?php echo $total ;?> ;/////problema con el timpo de numero
+					cambio =   (parseFloat(money)  - (parseFloat(totalnumero) - parseFloat(discount)))/100 ;
+					cliente = $("#client_id").val();
+					cliente2=$('#client_id option:selected').text();
+					otra = $('input:radio[name=switch_2]:checked').val();
 
 				if(discount>(<?php echo $dicuento;?>)){
 					alertify.alert('ERROR', 'No se puede efectuar la operacion. Descuento muy alto!', function(){ alertify.error('Descuento muy alto'); });
@@ -651,15 +708,18 @@ endif; ?>
 							e.preventDefault();
 
 						}else{
-							if(discount==""){ discount=0; }
-
-
-
-							alertify.confirm('Cambio',"Cambio: $"+(money-(<?php echo $total ;?>-discount ) ),
-
+							nuu = numeroALetras(cambio, {
+								plural: 'PESOS',
+								singular: 'PESO',
+								centPlural: 'CENTAVOS',
+								centSingular: 'CENTAVO'
+							});
+							alertify.confirm('Cambio',"Cambio: $"+cambio+"\n "+nuu,
 							function(){ alertify.success('Ok')
-							setTimeout(function(){ document.processsell.submit() ; }, 500);
-
+							//setTimeout(function(){ document.processsell.submit() ; }, 500);
+							e.preventDefault();
+							processsell();
+							
 						}
 
 						, function(){ alertify.error('Cancelado por usuario')});
@@ -670,43 +730,80 @@ endif; ?>
 						alertify.alert('ERROR',"No se puede efectuar la operacion falta cliente ", function(){ alertify.error('Falta cliente'); });
 						e.preventDefault();
 					}else{
-
-						alertify.confirm('Acreditar', "desea acreditar: $"+(<?php echo $total ;?>-discount )+" a "+ cliente2,
+						nuu = numeroALetras(((parseFloat(totalnumero) - parseFloat(discount))/100 ), {
+								plural: 'PESOS',
+								singular: 'PESO',
+								centPlural: 'CENTAVOS',
+								centSingular: 'CENTAVO'
+							});
+						alertify.confirm('Acreditar', "Desea acreditar: $ <b>"+((parseFloat(totalnumero) - parseFloat(discount))/100 )+"</b> a <b>"+ cliente2+"</b><br> "+nuu,
 						function(){ alertify.success('si acecto acreditar')
-						setTimeout(function(){ document.processsell.submit() ; }, 500);
+							e.preventDefault();
+
+							//setTimeout(function(){ document.processsell.submit() ; }, 500);
+							processsell();
+							
+								}
+						, function(){ alertify.error('cancelado por usuario')});
+
+
 					}
-					, function(){ alertify.error('cancelado por usuario')});
-
-
-				}
 				e.preventDefault();
 			}
 		}});
+
+		function processsell(){
+			
+			console.log("processsell");
+            $("#btnfinventa").prop('disabled', true);
+         // if (validaformulario()){
+			if (true){
+            console.log("si valido formulario");
+            $('.money').unmask();//desnmascaran los campos
+          //  id = $('#price_in').cleanVal();
+          // avilitamos todos los campos
+          frm = document.forms['processsell'];
+          for(i=0; ele=frm.elements[i]; i++){
+            ele.disabled=false;
+          }
+          $("#btnfinventa").prop('disabled', true);
+          var parametros = new FormData($("#processsell")[0]);
+          $.ajax (
+            {
+              data:parametros,
+              url:"./?action=process-sell",
+              type:"POST",
+              contentType: false,
+              processData: false,
+              beforesend: function(){
+              },
+              success: function(data){
+                if (data.estado == "true") {
+                  alertify.success('Se procesó venta correctamente');
+                  $("body").overhang({
+                      type: "success",
+                      duration: 1,
+                      message: "Se procesó venta correctamente",
+                      callback: function() {
+                     //$('#myModal').modal('hide');
+                      }
+                  });
+				  $("#btnfinventa").prop('disabled', false);
+                  //recargarclientes();
+                }else {
+                  $("#btnfinventa").prop('disabled', false);
+                  alertify.error('No se pudo procesar venta correctamente');
+                }
+              }
+            }
+          )
+		  $("#cart").load("./?action=viewcart");//////////////////////aki se tiene que mostrar la ultima venta.
+          }
+		};
 	</script>
 <?php endif; ?>
 <script>
-function addclient(){
-	var elem = $('#page_view');
-	var parametros = new FormData($("#newcliente")[0]);
-	$.ajax({
-		data: parametros,
-		url: "./?action=addclient",
-		type: "POST",
-		contentType:false,
-		processData:false,
-		beforeSend: function(){
-		},
-		success: function(response){
-			alertify.success(response);
-		}
-	});
-	$('#bclose').click();
-};
-//////////////////////////////////////////////////////////////////
-
 function elegir(valor){
 	$("#client_id option[value="+ valor +"]").attr("selected",true);
-
 }
-
 </script>

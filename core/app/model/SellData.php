@@ -35,7 +35,7 @@ class SellData {
 
 	public function add_with_client(){
 		$sql = "insert into ".self::$tablename." (total,cost,accredit,accreditlast,discount,person_id,user_id,created_at) ";
-		$sql .= "value ($this->total,$this->cost,$this->switch_2,$this->accreditlast,$this->discount,$this->person_id,$this->user_id,$this->created_at)";
+		$sql .= "value ($this->total,$this->cost,$this->accredit,$this->accreditlast,$this->discount,$this->person_id,$this->user_id,$this->created_at)";
 		return Executor::doit($sql);
 	}
 

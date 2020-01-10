@@ -19,9 +19,6 @@
             <div class="row">
               <form id="searchp" >
                 <div class="col-md-6">
-
-
-
                   <div class="input-group">
                     <!-- 	<input type="hidden" name="view" value="sell">  -->
                     <input type="text" id="product_code" name="product" class="form-control" autocomplete="off" placeholder="Buscar producto por nombre o por codigo:">
@@ -90,6 +87,7 @@
             $("#searchp").on("keyup","#product_code",function(e){
               e.preventDefault();
               nochangervalor();
+              console.log('buscando');
               $.get("./?action=searchproduct",$("#searchp").serialize(),function(data){
                 $("#show_search_results").html(data);
               });
@@ -99,7 +97,7 @@
         <!--añade al Carrito de compras-->
         <script>
         function addtocart(id) {
-          nochangervalor();
+          nochangervalor(); ///esta funcion guarda los datos ingrasados por el usuario
           $("#btnaddtocar"+id).prop('disabled', true);
           console.log("addtocart"+id)
           $.get("./?action=addtocart",
@@ -108,7 +106,7 @@
             product_id:id
           },function(data){
             if (data.estado == "true") {
-              alertify.success('Se agregó producto correctamente');
+              alertify.success('Se actual producto correctamente');
 
             }else {
               alertify.error('No se pudo agregar producto');

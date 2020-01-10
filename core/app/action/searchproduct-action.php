@@ -1,7 +1,11 @@
 <?php if(isset($_GET["product"]) && $_GET["product"]!=""):  //isset esta palabra es para balidar qu esten asignado valores .. ?>
 	<div id="testDiv" class="box-body">
 		<?php
+		
 		$products = ProductData::getLike(addslashes($_GET["product"])); //resibimos el codigo o nombre . addslashe esta es para formater la cadena i eliminar las comillas
+		if($_GET["product"]!=" "){
+			$products = ProductData::getAll();
+		}
 		if(count($products)>0){
 			?>
 			<style>
@@ -25,7 +29,6 @@
 					$productsnotq="";
 					$products_in_cero=0;
 					foreach($products as $product):
-
 						$precio=OperationData::getQprice($product->id);
 						$q= $precio["q"];
 						?>

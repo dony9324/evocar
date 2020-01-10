@@ -3,6 +3,7 @@ header('Content-type: application/json');
 $resultado = array();
 $resultado = array("estado" => "true");
 $errors = array();
+//si no existe la variable se agrega el product sin tantas comprobaciones
 if(!isset($_SESSION["cart"])){
 	$p = ProductData::getById($_GET["product_id"]);
 	$precio=OperationData::getQprice($_GET["product_id"]);
@@ -24,7 +25,7 @@ if(!isset($_SESSION["cart"])){
 			if ($productdatos->control_stock==1) {
 				$rre = $c["q"] - $q;
 				$resultado = array("estado" => "false");
-				$error = array("product_id"=>$c["product_id"],"message"=>"No hay suficiente cantidad de producto en inventario.","re"=>$rre);
+				$error = array("product_id"=>$c["product_id"],"message"=>"No hay suficiente cantidad de producto en inventario. 1","re"=>$rre);
 				$errors[count($errors)] = $error;
 			}else {
 				$num_succ++;
@@ -58,7 +59,7 @@ if(!isset($_SESSION["cart"])){
 				if ($productdatos->control_stock==1) {
 					$rre = $_GET["q"] - $q;
 					$resultado = array("estado" => "false");
-					$error = array("product_id"=>$_GET["product_id"],"message"=>"No hay suficiente cantidad de producto en inventario.","re"=>$rre);
+					$error = array("product_id"=>$_GET["product_id"],"message"=>"No hay suficiente cantidad de producto en inventario 2.","re"=>$rre);
 					$errors[count($errors)] = $error;
 					$can=false;
 				}
@@ -68,13 +69,13 @@ if(!isset($_SESSION["cart"])){
 
 			$q = OperationData::getQYesF($productdatos->id_group);
 			$can = true;
-			if(($_GET["q"]*$productdatos->total_quantity)<=$q){
+			if(( $_GET["q"]*$productdatos->total_quantity) <=$q){
 			}else{
 				$productdatos = ProductData::getById($_GET["product_id"]);
 				if ($productdatos->control_stock==1) {
 					$rre = $_GET["q"] - $q;
 					$resultado = array("estado" => "false");
-					$error = array("product_id"=>$_GET["product_id"],"message"=>"No hay suficiente cantidad de producto en inventario.","re"=>$rre);
+					$error = array("product_id"=>$_GET["product_id"],"message"=>"No hay suficiente cantidad de producto en inventario 3.","re"=>$rre);
 					$errors[count($errors)] = $error;
 					$can=false;
 				}
@@ -90,7 +91,7 @@ if(!isset($_SESSION["cart"])){
 			if ($productdatos->control_stock==1) {
 				$rre = $_GET["q"] - $q;
 				$resultado = array("estado" => "false");
-				$error = array("product_id"=>$_GET["product_id"],"message"=>"No hay suficiente cantidad de producto en inventario.","re"=>$rre);
+				$error = array("product_id"=>$_GET["product_id"],"message"=>"No hay suficiente cantidad de producto en inventario 4.","re"=>$rre);
 				$errors[count($errors)] = $error;
 				$can=false;
 			}
@@ -112,18 +113,19 @@ if(!isset($_SESSION["cart"])){
 			$index++;
 		}
 		if($found==true){
-			// si esta sumamos lo solisitado y lo ya listado
+			// si esta sumamos lo solisitado y lo ya listado, tenemos que multiplicar y dividir pora obtener los balores transformados en presentacion principal
+			$productdatos = ProductData::getById($_GET["product_id"]);
 			$q1 = $cart[$index]["q"];
-			$q2 = $_GET["q"];
+			$q2 = $_GET["q"] ;
 			$cart[$index]["q"]=$q1+$q2;
-			///////////////////////////////////
-			if(($q1+$q2) <=$q){
+			///////////////////////////////////comprobamos por ultima vez la cantidad disponible
+			if((($q1* $productdatos->group_amount / $productdatos->fractions)+$q2* $productdatos->group_amount / $productdatos->fractions) <=$q){
 			}else{
 				$productdatos = ProductData::getById($_GET["product_id"]);
 				if ($productdatos->control_stock==1) {
 					$rre = ($q1+$q2) - $q;
 					$resultado = array("estado" => "false");
-					$error = array("product_id"=>$_GET["product_id"],"message"=>"!No hay suficiente cantidad de producto en inventario.","re"=>$rre);
+					$error = array("product_id"=>$_GET["product_id"],"message"=>"!No hay suficiente cantidad de producto en inventario 5.","re"=>$rre);
 					$errors[count($errors)] = $error;
 					$can=false;
 				}

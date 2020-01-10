@@ -11,6 +11,8 @@
         <a href="#" class="btn btn-default" onclick="newfra()"><i class="fa  fa-plus"></i> Nueva Fraccion</a>
         <div id="presentaciones"> </div>
       </div>
+
+    <!--  /*  ///////////////////////         formulario oculto unidad de medida      /////////////////////////*/-->
       <div class="uniform box box-default" hidden>
         <div class="box-header with-border">
           <h3 class="box-title">Unidad de medida</h3>
@@ -39,6 +41,7 @@
           <button class="btn btn-success pull-right" onclick="savuni()">Guardar</button>
         </div>
       </div>
+        <!-- /*  ///////////////////////         formulario oculto bueva fraccion      /////////////////////////*/-->
       <div class="fraform box box-default" hidden>
         <div class="box-header with-border">
           <h3 class="box-title">Nueva Fraccion</h3>
@@ -86,7 +89,7 @@
           <button class="btn btn-success pull-right" onclick="savfra()">retener</button>
         </div>
       </div>
-
+  <!-- /*  ///////////////////////         formulario oculto Nuevo Grupo      /////////////////////////*/-->
       <div class="gruform box box-default" hidden>
         <div class="box-header with-border">
           <h3 class="box-title">Nuevo Grupo</h3>
@@ -127,7 +130,19 @@
             <span id="spanprice_outg"></span>
             </div>
             </div>
-
+              </div>
+              <br>
+              <div class="row">
+            <div id="contenedornamegru">
+            <div class="col-xs-4">
+              <input id="namgru" type="text" class="form-control" placeholder="Nombre">
+              <span id="spannamgru"></span>
+            </div>
+            </div>
+            <div class="col-sm-4">
+                <input type="text" required="" name="barcodegru" class="form-control" id="barcodegru" placeholder="Codigo de Barras del Producto">
+                <span id="spanbarcodegru"></span>
+              </div>
           </div>
         </div>
         <div class="box-body">

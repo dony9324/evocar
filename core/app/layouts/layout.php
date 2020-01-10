@@ -221,11 +221,12 @@ if(!isset($_SESSION["user_id"])){
       <ul id="nav" class="sidebar-menu" data-widget="tree">
         <!-- Optionally, you can add icons to the links -->
         <li id="home" class="active1"><a href="index.php?view=home"><i class="fa fa-home"></i><span>Inicio</span></a></li>
+          <?php if(isset($_SESSION["user_id"])): ?>
         <li id="sell"><a href="#" onclick="changerview('./?page=sell')"><i class="fa fa-usd"></i><span>Vender</span></a></li>
         <li id="box"><a href="#"  onclick="changerview('./?page=box')"><i class="fa fa-cube"></i><span>Caja</span></a></li>
         <li id="credits"><a href="#"  onclick="changerview('./?page=credits')"><i class="fa fa-book"></i><span>Creditos</span></a></li>
         <li id="clients"><a href="#"  onclick="changerview('./?page=clients')"><i class="fa fa-smile-o"></i><span>Clientes</span></a></li>
-        <?php if(isset($_SESSION["user_id"])):  if($u->is_admin):?>
+        <?php if($u->is_admin):?>
           <li id="providers"><a href="#" onclick="changerview('./?page=providers')"><i class="fa fa-truck"></i><span>Proveedores</span></a></li>
           <li id="inventary"><a href="#" onclick="changerview('./?page=inventary')"><i class="fa fa-tags"></i><span>Inventario</span></a></li>
           <li id="res"><a href="index.php?view=res  view=sells"><i class="fa fa-th-list"></i> Compras y Ventas</a></li>

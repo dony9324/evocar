@@ -1,4 +1,9 @@
 <?php
+header('Content-type: application/json');
+$resultado = array();
+$resultado = array("estado" => "false");
+
+if(count($_POST)>0){
 if(isset($_SESSION["cart"])){
 	$cart = $_SESSION["cart"];
 	if(count($cart)>0){
@@ -9,50 +14,83 @@ if(isset($_SESSION["cart"])){
 		$process=false;
 		$errors = array();
 		foreach($cart as $c){
-			///
-			$q = OperationData::getQYesF($c["product_id"]);
-			if($c["q"]<=$q){
-				if(isset($_POST["is_oficial"])){
-				$qyf =OperationData::getQYesF($c["product_id"]); /// son los productos que puedo facturar
-				if($c["q"]<=$qyf){
+			$productdatos = ProductData::getById($c["product_id"]);
+			if ($productdatos->control_stock == 1){
+			if ($productdatos->other_presentations==1) {
+				if ($productdatos->id_group==0) {
+					//si llego aki este producto tiene mas presentaciones y esta la presentacion principal
+		
+					$q = OperationData::getQYesF($c["product_id"]);
+					if($c["q"]<=$q){
+						$num_succ++;
+					}else{
+						$productdatos = ProductData::getById($c["product_id"]);
+						if ($productdatos->control_stock==1) {
+							$rre = $c["q"] - $q;
+							$resultado = array("estado" => "false");
+							$error = array("product_id"=>$c["product_id"],"message"=>"No hay suficiente cantidad de producto en inventario 2.","re"=>$rre);
+							$errors[count($errors)] = $error;
+						}
+					}
+				}else {
+					//si llego aki esta es una presentacion segundaria Y SE 	MIDE LA CANTIDAD DE LA principal
+		
+					$q = OperationData::getQYesF($productdatos->id_group);
+					if(( $c["q"]*$productdatos->total_quantity) <=$q){
+						$num_succ++;
+					}else{
+						$productdatos = ProductData::getById($c["product_id"]);
+						if ($productdatos->control_stock==1) {
+							$rre = $c["q"] - $q;
+							$resultado = array("estado" => "false");
+							$error = array("product_id"=>$c["product_id"],"message"=>"No hay suficiente cantidad de producto en inventario 3.","re"=>$rre);
+							$errors[count($errors)] = $error;
+						}
+					}
+				}
+			}else {
+				//si llego aki este producto NO tiene mas presentacioneS
+				$q = OperationData::getQYesF($c["product_id"]);
+				if($c["q"]<=$q){
 					$num_succ++;
 				}else{
-				$error = array("product_id"=>$c["product_id"],"message"=>"No hay suficiente cantidad de producto para facturar en inventario.");
-				$errors[count($errors)] = $error;
+					$productdatos = ProductData::getById($c["product_id"]);
+					if ($productdatos->control_stock==1) {
+						$rre = $c["q"] - $q;
+						$resultado = array("estado" => "false");
+						$error = array("product_id"=>$c["product_id"],"message"=>"No hay suficiente cantidad de producto en inventario 4.","re"=>$rre);
+						$errors[count($errors)] = $error;
+					}
 				}
-				}else{
-					// si llegue hasta aqui y no voy a facturar, entonces continuo ...
-					$num_succ++;
-				}
-			}else{
-				$error = array("product_id"=>$c["product_id"],"message"=>"No hay suficiente cantidad de producto en inventario.");
-				$errors[count($errors)] = $error;
 			}
-		}
+		}else{$num_succ++;}
+	}
+
 if($num_succ==count($cart)){
 	$process = true;
 }
 if($process==false){
 $_SESSION["errors"] = $errors;
-	?>
-<script>
-	window.location="index.php?view=sell";
-</script>
-<?php
 }
 /*fin de verificacion*/
-//////////////////////////////////
+/////////////////////////////////
+
 		if($process==true){
 			$sell = new SellData();
-			$sell->user_id = $_SESSION["user_id"];
-			$sell->switch_2 = $_POST["switch_2"];
+			$sell->accredit = $_POST["switch_2"];
 			$sell->accreditlast = $_POST["switch_2"];
 			$sell->total = $_POST["total"];
-			$sell->	cost = $_POST["cost"];
-			$sell->discount = 0;
-			if(isset($_POST["discount"])){
-			$sell->discount = $_POST["discount"];
+			$sell->cost = $_POST["cost"];
+			$sell->adelanto = $_POST["adelanto"];
+			$sell->cantidad_adelanto = $_POST["cantidad_adelanto"];
+			$sell->money = $_POST["money"];
+			$sell->entrega = $_POST["entrega"];
+			$sell->extracode = ""; //este campo no tiene uso actualmente
+			
+			foreach($cart as  $c){
+				$sell->discount += $c["descuento"];
 			}
+			$sell->user_id = $_SESSION["user_id"];
 			 if(isset($_POST["client_id"]) && $_POST["client_id"]!=""){
 			 	$sell->person_id=$_POST["client_id"];
  				$s = $sell->add_with_client();
@@ -60,21 +98,28 @@ $_SESSION["errors"] = $errors;
  				$s = $sell->add();
 			 }
 		foreach($cart as  $c){
+			//////////voy por aki
+			$productdatos = ProductData::getById($c["product_id"]);
 			$op = new OperationData();
-			 $op->product_id = $c["product_id"] ;
-			 $op->operation_type_id=2;
-			 $op->sell_id=$s[1];
-			 $op->q= $c["q"];
-			if(isset($_POST["is_oficial"])){
-				$op->is_oficial = 1;
-			}
+			$op->product_id = $c["product_id"];
+			$op->q= $c["q"];
+			$op->id_group= $productdatos->id_group;
+			$op->precitotal= $c["q"]*$c["price_out"];
+			$op->discount = $c["descuento"];
+			$op->operation_type_id=2;
+			$op->sell_id=$s[1];
+			$op->user_id = $_SESSION["user_id"];
+
 			$add = $op->add();
-			unset($_SESSION["cart"]);
-			setcookie("selled","selled");
+
 		}
-////////////////////
-print "<script>window.location='index.php?view=onesell&id=$s[1]';</script>";
+		unset($_SESSION["cart"]);
+		setcookie("selled","selled");
+		$resultado = array("estado" => "true", "onesell" => $s[1]);
+	//print "<script> window.location='index.php?view=onesell&id=$s[1]';</script>";
 		}
 	}
+}
+return print(json_encode($resultado));
 }
 ?>

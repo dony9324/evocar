@@ -10,7 +10,25 @@ class View {
 			if(View::isValid()){
 				include "core/app/view/".$_GET['view']."-view.php";
 			}else{
-				View::Error("<b>404 NO ENCONTRADO</b> View <b>".$_GET['view']."</b> !! - <a href='https://www.facebook.com/dony9324' target='_blank'>Help</a>");
+				View::Error("
+
+
+				<section class='content'>
+							<div class='error-page'>
+								<h2 class='headline text-yellow'> 404</h2>
+
+								<div class='error-content'>
+									<h3><i class='fa fa-warning text-yellow'></i> NO ENCONTRADO View ".$_GET['view']." !!.</h3>
+
+									<a href='https://www.facebook.com/dony9324' target='_blank'>Help</a>
+
+
+								</div>
+								<!-- /.error-content -->
+							</div>
+							<!-- /.error-page -->
+						</section>");
+
 			}
 		}
 	}

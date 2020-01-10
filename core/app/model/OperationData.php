@@ -5,6 +5,7 @@ class OperationData {
 	public function  __construct(){
 		$this->id = 0;
 		$this->product_id = 0;
+		$this->id_group = 0;
 		$this->q = 0;
 		$this->precitotal = 0;
 		$this->discount = 0;
@@ -83,14 +84,33 @@ class OperationData {
 
 	public static function getQYesF($product_id){
 		$q=0;
+		$product = ProductData::getById($product_id);// los datos del producto
+		////aki se buscan y calculan las operaciones dela presentacion principal
 		$operations = self::getAllByProductId($product_id);
-				foreach($operations as $operation){
+			foreach($operations as $operation){
 				if($operation->operation_type_id==1){ $q+=$operation->q; }
 				else if($operation->operation_type_id==2){  $q+=(-$operation->q); }
+			}
+		///aki buscamos las operaciones de las presentaciones segundarias las convertimos y la sumamos la la cantidad principal
+		if ($product->other_presentations==1) {
+			$other_presentations = ProductData::getById_group($product_id);
+		}
+		if (isset($other_presentations)){
+			foreach ( $other_presentations as $other) {
+				$qtmp=0;
+				$operationstmp = self::getAllByProductId($other->id);
+
+			foreach($operationstmp as $operationtmp){
+				if($operationtmp->operation_type_id==1){ $qtmp+=$operation->q; }
+				else if($operationtmp->operation_type_id==2){  $qtmp+=(-$operation->q); }
+			}
+			$q+= ($qtmp * $other->group_amount / $other->fractions);
+			}
 		}
 		// print_r($data);
 		return $q;
 	}
+
 
 
 	public static function getQprice($product_id){

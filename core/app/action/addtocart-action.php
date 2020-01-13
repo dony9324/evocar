@@ -25,6 +25,7 @@ if(!isset($_SESSION["cart"])){
 			if ($productdatos->control_stock==1) {
 				$rre = $c["q"] - $q;
 				$resultado = array("estado" => "false");
+				$resultado = array("estado" => "false", "q" => $q);
 				$error = array("product_id"=>$c["product_id"],"message"=>"No hay suficiente cantidad de producto en inventario. 1","re"=>$rre);
 				$errors[count($errors)] = $error;
 			}else {
@@ -58,7 +59,7 @@ if(!isset($_SESSION["cart"])){
 				$productdatos = ProductData::getById($_GET["product_id"]);
 				if ($productdatos->control_stock==1) {
 					$rre = $_GET["q"] - $q;
-					$resultado = array("estado" => "false");
+					$resultado = array("estado" => "false","q" => $q);
 					$error = array("product_id"=>$_GET["product_id"],"message"=>"No hay suficiente cantidad de producto en inventario 2.","re"=>$rre);
 					$errors[count($errors)] = $error;
 					$can=false;
@@ -69,7 +70,7 @@ if(!isset($_SESSION["cart"])){
 
 			$q = OperationData::getQYesF($productdatos->id_group);
 			$can = true;
-			if(( $_GET["q"]*$productdatos->total_quantity) <=$q){
+			if(( $_GET["q"]*($productdatos->group_amount / $productdatos->fractions)) <=$q){
 			}else{
 				$productdatos = ProductData::getById($_GET["product_id"]);
 				if ($productdatos->control_stock==1) {
@@ -119,12 +120,15 @@ if(!isset($_SESSION["cart"])){
 			$q2 = $_GET["q"] ;
 			$cart[$index]["q"]=$q1+$q2;
 			///////////////////////////////////comprobamos por ultima vez la cantidad disponible
-			if((($q1* $productdatos->group_amount / $productdatos->fractions)+$q2* $productdatos->group_amount / $productdatos->fractions) <=$q){
+			if((($q1* ($productdatos->group_amount / $productdatos->fractions)) + ($q2* ($productdatos->group_amount / $productdatos->fractions))) <=$q){
+						//if(($q1 + $q2) <= $q){
+							$resultado = array("estado" => "true","q1" => $q1,"q2" => $q2,"q" => $q);
 			}else{
 				$productdatos = ProductData::getById($_GET["product_id"]);
 				if ($productdatos->control_stock==1) {
 					$rre = ($q1+$q2) - $q;
 					$resultado = array("estado" => "false");
+					$resultado = array("estado" => "false","q1" => $q1,"q2" => $q2,"q" => $q);
 					$error = array("product_id"=>$_GET["product_id"],"message"=>"!No hay suficiente cantidad de producto en inventario 5.","re"=>$rre);
 					$errors[count($errors)] = $error;
 					$can=false;

@@ -7,7 +7,28 @@ use Mike42\Escpos\Printer;
 use Mike42\Escpos\EscposImage;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 /* Fill in your own connector here */
-$connector = new WindowsPrintConnector("EPSON TM-T20II Receipt");
+//$connector = new WindowsPrintConnector("EPSON TM-T20II Receipt");
+
+try {
+	// Este bloque contien el código que pretendemos ejecutar, pero que,
+	// llegado el caso, podría fallar, lanzando una exxcepción.
+	$connector = new WindowsPrintConnector("EPSON TM-T20II Receipt");
+	if (isset($connector)) {
+		$resultado = array("estado" => "false", "o" => "no hay conector encontró impresora.");
+		return print(json_encode($resultado));
+	}
+} catch (Exception $e) {
+	// Este bloque de código sólo se ejecuta si se ha producido una
+	// excepción al intentar ejecutar el bloque previo.
+	$resultado = array("estado" => "false", "o" => "no se  encontró impresora.");
+	return print(json_encode($resultado));
+} finally {
+	// Esta parte es opcional y, si existe, se ejecutará tanto si se ha podido efectuar
+	// el proceso, como si se ha producido una excepción.
+}
+
+
+
 /* Information for the receipt */
 $infoiva= CompanyData::getById(1)->value;
 $infonit= CompanyData::getById(2)->value;

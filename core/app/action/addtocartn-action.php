@@ -1,5 +1,5 @@
 <?php
-
+///este archivo no se esta usando
 if(!isset($_SESSION["cartn"])){
 	$product = array("product_id"=>$_POST["product_id"],"q"=>$_POST["q"]);
 	$_SESSION["cartn"] = array($product);

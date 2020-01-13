@@ -84,30 +84,42 @@ class OperationData {
 
 	public static function getQYesF($product_id){
 		$q=0;
+		$q2=0;
 		$product = ProductData::getById($product_id);// los datos del producto
 		////aki se buscan y calculan las operaciones dela presentacion principal
 		$operations = self::getAllByProductId($product_id);
 			foreach($operations as $operation){
 				if($operation->operation_type_id==1){ $q+=$operation->q; }
 				else if($operation->operation_type_id==2){  $q+=(-$operation->q); }
+
 			}
 		///aki buscamos las operaciones de las presentaciones segundarias las convertimos y la sumamos la la cantidad principal
-		if ($product->other_presentations==1) {
+		if ($product->other_presentations == 1) {
 			$other_presentations = ProductData::getById_group($product_id);
-		}
-		if (isset($other_presentations)){
+			//$q = $q +1;
+
+
 			foreach ( $other_presentations as $other) {
+				//$q = $q +1;
 				$qtmp=0;
 				$operationstmp = self::getAllByProductId($other->id);
 
 			foreach($operationstmp as $operationtmp){
-				if($operationtmp->operation_type_id==1){ $qtmp+=$operation->q; }
-				else if($operationtmp->operation_type_id==2){  $qtmp+=(-$operation->q); }
+				//$q = $q +1;
+				if($operationtmp->operation_type_id==1){ $qtmp = $qtmp + $operationtmp->q ;
+
+				 }
+				else if($operationtmp->operation_type_id==2){  $qtmp = $qtmp - $operationtmp->q; }
 			}
-			$q+= ($qtmp * $other->group_amount / $other->fractions);
+///el error era que confundi la variable operation con operationtmp
+			$q2 = $q2 + ($qtmp *$other->group_amount / $other->fractions);
+
 			}
-		}
+}
+		//	$q= $q + 1;
+		$q= $q + $q2;
 		// print_r($data);
+//$q= $q2;
 		return $q;
 	}
 

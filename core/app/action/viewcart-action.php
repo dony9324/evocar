@@ -551,7 +551,7 @@ $("#q<?php echo $p["product_id"];?>").blur(function(){
 				function printoutcot(){
 					//estalinea es por un error de doble ventana he impide que se abra dosveces el modal
 					$("#btnprintoutcot").prop('disabled', true);
-					console.log("nuevo Cliente")
+					console.log("printoutcot")
 					$.get("./?imprimir=printcot",function(data){
 						if (data.estado == "true") {
 							alertify.success('Se Imprimio correctamente');
@@ -719,7 +719,7 @@ $("#q<?php echo $p["product_id"];?>").blur(function(){
 							//setTimeout(function(){ document.processsell.submit() ; }, 500);
 							e.preventDefault();
 							processsell();
-							
+
 						}
 
 						, function(){ alertify.error('Cancelado por usuario')});
@@ -742,7 +742,7 @@ $("#q<?php echo $p["product_id"];?>").blur(function(){
 
 							//setTimeout(function(){ document.processsell.submit() ; }, 500);
 							processsell();
-							
+
 								}
 						, function(){ alertify.error('cancelado por usuario')});
 
@@ -753,7 +753,7 @@ $("#q<?php echo $p["product_id"];?>").blur(function(){
 		}});
 
 		function processsell(){
-			
+
 			console.log("processsell");
             $("#btnfinventa").prop('disabled', true);
          // if (validaformulario()){

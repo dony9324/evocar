@@ -19,7 +19,6 @@ if(isset($_SESSION["cart"])){
 			if ($productdatos->other_presentations==1) {
 				if ($productdatos->id_group==0) {
 					//si llego aki este producto tiene mas presentaciones y esta la presentacion principal
-		
 					$q = OperationData::getQYesF($c["product_id"]);
 					if($c["q"]<=$q){
 						$num_succ++;
@@ -34,7 +33,6 @@ if(isset($_SESSION["cart"])){
 					}
 				}else {
 					//si llego aki esta es una presentacion segundaria Y SE 	MIDE LA CANTIDAD DE LA principal
-		
 					$q = OperationData::getQYesF($productdatos->id_group);
 					if(( $c["q"]*$productdatos->total_quantity) <=$q){
 						$num_succ++;
@@ -65,7 +63,6 @@ if(isset($_SESSION["cart"])){
 			}
 		}else{$num_succ++;}
 	}
-
 if($num_succ==count($cart)){
 	$process = true;
 }
@@ -74,7 +71,6 @@ $_SESSION["errors"] = $errors;
 }
 /*fin de verificacion*/
 /////////////////////////////////
-
 		if($process==true){
 			$sell = new SellData();
 			$sell->accredit = $_POST["switch_2"];
@@ -83,10 +79,9 @@ $_SESSION["errors"] = $errors;
 			$sell->cost = $_POST["cost"];
 			$sell->adelanto = $_POST["adelanto"];
 			$sell->cantidad_adelanto = $_POST["cantidad_adelanto"];
-			$sell->money = $_POST["money"];
+			$sell->money_person = $_POST["money"];
 			$sell->entrega = $_POST["entrega"];
 			$sell->extracode = ""; //este campo no tiene uso actualmente
-			
 			foreach($cart as  $c){
 				$sell->discount += $c["descuento"];
 			}
@@ -97,7 +92,8 @@ $_SESSION["errors"] = $errors;
 			 }else{
  				$s = $sell->add();
 			 }
-		foreach($cart as  $c){
+			 if ($s[1]!=0) {//si la primera trasacion no fallo
+			foreach($cart as  $c){
 			//////////voy por aki
 			$productdatos = ProductData::getById($c["product_id"]);
 			$op = new OperationData();
@@ -109,14 +105,13 @@ $_SESSION["errors"] = $errors;
 			$op->operation_type_id=2;
 			$op->sell_id=$s[1];
 			$op->user_id = $_SESSION["user_id"];
-
 			$add = $op->add();
-
 		}
 		unset($_SESSION["cart"]);
 		setcookie("selled","selled");
 		$resultado = array("estado" => "true", "onesell" => $s[1]);
 	//print "<script> window.location='index.php?view=onesell&id=$s[1]';</script>";
+		}
 		}
 	}
 }

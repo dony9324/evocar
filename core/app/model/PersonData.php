@@ -79,6 +79,9 @@ class PersonData {
 	}
 
 	public static function getById($id){
+		if ($id==NULL) {//esta linea es para evitar un error fatal cuando id es null falla la consulta
+			$id=0;
+		}
 		$sql = "select * from ".self::$tablename." where id=$id";
 		$query = Executor::doit($sql);
 		$found = null;

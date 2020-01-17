@@ -3,14 +3,14 @@
     <!-- Modal content-->
     <div  class="box box-success fondo">
       <div class="box-header with-border">
-        <h3 class="box-title">Nuevo Cliente</h3>
+        <h3 class="box-title">Nuevo Usuario</h3>
         <button id="bclose" type="button" class="close" data-dismiss="modal" aria-label="Close" aria-hidden="true">
           <span>×</span></button>
         </div>
           <!-- form start -->
         <form name="pepe" class="form-horizontal" method="post" autocomplete="off" enctype="multipart/form-data"  id="addclient" role="form" >
           <div class="box-body">
-            <div class="form-group">
+          <div class="form-group">
               <label for="image" class="col-sm-2 control-label">Imagen</label>
               <div class="col-sm-4">
                 <label  id="imagelabel" for="image" class="col-sm-12 btn btn-default">Seleccionar Imagen</label>
@@ -18,7 +18,6 @@
                 <span id="spanimagep"></span>
               </div>
             </div>
-
             <div class="form-group">
               <div id="contenedorname">
               <label for="name"  class="col-sm-2 control-label">Nombre*</label>
@@ -35,7 +34,6 @@
               </div>
               </div>
             </div>
-
             <div class="form-group">
               <div id="contenedordescription">
               <label for="description" class="col-sm-2 control-label">Documento</label>
@@ -45,53 +43,43 @@
               </div>
               </div>
               <div id="contenedorlocation">
-              <label for="location" class="col-sm-2 control-label">Dirección</label>
+              <label for="location" class="col-sm-2 control-label">Nombre de usuario*</label>
               <div class="col-sm-4">
-                <input type="text" name="address1" class="form-control"  id="address1" placeholder="Direccion">
-                <span id="spanlocation"></span>
+                <input type="text" name="username" class="form-control" required id="username" placeholder="Nombre de usuario">
+                <span id="spanusername"></span>
               </div>
             </div>
             </div>
-
             <div class="form-group">
               <div id="contenedordescription">
             									<label for="email1" class="col-sm-2 control-label">Email</label>
-
             									<div class="col-sm-4">
-            										<input type="text" name="email1" class="form-control" id="email1" placeholder="Email">
+                                <input type="text" name="email" class="form-control" id="email" placeholder="Email">
             									</div>
               </div>
               <div id="contenedorlocation">
             									<label for="phone1" class="col-sm-2 control-label">Telefono</label>
-
             									<div class="col-sm-4">
             										<input type="text" name="phone1" class="form-control" id="phone1" placeholder="Telefono">
             									</div>
             								</div>
                           </div>
-
             								<div class="form-group">
             									<label for="inputEmail1" class="col-sm-2 control-label">Telefono 2</label>
-
             									<div class="col-sm-4">
             										<input type="text" name="phone2" class="form-control" id="phone2" placeholder="Telefono 2">
             									</div>
-
-            									<label for="inputEmail1" class="col-sm-2 control-label">Empresa</label>
-
+            									<label for="inputEmail1" class="col-sm-2 control-label">Contraseña</label>
             									<div class="col-sm-4">
-            										<input type="text" name="company" class="form-control" id="company" placeholder="Empresa">
+            										<input type="password" name="password" class="form-control" id="inputEmail1" placeholder="Contrase&ntilde;a">
             									</div>
             								</div>
             								<div class="form-group">
             									<label for="inputEmail1" class="col-sm-2 control-label">Nit</label>
-
             									<div class="col-sm-4">
             										<input type="text" name="nit" class="form-control" id="nit" placeholder="Nit">
             									</div>
-
               <div class="col-sm-offset-2 col-sm-4">
-
                   </div>
               <div class="col-sm-offset-2 col-sm-4">
                 <button type="button"  class="btn btn-success" id="guardar" onclick="addclient();">Guardar Producto</button>
@@ -128,7 +116,7 @@
           $("#imagelabel").addClass("btn-danger");
           $("#imagelabel").html("<i class='fa fa-fw fa-file-image-o'></i>"+filename);
           console.log('Imagen muy pesada');
-          $("#spanimagep").html("Imagen muy pesada, no se guardara Imagen
+          $("#spanimagep").html("Imagen muy pesada, no se guardara Imagen");
           $("body").overhang({
               type: "error",
               message: "Imagen muy pesada, no se guardara Imagen.!"

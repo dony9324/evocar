@@ -87,7 +87,11 @@ public static function getByperson_id($id){
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}
-
+	public static function getAll(){
+		$sql = "select * from ".self::$tablename." order by created_at desc";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new SellData());
+	}
 	public static function getSellsUnBoxed(){
 		$sql = "select * from ".self::$tablename." where operation_type_id=2 and accredit=0 and box_id is NULL order by created_at desc";
 		$query = Executor::doit($sql);

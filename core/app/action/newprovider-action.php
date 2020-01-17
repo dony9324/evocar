@@ -129,6 +129,10 @@
           $("#imagelabel").html("<i class='fa fa-fw fa-file-image-o'></i>"+filename);
           console.log('Imagen muy pesada');
           $("#spanimagep").html("Imagen muy pesada, no se guardara Imagen.");
+          $("body").overhang({
+              type: "error",
+              message: "Imagen muy pesada, no se guardara Imagen.!"
+          });
     } else {
       $("#imagelabel").removeClass("btn-default");
       $("#imagelabel").removeClass("btn-danger");

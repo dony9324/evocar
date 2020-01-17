@@ -56,7 +56,7 @@ $con = $base->connect();
     <!-- lockscreen credentials (contains the form) -->
     <form id="loginForm<?php echo $r['id'];?>" class="lockscreen-credentials" method="post" action="./?action=access&o=login" autocomplete="off">
       <div class="input-group">
-        <input type="password" id="pas<?php echo $r['id'];?>" class="form-control"  placeholder="Contraseña" name="password" autofocus required>
+        <input type="password" id="pas<?php echo $r['id'];?>" class="form-control"  placeholder="Contraseña" name="password" autofocus="on">
 		<input class="form-control" placeholder="Usuario" name="username" type="hidden" value="<?php echo $r['username'];?>">
         <div class="input-group-btn">
           <button type="submit" class="btn"><i class="fa fa-arrow-right text-muted"></i></button>

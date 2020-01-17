@@ -61,8 +61,65 @@ endif; ?>
 	$descuento = 0; // descuento hecho
 		// print_r($_SESSION["cart"]); // ver que hay en esta variable texteo
 	?>
-	<h3>Lista de venta</h3>
+	<div class="form-group col-sm-12">
+		<h3>Lista de venta</h3>
 
+		<div id="multiplicar0">
+		</div>
+		<button type="button" onclick="multiplicar()" class="btn btn-default"><i class="fa fa-plus"></i>Calculadora</button>
+		<div id="resultado" hidden="on">
+
+		</div>
+
+		<div id="multiplicar" class="col-sm-4" hidden="on">
+			<form id="formmultiplicar"class="form" action="#">
+                    <input type="text"  class="form-control" id="inpmultiplicar" placeholder="Primer nuemero" autocomplete="off">
+                    <span id="spanporcentajeiva"></span>
+				</form>
+    </div>
+
+		<div id="multiplicar2" class="col-sm-4" hidden="on">
+			<form id="formmultiplicar2" class="form" action="#">
+				<input type="text" class="form-control" id="inpmultiplicar2" placeholder="Segundo nuemero" autocomplete="off">
+				<span id="s"></span>
+			</form>
+		</div>
+
+	</div>
+	<script>
+	function multiplicar(){
+		console.log("multiplicar");
+		var elem = $('#multiplicar');
+		elem.fadeIn();
+	//elem.hide();
+		$("#inpmultiplicar").focus();
+		alertify.message('Ingrese Primer dato');
+	}
+	$("#formmultiplicar").on("submit",function(e){
+		e.preventDefault();
+		var elem = $('#multiplicar');
+		elem.hide();
+		var elem2 = $('#multiplicar2');
+		elem2.fadeIn();
+		$("#inpmultiplicar2" ).focus();
+		//BORRAR EL CONTENIDO DEL CAMPO
+		//$("#product_code").val("");
+	});
+	$("#formmultiplicar2").on("submit",function(e){
+		e.preventDefault();
+		var dato1 = $('#inpmultiplicar').val();
+		var dato2 = $('#inpmultiplicar2').val();
+		var resultado = dato1 * dato2;
+		$('#resultado').html("<h1>"+resultado+"</h1>");
+		var elem = $('#resultado');
+		elem.fadeIn();
+		var elem2 = $('#multiplicar2');
+		elem2.hide();
+	//	$("#inpmultiplicar2" ).focus();
+		//BORRAR EL CONTENIDO DEL CAMPO
+		//$("#product_code").val("");
+	});
+	</script>
 	<table style="width:100%;" class="text-center table table-bordered table-hover">
 		<thead>
 			<th>Producto</th>
@@ -577,20 +634,13 @@ $("#q<?php echo $p["product_id"];?>").blur(function(){
 						</div>
 						<div class="modal-body">
 							<p>Buscar cliente por nombre, cedula o por codigo.</p>
-							<form id="searchclients" class="" action="index.html" method="post">
-
-
+							<form id="searchclients" class="" action="#" method="post">
 								<div class="input-group input-group">
 									<input type="text" id="cliente"  name="clients" class="form-control" autofocus="on">
 									<span class="input-group-btn">
 										<button type="button" id="buscar"class="btn btn-info btn-flat"><i class="glyphicon glyphicon-search"></i> Buscar Cliente</button>
 									</span>
 								</div>
-
-
-
-
-
 							</form>
 						</div>
 						<div id="results"></div>

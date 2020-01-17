@@ -22,7 +22,7 @@
 							<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 								<i class="fa fa-download"></i> Descargar <span class="caret"></span>
 		  					</button>
-						
+
 							<ul class="dropdown-menu" role="menu">
 								<li><a href="report/products-word.php">Word 2007 (.docx)</a>
 								</li>
@@ -91,10 +91,10 @@
 									<?php echo $product->name; ?>
 								</td>
 								<td>$
-									<?php echo number_format($product->price_in,2,'.',','); ?>
+									<?php echo number_format(($product->price_in/100),2,'.',','); ?>
 								</td>
 								<td>$
-									<?php echo number_format($product->price_out,2,'.',','); ?>
+									<?php echo number_format(($product->price_out/100),2,'.',','); ?>
 								</td>
 								<td>
 									<?php if($product->category_id!=null && $product->category_id != 0 ){if(isset($product->getCategory()->name)){
@@ -118,6 +118,28 @@
 									<a href="index.php?view=editproduct&id=<?php echo $product->id; ?>" class="btn btn-xs btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
 									<?php  $u = UserData::getById($_SESSION["user_id"]); if($u->id == 1 or $u->id ==3 ):?>
 									<a href="index.php?action=delproduct&id=<?php echo $product->id; ?>" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+									<a href="#" onclick="printoutcot<?php echo $product->id; ?>()" class="btn btn-xs btn-info"><i class="fa fa-print"></i></a>
+
+
+									<script>
+										function printoutcot<?php echo $product->id; ?>(){
+											console.log("printoutcot");
+										$.get("./?imprimir=printdatospro",
+													{
+													id:<?php echo $product->id; ?>,
+													name:"<?php echo addslashes($product->name); ?>",
+													q:<?php echo $q; ?>
+													},function(data){
+											if (data.estado == "true") {
+												alertify.success('Se actualizo cantidad correctamente');
+											}else {
+												alertify.error('No se pudo actualizar cantidad');
+											}
+										});
+									}
+									</script>
+
+
 									<?php endif;?>
 								</td>
 							</tr>

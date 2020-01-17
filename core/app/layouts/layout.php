@@ -80,8 +80,27 @@ if(!isset($_SESSION["user_id"])){
                   }
                 }
               }
+
+                if ($_SESSION['pruevas']) {
+                  echo "<li class='dropdown messages-menu'>
+            <a href='#' class='dropdown-toggle' data-toggle='dropdown'>
+            <button type='button' class='btn btn-block btn-success btn-lg'>pruevas</button>
+            </a>
+
+          </li>";
+                }else {
+                  echo "<li class='dropdown messages-menu'>
+            <a href='#' class='dropdown-toggle' data-toggle='dropdown'>
+            <button type='button' class='btn btn-block btn-danger btn-lg'>REAL</button>
+            </a>
+
+          </li>";
+                }
+
               ?>
               <!-- Notifications Menu -->
+
+              <li id="imprimircodigos"><a href="#"  onclick="changerview('./?page=imprimircodigos')"><i class="fa fa-print"></i><span>imprimir codigos</span></a></li>
               <li class="dropdown notifications-menu">
                 <!-- Menu toggle button -->
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -223,14 +242,17 @@ if(!isset($_SESSION["user_id"])){
         <li id="home" class="active1"><a href="index.php?view=home"><i class="fa fa-home"></i><span>Inicio</span></a></li>
           <?php if(isset($_SESSION["user_id"])): ?>
         <li id="sell"><a href="#" onclick="changerview('./?page=sell')"><i class="fa fa-usd"></i><span>Vender</span></a></li>
+        <li id="sell"><a href="#" onclick="changerview('./?page=cuentas')"><i class="fa fa-tasks"></i><span>cuentas</span></a></li>
         <li id="box"><a href="#"  onclick="changerview('./?page=box')"><i class="fa fa-cube"></i><span>Caja</span></a></li>
         <li id="credits"><a href="#"  onclick="changerview('./?page=credits')"><i class="fa fa-book"></i><span>Creditos</span></a></li>
         <li id="clients"><a href="#"  onclick="changerview('./?page=clients')"><i class="fa fa-smile-o"></i><span>Clientes</span></a></li>
+
         <?php if($u->is_admin):?>
           <li id="providers"><a href="#" onclick="changerview('./?page=providers')"><i class="fa fa-truck"></i><span>Proveedores</span></a></li>
+          <li id="Almacenamientos"><a href="#"onclick="changerview('./?page=Almacenamientos')"><i class="fa fa-files-o"></i><span>Almacenamientos</span><span class="pull-right-container"><span class="label label-primary pull-right"><?php	$alm = AlmacenamientosData::getAll(); echo count($alm);?></span></span></a></li>
           <li id="inventary"><a href="#" onclick="changerview('./?page=inventary')"><i class="fa fa-tags"></i><span>Inventario</span></a></li>
-          <li id="res"><a href="index.php?view=res  view=sells"><i class="fa fa-th-list"></i> Compras y Ventas</a></li>
-          <li id=""><a href="#"><i class="fa fa-exchange"></i> Devoluciones</a></li>
+          <li id="res"><a href="#" onclick="changerview('./?page=ressells')"><i class="fa fa-th-list"></i><span>Compras y Ventas</span></a></li>
+          <li id="devoluciones"><a href="#" onclick="changerview('./?page=devoluciones')"><i class="fa fa-exchange"></i><span>Devoluciones</span></a></li>
 
 
           <li id="reportes" class="treeview">
@@ -242,7 +264,8 @@ if(!isset($_SESSION["user_id"])){
               <li id="res"><a href="index.php?view=res  view=sells"><i class="fa fa-th-list"></i> Compras y Ventas</a></li>
             </ul>
           </li>
-          <li id="users"><a href="index.php?view=users&o=all"><i class="fa fa-users"></i><span>Usuarios</span></a></li>
+          <li id="users"><a href="#" onclick="changerview('./?page=users&o=all')"><i class="fa fa-users"></i><span>Usuarios</span></a></li>
+
           <li id="settings"><a href="index.php?view=settings"><i class="fa fa-cogs"></i><span>Configuracion</span></a></li>
         <?php endif;?><?php endif;?>
       </ul>

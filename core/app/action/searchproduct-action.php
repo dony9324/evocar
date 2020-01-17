@@ -1,5 +1,8 @@
 <?php if(isset($_GET["product"]) && $_GET["product"]!=""):  //isset esta palabra es para balidar qu esten asignado valores .. ?>
 	<div id="testDiv" class="box-body">
+		<div id="detallesproducto">
+
+		</div>
 		<?php
 
 
@@ -10,6 +13,34 @@
 		}
 		if(count($products)>0){
 			?>
+			<script>
+			function masdetalles(id){
+			console.log("masdetalles"+id);
+				//estalinea es por un error de doble ventana he impide que se abra dosveces el modal
+			$(".masdetalles").prop('disabled', true);
+			$.get("./?action=detallesoneproduct",
+			{
+			id: id
+			},
+			function(data){
+				$("#detallesproducto").html(data);
+				$('#myModaldetalles').modal('show');
+				$(".masdetalles").prop('disabled', false);
+			});
+			}
+
+
+			function newclient(){
+				//estalinea es por un error de doble ventana he impide que se abra dosveces el modal
+				$(".masdetalles").prop('disabled', true);
+				console.log("nuevo Cliente")
+				$.get("./?action=newclient",function(data){
+					$("#newcliente").html(data);
+					$('#myModal').modal('show');
+					$("#btnnewclient").prop('disabled', false);
+				});
+			}
+			</script>
 			<style>
 			input[type=number]::-webkit-outer-spin-button,
 			input[type=number]::-webkit-inner-spin-button {	-webkit-appearance: none;	margin: 0; }
@@ -19,6 +50,7 @@
 				<thead>
 					<tr>
 						<th style="width:auto;">id</th>
+						<th style="width:auto;"></th>
 						<th>Nombre</th>
 						<th >Costo</th>
 						<th>Precio</th>
@@ -40,7 +72,10 @@
 						?>
 						<tr class="<?php if($product->control_stock==1){ if($q<=$product->inventary_min && $q>0){ echo "warning"; } if(!($q<=$product->inventary_min)){echo "success";}  if(!$q>0){ echo "danger"; }}else { 	}?>">
 								<td style="width:auto;"><?php echo $product->id; ?></td>
-							<td><?php echo $product->name; ?></td>
+							<td> <button onclick="masdetalles(<?php echo $product->id; ?>)" type="button" class="masdetalles btn btn-success btn-flat" style=" vertical-align: middle; width: 35px;"><i class="fa fa-tags" ></i></button></td>
+							<td>  <?php echo $product->name; ?></td>
+
+
 
 							<td><b>$ <?php echo number_format(($product->price_in/100), 2, ',', '.'); ?></b></td>
 							<td><b>$<?php if ($precio["Precio"]>0) {echo number_format(($precio["Precio"]/100), 2, ',', '.'); }else{
@@ -85,6 +120,7 @@
 				<tfoot>
 					<tr>
 						<th style="width:auto;">id</th>
+						<th style="width:auto;"></th>
 						<th>Nombre</th>
 						<th>Costo</th>
 						<th>Precio</th>

@@ -68,7 +68,8 @@
             $("#cart").load("./?action=viewcart")
             $("#searchp").on("submit",function(e){
               e.preventDefault();
-              $("#product_code").val("");
+              //BORRAR EL CONTENIDO DEL CAMPO
+              //$("#product_code").val("");
             });
             ///cantidad por valor
             $("#changer").on("submit",function(e){

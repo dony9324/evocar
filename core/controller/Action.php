@@ -10,7 +10,22 @@ class Action {
 			if(Action::isValid()){
 				include "core/app/action/".$_GET['action']."-action.php";
 			}else{
-				Action::Error("<b>404 NO ENCONTRADO</b> Action <b>".$_GET['action']."</b> !! - <a href='https://www.facebook.com/dony9324' target='_blank'>Help</a>");
+				Action::Error("
+				<section class='content'>
+							<div class='error-page'>
+								<h2 class='headline text-yellow'> 404</h2>
+
+								<div class='error-content'>
+									<h3><i class='fa fa-warning text-yellow'></i> NO ENCONTRADO action ".$_GET['action']." !!.</h3>
+
+									<a href='https://www.facebook.com/dony9324' target='_blank'>Help</a>
+
+
+								</div>
+								<!-- /.error-content -->
+							</div>
+							<!-- /.error-page -->
+						</section>");
 			}
 		}
 	}

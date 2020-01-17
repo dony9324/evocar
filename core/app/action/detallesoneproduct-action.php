@@ -1,16 +1,23 @@
-<div id="myModal" class="modal fade in" role="dialog"><!--parte oscura del modal-->
+<div id="myModaldetalles" class="modal fade in" role="dialog"><!--parte oscura del modal-->
   <div class="modal-dialog modal-lg"> <!-- tamaño del modal-->
     <!-- Modal content-->
     <div  class="box box-success fondo">
       <div class="box-header with-border">
-        <h3 class="box-title">Nuevo Producto</h3>
+        <?php  $product = ProductData::getById($_GET["id"]); ?>
+        <h3 class="box-title">Detalles de Producto <button class="btn btn-success"><?php echo $_GET["id"];?></button></h3>
         <button id="bclose" type="button" class="close" data-dismiss="modal" aria-label="Close" aria-hidden="true">
           <span>×</span></button>
         </div>
-        <?php $categories = CategoryData::getAll();
+        <?php
+
+         $categories = CategoryData::getAll();
         $ivas = IvaData::getAll();
         $marcas = TrademarkData::getAll();
         $units = unitData::getAll();
+        if($product!=null){
+
+
+
         ?>
         <!-- form start -->
         <form name="pepe" class="form-horizontal" method="post" autocomplete="off" enctype="multipart/form-data"  id="addproduct" role="form" >
@@ -18,14 +25,18 @@
             <div class="form-group">
               <label for="image" class="col-sm-2 control-label">Imagen</label>
               <div class="col-sm-4">
-                <label  id="imagelabel" for="image" class="col-sm-12 btn btn-default">Seleccionar Imagen</label>
-                <input type="file" name="image" id="image" accept="image/*" peso="">
-                <span id="spanimagep"></span>
+                <?php if($product->image!=""){?>
+                  <br>
+                        <img src="res/img/<?php echo $product->image;?>" class="img-responsive">
+
+                <?php }?>
               </div>
+              </div>
+              <div class="form-group">
               <div id="contenedorcodigo">
               <label for="codigo"  class="col-sm-2 control-label">Codigo</label>
               <div class="col-sm-4">
-                <input type="text"  name="codigo" id="codigo" class="form-control" placeholder="Código extra">
+                <input type="text"  name="codigo" value="<?php echo $product->extracode; ?>" id="codigo" class="form-control" placeholder="Código extra">
                 <span id="spancodigop"></span>
               </div>
             </div>
@@ -35,14 +46,14 @@
               <div id="contenedorname">
               <label for="name"  class="col-sm-2 control-label">Nombre*</label>
               <div class="col-sm-4">
-                <input type="text"  name="name"  class="form-control" id="name" placeholder="Nombre" autofocus>
+                <input type="text"  name="name" value="<?php echo $product->name; ?>" class="form-control" id="name" placeholder="Nombre" autofocus>
                 <span id="spanamep"></span>
               </div>
             </div>
             <div id="contenedorbarcode">
               <label for="barcode" class="col-sm-2 control-label">Codigo de Barras</label>
               <div class="col-sm-4">
-                <input type="text" required name="barcode"  class="form-control" id="barcode" placeholder="Codigo de Barras del Producto">
+                <input type="text" required name="barcode"  class="form-control" id="barcode" value="<?php echo $product->barcode; ?>" placeholder="Codigo de Barras del Producto">
                 <span id="spanbarcode"></span>
               </div>
               </div>
@@ -52,14 +63,14 @@
               <div id="contenedordescription">
               <label for="description" class="col-sm-2 control-label">Descripcion</label>
               <div class="col-sm-4">
-                <input name="description"  required class="form-control"  id="description" placeholder="Descripcion del Producto">
+                <input name="description" value="<?php echo $product->description; ?>" required class="form-control"  id="description" placeholder="Descripcion del Producto">
                 <span id="spandescription"></span>
               </div>
               </div>
               <div id="contenedorlocation">
               <label for="location" class="col-sm-2 control-label">Ubicación</label>
               <div class="col-sm-4">
-                <input type="text" name="location" required class="form-control" id="location" placeholder="Ubicación del Producto">
+                <input type="text" name="location" value="<?php echo $product->location; ?>" required class="form-control" id="location" placeholder="Ubicación del Producto">
                 <span id="spanlocation"></span>
               </div>
             </div>
@@ -76,25 +87,6 @@
                     <?php endforeach;?>
                   </select>
                 </div>
-                <div id="newcategoryiva" class="col-sm-2 ocultar" >
-
-                  <a  href="#" class="btn btn-default" onClick="newmarca()"><i class='fa  fa-plus'></i> Nueva Marca </a>
-                </div>
-                <div id="categorias"  class="col-sm-2 ocultar">
-                  <a href="#" class="btn btn-default"  onClick="marcas()" ><i class='fa fa-th-list'></i> Opciones de Marcas.</a>
-                </div>
-                <div id="cancelar" class="mostrar" hidden="on">
-                  <label class="col-sm-5 control-label">Ingrese datos para guardar nueva Categoría.</label>
-                </div>
-                <div id="cancelar" class="mostrar2" hidden="on">
-                  <label class="col-sm-5 control-label">Ingrese datos para guardar nuevo tipo de IVA.</label>
-                </div>
-                <div id="cancelar" class="mostrar3" hidden="on">
-                  <label class="col-sm-5 control-label">Ingrese datos para guardar nueva Marca.</label>
-                </div>
-              </div>
-
-              <div id="contentcategory_id" class="form-group">
                 <label class="col-sm-2 control-label">Categoria</label>
                 <div class="col-sm-4">
                   <select id="category_id" name="category_id" class="form-control">
@@ -104,33 +96,8 @@
                     <?php endforeach;?>
                   </select>
                 </div>
-                <div id="newcategory"  class="col-sm-2 ocultar">
-                  <a href="#" class="btn btn-default"  onClick="newcategory()" ><i class='fa  fa-plus'></i> Nueva Categoria</a>
-                </div>
-                <div id="categorias"  class="col-sm-2 ocultar">
-                  <a href="#" class="btn btn-default"  onClick="categorias()" ><i class='fa fa-th-list'></i> Opciones de categorías</a>
-                </div>
-                <div  class="mostrar" hidden="on">
-                  <a class="btn btn-success col-sm-2" onClick="savecategory()">Guardar </a>
-                  <div id="contentnuevacategoria" class="col-sm-4">
-                    <input type="text" class="form-control" id="nuevacategoria"  placeholder="Nombre de la Categoria" autocomplete="off">
-                    <span></span>
-                  </div>
-                </div>
-                <div id="cantidadefectivo" class="mostrar2" hidden="on">
-                  <a class="btn btn-success col-sm-2" onClick="saveiva()">Guardar </a>
-                  <div id="contentnuevacategoria2" class="col-sm-4">
-                    <input type="text" class="form-control" id="nuevoiva"  placeholder="Nombre del tipo de IVA" autocomplete="off">
-                    <span id="spanameiva"></span>
-                  </div>
-                </div>
-                <div id="cantidadefectivo" class="mostrar3" hidden="on">
-                  <a class="btn btn-success col-sm-2" onClick="savemarca()">Guardar </a>
-                  <div id="contentnuevacategoria2" class="col-sm-4">
-                    <input type="text" class="form-control" id="nuevamarca"  placeholder="Nombre de Marca" autocomplete="off">
-                    <span id="spanamemarca"></span>
-                  </div>
-                </div>
+
+
               </div>
 
               <div id="contentcategory_id_iva" class="form-group">
@@ -143,38 +110,11 @@
                     <?php endforeach;?>
                   </select>
                 </div>
-                <div id="newcategoryiva" class="col-sm-2 ocultar" >
 
-                  <a  href="#" class="btn btn-default" onClick="newiva()"><i class='fa  fa-plus'></i> Nuevo  tipo  I.V.A </a>
-                </div>
-                <div id="categorias"  class="col-sm-2 ocultar">
-                  <a href="#" class="btn btn-default"  onClick="categoriasiva()" ><i class='fa fa-th-list'></i> Opciones de I.V.A.</a>
-                </div>
-                <div id="cancelar" class="mostrar" hidden="on">
-                  <a  class="btn btn-danger col-sm-2" onClick="adeshab()" >Cancelar</a>
-                  <div class="col-sm-4">
-                    <input type="text" class="form-control" id="descriptionc"  placeholder="Descripción de la Categoria" autocomplete="off">
-                  </div>
-                </div>
-                <div id="cancelar" class="mostrar2" hidden="on">
-                  <a  class="btn btn-danger col-sm-2" onClick="adeshab()" >Cancelar</a>
-                  <div class="col-sm-4">
-                    <input type="number" min="0" max="50" step="1" class="form-control" id="porcentaje"  placeholder="porcentaje agregado" autocomplete="off">
-                    <span id="spanporcentajeiva"></span>
-                  </div>
-                </div>
-                <div id="cancelar" class="mostrar3" hidden="on">
-                  <a  class="btn btn-danger col-sm-2" onClick="adeshab()" >Cancelar</a>
-                  <div class="col-sm-4">
-                    <input type="text" class="form-control" id="descriptionm"  placeholder="Descripción de Marca" autocomplete="off">
-                    <span id="spanporcentajeiva"></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div id="bg-white2" class="">
-              <div id="contentselectmedida" class="form-group">
-                <label class="col-sm-2 control-label">Unidad de medida*</label>
+
+               <div id="bg-white2" class="">
+
+              <label class="col-sm-2 control-label">Unidad de medida*</label>
                 <div class="col-sm-4">
                   <select id="selectmedida" name="selectmedida" class="form-control" onChange="medida(this.value)">
                     <option value="">--Seleccione--</option>
@@ -192,13 +132,7 @@
                   </select>
                   <span id="spanselectmedida"></span>
                 </div>
-                <div class="mostrar4" hidden="on">
-                  <label id="labelmedida" class=" col-sm-2">tata</label>
-                  <div class="col-sm-4">
-                    <input type="number" id="cantidad" name="cantidad" class="form-control" onchange="adeshabCuantos()"  placeholder="Cantidad" autocomplete="off" step="any">
-                    <span id="spanmedida"></span>
-                  </div>
-                </div>
+
               </div>
             </div>
             <div class="form-group">
@@ -231,9 +165,9 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="q" class="col-sm-2 control-label">Inventario inicial*</label>
+              <label for="q" class="col-sm-2 control-label">Inventario Disponible</label>
               <div class="col-sm-4">
-                <input type="number" min="0" step="any" name="q" required class="form-control"  id="q" placeholder="Inventario inicial" value="0">
+                <input type="number" min="0" step="any" name="q" required class="form-control"  id="q" placeholder="Inventario Disponible" value="0">
               </div>
               <label for="inventary_min" class="col-sm-2 control-label">Minima en inventario*</label>
               <div class="col-sm-4">
@@ -252,7 +186,6 @@
                     </div>
                   </div>
               <div class="col-sm-offset-2 col-sm-4">
-                <button type="button"  class="btn btn-success" id="guardar" onclick="addproduct();">Guardar Producto</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
               </div>
             </div>
@@ -460,10 +393,6 @@ function borrarpresentaciones(){
           $("#imagelabel").html("<i class='fa fa-fw fa-file-image-o'></i>"+filename);
           console.log('Imagen muy pesada');
           $("#spanimagep").html("Imagen muy pesada, no se guardara Imagen.");
-          $("body").overhang({
-              type: "error",
-              message: "Imagen muy pesada, no se guardara Imagen.!"
-          });
     } else {
       $("#imagelabel").removeClass("btn-default");
       $("#imagelabel").removeClass("btn-danger");
@@ -1487,3 +1416,4 @@ function divide_stock(){
       borrarpresentaciones();
     })
     </script>
+  <?php   } ?>

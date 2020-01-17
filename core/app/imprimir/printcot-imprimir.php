@@ -13,14 +13,11 @@ try {
 	// Este bloque contien el código que pretendemos ejecutar, pero que,
 	// llegado el caso, podría fallar, lanzando una exxcepción.
 	$connector = new WindowsPrintConnector("EPSON TM-T20II Receipt");
-	if (isset($connector)) {
-		$resultado = array("estado" => "false", "o" => "no hay conector encontró impresora.");
-		return print(json_encode($resultado));
-	}
+
 } catch (Exception $e) {
 	// Este bloque de código sólo se ejecuta si se ha producido una
 	// excepción al intentar ejecutar el bloque previo.
-	$resultado = array("estado" => "false", "o" => "no se  encontró impresora.");
+	$resultado = array("estado" => "false", "o" => "no se  2");
 	return print(json_encode($resultado));
 } finally {
 	// Esta parte es opcional y, si existe, se ejecutará tanto si se ha podido efectuar
@@ -70,7 +67,7 @@ $printer -> text("Direccion: ".$infodire.".\n");
 $printer -> text("TELL: ".$infocell.".\n");
 $printer -> setFont(); // Reset
 $printer -> selectPrintMode(Printer::MODE_EMPHASIZED);//Modo enfatizado NEGRITA
-$printer -> text("Cotisacion .\n");
+$printer -> text("Cotizacion .\n");
   $printer -> selectPrintMode(); // Reset
 $printer -> setEmphasis(true);//Modo enfatizado NEGRITA
 $printer -> feed();
@@ -107,9 +104,13 @@ $printer -> text("Atendido por: ".$user->name." ".$user->lastname."\n");
 if($mensaje!=null){
 	$printer -> text("web: ".$mensaje."\n");
 	}
+
 $printer -> feed(1);
 $printer -> text($date . "\n");
-
+$printer->setBarcodeHeight(80);
+$printer->setBarcodeTextPosition(Printer::BARCODE_TEXT_BELOW);
+$printer->barcode("9876");
+$printer->barcode("ABC");
 /* Cut the receipt and open the cash drawer */
 $printer -> cut();
 $printer -> pulse();

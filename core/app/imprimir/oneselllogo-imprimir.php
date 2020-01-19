@@ -1,33 +1,33 @@
 <?php
-require __DIR__ . '/autoload.php';
+header('Content-type: application/json');
+$resultado = array();
+$resultado = array("estado" => "true");
+include "res/escpos-php-master/autoload.php";
 use Mike42\Escpos\Printer;
 use Mike42\Escpos\EscposImage;
-use Mike42\Escpos\PrintConnectors\FilePrintConnector;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 
-
-
-include "../../core/autoload.php";
-include "../../core/app/model/PersonData.php";
-include "../../core/app/model/UserData.php";
-include "../../core/app/model/SellData.php";
-include "../../core/app/model/OperationData.php";
-
-include "../../core/app/model/ProductData.php";
-include "../../core/app/model/CompanyData.php";
-
-
-
-
-
-
 /* Fill in your own connector here */
-$connector = new WindowsPrintConnector("EPSON TM-T20II Receipt5");
+try {
+	// Este bloque contien el código que pretendemos ejecutar, pero que,
+	// llegado el caso, podría fallar, lanzando una exxcepción.
+	$connector = new WindowsPrintConnector("EPSON TM-T20II Receipt");
+
+} catch (Exception $e) {
+	// Este bloque de código sólo se ejecuta si se ha producido una
+	// excepción al intentar ejecutar el bloque previo.
+	$resultado = array("estado" => "false", "o" => "no se  2");
+	return print(json_encode($resultado));
+} finally {
+	// Esta parte es opcional y, si existe, se ejecutará tanto si se ha podido efectuar
+	// el proceso, como si se ha producido una excepción.
+}
 
 /* Information for the receipt */
 $infoiva= CompanyData::getById(1)->value;
 $infonit= CompanyData::getById(2)->value;
 $infocell= CompanyData::getById(3)->value;
+$mensaje= CompanyData::getById(4)->value;
 $infoweb= CompanyData::getById(4)->value;
 $infodire= CompanyData::getById(5)->value;
 
@@ -60,12 +60,17 @@ $total = new item('Total', number_format($total-$discount,2,".",","), true);
 $date = $sell->created_at;
 
 /* Start the printer */
-$logo = EscposImage::load("resources/escpos-php.png", false);
+
 $printer = new Printer($connector);
 
 /* Print top logo */
 $printer -> setJustification(Printer::JUSTIFY_CENTER);
-$printer -> graphics($logo);
+try{
+ $logo = EscposImage::load("res/img/logo.png", false);
+		$printer->bitImage($logo);
+		//$printer -> graphics($logo);
+}catch(Exception $e){}//No hacemos nada si hay error
+
 
 /* Name of shop */
 $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
@@ -141,7 +146,7 @@ class item
         $this -> price = $price;
         $this -> dollarSign = $dollarSign;
     }
-    
+
     public function __toString()
     {
         $rightCols = 0;
@@ -150,13 +155,14 @@ class item
             $leftCols = $leftCols / 2 - $rightCols / 2;
         }
         $left = str_pad($this -> name, $leftCols) ;
-        
+
         $sign = ($this -> dollarSign ? '$ ' : '');
         $right = str_pad($sign . $this -> price, $rightCols, ' ', STR_PAD_LEFT);
         return "$left$right\n";
     }
 }
+return print(json_encode($resultado));
 ?>
 <script>
-	window.history.back();
+	//window.history.back();
 </script>

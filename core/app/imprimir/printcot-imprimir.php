@@ -7,7 +7,6 @@ use Mike42\Escpos\Printer;
 use Mike42\Escpos\EscposImage;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 /* Fill in your own connector here */
-//$connector = new WindowsPrintConnector("EPSON TM-T20II Receipt");
 
 try {
 	// Este bloque contien el código que pretendemos ejecutar, pero que,
@@ -23,8 +22,6 @@ try {
 	// Esta parte es opcional y, si existe, se ejecutará tanto si se ha podido efectuar
 	// el proceso, como si se ha producido una excepción.
 }
-
-
 
 /* Information for the receipt */
 $infoiva= CompanyData::getById(1)->value;

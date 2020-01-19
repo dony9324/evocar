@@ -242,7 +242,7 @@ if(!isset($_SESSION["user_id"])){
         <li id="home" class="active1"><a href="index.php?view=home"><i class="fa fa-home"></i><span>Inicio</span></a></li>
           <?php if(isset($_SESSION["user_id"])): ?>
         <li id="sell"><a href="#" onclick="changerview('./?page=sell')"><i class="fa fa-usd"></i><span>Vender</span></a></li>
-        <li id="sell"><a href="#" onclick="changerview('./?page=cuentas')"><i class="fa fa-tasks"></i><span>cuentas</span></a></li>
+        <li id="cuentas"><a href="#" onclick="changerview('./?page=cuentas')"><i class="fa fa-tasks"></i><span>cuentas</span></a></li>
         <li id="box"><a href="#"  onclick="changerview('./?page=box')"><i class="fa fa-cube"></i><span>Caja</span></a></li>
         <li id="credits"><a href="#"  onclick="changerview('./?page=credits')"><i class="fa fa-book"></i><span>Creditos</span></a></li>
         <li id="clients"><a href="#"  onclick="changerview('./?page=clients')"><i class="fa fa-smile-o"></i><span>Clientes</span></a></li>

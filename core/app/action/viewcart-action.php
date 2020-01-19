@@ -838,6 +838,8 @@ $("#q<?php echo $p["product_id"];?>").blur(function(){
                      //$('#myModal').modal('hide');
                       }
                   });
+	//////////////////////aki se tiene que mostrar la ultima venta.
+									changerview('./?action=onesell&id='+data.onesell);
 				  $("#btnfinventa").prop('disabled', false);
                   //recargarclientes();
                 }else {
@@ -847,7 +849,7 @@ $("#q<?php echo $p["product_id"];?>").blur(function(){
               }
             }
           )
-		  $("#cart").load("./?action=viewcart");//////////////////////aki se tiene que mostrar la ultima venta.
+
           }
 		};
 	</script>

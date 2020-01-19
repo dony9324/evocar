@@ -4,7 +4,19 @@
 
 		</div>
 		<?php
+/*////str_split ( string $string [, int $split_length = 1 ] ) : array
+string
+El string de entrada.
 
+split_length
+Longitud máxima del fragmento.
+ejemplo
+$str = "Hello Friend";
+$arr1 = str_split($str);
+$arr2 = str_split($str, 3);
+print_r($arr1);
+print_r($arr2);
+*/
 
 		if($_GET["product"]==="  *"){ //este es para mostrar todos los productos
 			$products = ProductData::getAll();

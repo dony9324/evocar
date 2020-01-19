@@ -1,8 +1,8 @@
 <section class="content-header">
-  <h1><i class="fa fa-smile-o"></i> Clientes <small></small> </h1>
+  <h1><i class="fa fa-tasks"></i>Cuentas <small></small> </h1>
   <ol class="breadcrumb">
     <li><a href="#" onClick="changerview('./?page=home')"><i class="fa fa-home"></i> Inicio</a></li>
-    <li><a href="#" onClick="changerview('./?page=clients')">Clientes</a></li>
+    <li><a href="#" onClick="changerview('./?page=cuentas')">Cuentas</a></li>
   </ol>
 </section>
 
@@ -14,12 +14,10 @@
 
       <div class="box">
         <div class="box-header">
-          <h3 class="box-title">Lista de Clientes</h3>
+          <h3 class="box-title">Cuentas</h3>
 
           <div class="btn-group pull-right">
-            <button type="button" id="btnnewclient" onclick="newclient()" class="btn btn-default"><i class="fa  fa-plus"></i><i class='fa fa-smile-o'></i> Nuevo Cliente</button>
-
-
+            <button type="button" id="btnnewcuenta" onclick="newcuenta()" class="btn btn-default"><i class="fa  fa-plus"></i> Nueva cuenta</button>
             <div class="btn-group pull-right">
               <?php $u=null;
               if(isset($_SESSION["user_id"]) &&$_SESSION["user_id"]!=""):
@@ -29,24 +27,24 @@
                   <i class="fa fa-download"></i> Descargar <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
-                  <li><a href="report/clients-word.php">Word 2007 (.docx)</a></li>
+                  <li><a href="report/cuentas-word.php">Word 2007 (.docx)</a></li>
                 </ul>
               <?php endif; ?>  <?php endif; ?>
             </div>
           </div>
         </div>
-        <div id="newcliente"> </div>
+        <div id="newcuenta"> </div>
 
         <script>
-        //esta funcion carga el formulario para guardar un nuevo Cliente
-        function newclient(){
+        //esta funcion carga el formulario para guardar un nuevo Cuenta
+        function newcuenta(){
           //estalinea es por un error de doble ventana he impide que se abra dosveces el modal
-          $("#btnnewclient").prop('disabled', true);
-          console.log("nuevo Cliente")
-          $.get("./?action=newclient",function(data){
-            $("#newcliente").html(data);
+          $("#btnnewcuenta").prop('disabled', true);
+          console.log("nuevo Cuenta")
+          $.get("./?action=newcuenta",function(data){
+            $("#newcuenta").html(data);
             $('#myModal').modal('show');
-            $("#btnnewclient").prop('disabled', false);
+            $("#btnnewcuenta").prop('disabled', false);
           });
         }
         </script>
@@ -54,7 +52,7 @@
         <div class="box-body">
           <?php
 
-          $users = PersonData::getClients();
+          $users = CuentasData::getAll();
           if(count($users)>0){
             // si hay usuarios
             ?>
@@ -91,7 +89,7 @@
                       if(isset($_SESSION["user_id"]) &&$_SESSION["user_id"]!=""):
                         $u = UserData::getById($_SESSION["user_id"]);?>
                         <?php if($u->is_admin):?>
-                          <a href="index.php?view=editclient&id=<?php echo $user->id;?>" class="btn btn-warning btn-xs">Editar</a>
+                          <a href="index.php?view=editcuenta&id=<?php echo $user->id;?>" class="btn btn-warning btn-xs">Editar</a>
                         <?php endif;?> <?php endif;?>
                       </td>
                     </tr>
@@ -116,7 +114,7 @@
               <?php
 
             }else{
-              echo "<p class='alert alert-danger'>No hay clientes</p>";
+              echo "<p class='alert alert-danger'>No hay cuentas</p>";
             }
 
             ?>
@@ -131,7 +129,7 @@
   </section>
   <script>
   $("#nav li").removeClass("active");
-  $("#clients").last().addClass("active");
+  $("#cuentas").last().addClass("active");
 </script>
 <!-- el siguente script traduce las tablas. Opcionalmente, puede agregar complementos Slimscroll y FastClick.
 Se recomiendan estos dos complementos para mejorar la experiencia de usuario -->

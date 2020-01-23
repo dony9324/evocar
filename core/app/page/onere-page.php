@@ -11,7 +11,7 @@
   <div class="row">
     <div class="col-xs-12">
       <div class="box">
-        <div class="box-header">
+        <div class="box-header ui-sortable-handle" style="cursor: move;">
           <h3 class="box-title">Resumen de Reabastecimiento</h3>
           <div class="btn-group  pull-right">
             <div class="btn-group pull-right">
@@ -107,12 +107,112 @@
       <!-- /.box-body -->
     </div>
     <!-- /.box -->
-  </div>
-  <!-- /.col -->
-</div>
-<!-- /.row -->
-</section>
+
 <script>
 $("#nav li").removeClass("active");
 $("#inventary").last().addClass("active");
 </script>
+
+
+<!-- bodegas -->
+<div class="box box-primary">
+  <div class="box-header ui-sortable-handle">
+    <i class="ion ion-clipboard"></i>
+    <h3 class="box-title">Defina Almacenamientos</h3>
+  </div>
+  <!-- /.box-header -->
+  <div class="box-body">
+    <!-- See dist/js/pages/dashboard.js to activate the todoList plugin -->
+    <ul class="todo-list ui-sortable">
+
+
+
+
+      <?php
+        foreach($operations as $operation){
+          $product  = $operation->getProduct();
+          $bodega = BodegaData::getAlloperation_id($operation->id);
+
+        ?>
+        <li>
+          #<?php echo $product->id ;?>
+          <input type="checkbox" value="">
+          <span class="text"> <?php echo $operation->q ;?> </span> <span class="text"><?php echo $product->name ;?></span>
+          <?php foreach($bodega as $bode){
+            $color=AlmacenamientosData::getById($bode->almacenamiento_id);
+            ?>
+          <small class="label label-default <?php echo $color->color; ?>">
+          <?php echo $bode->q; ?></small><?php }  ?>
+          <div onclick="cambiar(<?php echo $operation->id; ?>)" class="tools">
+          <i class="fa fa-edit"></i>
+          </div>
+
+        </li>
+
+      <?php
+      }?>
+
+
+    </ul>
+
+  </div>
+  <script>
+  function cambiar(operation_id){
+    console.log("funcion cambiar");
+    $.get("./?action=cambiaralmacenamiento",{id: operation_id},function(data){
+      $("#cambiar").html(data);
+      $('#myModal').modal('show');
+    //  $("#btnnewalmacenamiento").prop('disabled', false);
+    });
+  }
+  </script>
+  <div id="cambiar"> </div>
+  <!-- /.box-body -->
+  <div class="box-footer clearfix no-border">
+    <button type="button" class="btn btn-default pull-right"><i class="fa fa-plus"></i> Add item</button>
+  </div>
+</div>
+<script>
+/* The todo list plugin */
+$('.todo-list').todoList({
+  onCheck  : function () {
+    window.console.log($(this), 'The element has been checked');
+  },
+  onUnCheck: function () {
+    window.console.log($(this), 'The element has been unchecked');
+  }
+});
+</script>
+<?php
+if(isset($_COOKIE['bodega'])) {
+  if ($_COOKIE['bodega']==$_GET["id"]) {
+?>
+<script>
+$("body").overhang({
+  type: "warn",
+  message: "Se ha realizado un reabastecimiento, defina donde se almacenaran los productos.",
+  duration: 3,
+  overlay: true
+});
+setTimeout(function(){ console.log("segundo mensaje");
+
+$("body").overhang({
+  type: "warn",
+  message: "Si no se define los productos serán almacenados en el almacenamiento principal.",
+  duration: 3,
+  overlay: true
+});
+}, 3300);
+</script>
+
+<?php
+  }
+}
+?>
+
+
+  </div>
+      <!-- /.col -->
+    </div>
+      <!-- /.row -->
+</section>

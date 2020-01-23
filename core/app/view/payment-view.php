@@ -1,3 +1,64 @@
+<div id="myModal" class="modal fade in" role="dialog"><!--parte oscura del modal-->
+  <div class="modal-dialog modal-lg"> <!-- tamaño del modal-->
+    <!-- Modal content-->
+    <div  class="box box-success fondo">
+      <div class="box-header with-border">
+        <h3 class="box-title">Nuevo Almacenamiento</h3>
+        <button id="bclose" type="button" class="close" data-dismiss="modal" aria-label="Close" aria-hidden="true">
+          <span>×</span></button>
+        </div>
+          <!-- form start -->
+        <form name="pepe" class="form-horizontal" method="post" autocomplete="off" enctype="multipart/form-data"  id="addalmacenamiento" role="form" >
+          <div class="box-body">
+            <div class="form-group">
+              <label for="image" class="col-sm-2 control-label">Imagen</label>
+              <div class="col-sm-4">
+                <label  id="imagelabel" for="image" class="col-sm-12 btn btn-default">Seleccionar Imagen</label>
+                <input type="file" name="image" id="image" accept="image/*" peso="">
+                <span id="spanimagep"></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div id="contenedorname">
+              <label for="name"  class="col-sm-2 control-label">Nombre*</label>
+              <div class="col-sm-4">
+                <input type="text"  name="name"  class="form-control" id="name" placeholder="Nombre" autofocus>
+                <span id="spanamep"></span>
+              </div>
+            </div>
+            <div id="contenedornamecorto">
+              <label for="namecorto" class="col-sm-2 control-label">Nombre corto</label>
+              <div class="col-sm-4">
+                <input type="text"  name="namecorto"  class="form-control" id="namecorto" placeholder="Nombre corto">
+                <span id="spannamecorto"></span>
+              </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+            <div id="contenedorlocation">
+              <label for="location" class="col-sm-2 control-label">Dirección</label>
+              <div class="col-sm-4">
+                <input type="text" name="address1" class="form-control"  id="address1" placeholder="Direccion">
+                <span id="spanlocation"></span>
+              </div>
+            </div>
+              <div class="col-sm-offset-2 col-sm-4">
+
+                  </div>
+              <div class="col-sm-offset-2 col-sm-4">
+                <button type="button"  class="btn btn-success" id="guardar" onclick="addalmacenamiento();">Guardar Producto</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
 
 <div class="container-fluid">
  <div class="row">
@@ -16,8 +77,8 @@
 		</div>
 		</form>
 	</div>
-    
-    
+
+
     <div class="col-md-6">
 	<h1>Pagos</h1>
 	<p><b>Buscar Cliente nombre, cedula o por codigo :</b></p>
@@ -40,7 +101,7 @@
 $(document).ready(function(){
 	$("#searchp").on("submit",function(e){
 		e.preventDefault();
-		
+
 		$.get("./?action=searchpayment",$("#searchp").serialize(),function(data){
 			$("#show_search_results").html(data);
 		});
@@ -61,13 +122,13 @@ $(document).ready(function(){
 <?php $cara = isset($_SESSION["cart2"]);?>
 $(document).ready(function(){
 	var cara=<?php echo json_encode($cara);?>;
-	
+
 	  m4e = document.getElementById("product_code2");
 	   m4e2 = document.getElementById("product_code");
 	  if(cara){
 	 m4e.disabled = true;
 	  m4e2.disabled = true;
-	 
+
 //	document.getElementById("product_code").disabled = true;
 	 // $("#client_id option[value="+ valor +"]").attr("selected",true);
 	  }
@@ -78,7 +139,7 @@ $(document).ready(function(){
 $(document).ready(function(){
 	$("#searchp2").on("submit",function(e){
 		e.preventDefault();
-		
+
 			$.get("./?action=searchclients2",$("#searchp2").serialize(),function(data){
 			$("#show_search_results").html(data);
 		});
@@ -88,13 +149,13 @@ $(document).ready(function(){
 	});
 
 function elegir2(valor){
-		
-	
+
+
 			$.get("./?action=searchpayment2",$("#ccc").serialize(),function(data){
 			$("#show_search_results").html(data);
 		});
 }
-	
+
 
 
 
@@ -157,7 +218,7 @@ $q= PaymentData::getQYesF($credit->id);
 	<td><?php echo $credit->id; ?></td>
 	<td ><?php $pagar= $p["q"]; echo  $p["q"]; ?></td>
 <td class="<?php if(isset($client -> name) && $credit->person_id!="" ): else: echo 'danger'; endif; ?>"><?php if(isset($client -> name) && $credit->person_id!=""):
-				 echo $credit->person_id ." ". $client -> name . " ".$client -> lastname ; 
+				 echo $credit->person_id ." ". $client -> name . " ".$client -> lastname ;
 				  else: echo "ERROR. El Cliente fue eliminado";
 				 endif;
 				 ?></td>
@@ -176,8 +237,8 @@ $q= PaymentData::getQYesF($credit->id);
       <input type="hidden" name="sell_id" value="<?php echo $credit->id; ?>" class="form-control" placeholder="Total">
       <input type="hidden" name="payment" value="<?php echo $pagar; ?>" class="form-control" placeholder="Total">
       <input type="hidden" name="person_id" value="<?php echo $credit->person_id ; ?>" class="form-control" placeholder="Total">
-      
-       
+
+
 <table style="width:100%;" class="table table-bordered">
 <tr>
 	<td class="danger"><p>Total</p></td>
@@ -191,10 +252,10 @@ $q= PaymentData::getQYesF($credit->id);
       <input type="text" name="money" required class="form-control" id="money" placeholder="Efectivo">
     </div>
   </div>
- 
+
 		<a href="index.php?action=clearcart2" class="btn btn-lg btn-danger"><i class="glyphicon glyphicon-remove"></i> Cancelar</a>
         <button class="btn btn-lg btn-success"><i class="glyphicon glyphicon-usd"></i> Finalizar Pago</button>
-            
+
         </div>
     </div>
 </div>
@@ -208,24 +269,24 @@ alertify.defaults.transition = "slide";
 alertify.defaults.theme.ok = "btn btn-info";
 alertify.defaults.theme.cancel = "btn btn-danger";
 alertify.defaults.theme.input = "form-control";
-								
+
 				if(money<(<?php echo $pagar;?>)){
 					alertify.alert('ERROR', 'No se puede efectuar la operacion falta efectivo!', function(){ alertify.error('Falta efectivo'); });
 					e.preventDefault();
-		
+
 				}else{
-					
+
 					alertify.confirm('Cambio',"Cambio: $"+(money-(<?php echo $pagar;?> ) ),
-			
+
 			 function(){ alertify.success('Ok')
 			 setTimeout(function(){ document.processpayment.submit() ; }, 500);
-			 
+
 			  }
-			 
+
                 , function(){ alertify.error('Cancelado por usuario')});
 						e.preventDefault();
-						
-						
+
+
 					}
 			});
 </script>

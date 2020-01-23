@@ -5,12 +5,12 @@
       <div class="box-header with-border">
         <?php  $product = ProductData::getById($_GET["id"]); ?>
         <h3 class="box-title">Detalles de Producto <button class="btn btn-success"><?php echo $_GET["id"];?></button></h3>
+
         <button id="bclose" type="button" class="close" data-dismiss="modal" aria-label="Close" aria-hidden="true">
           <span>×</span></button>
         </div>
         <?php
-
-         $categories = CategoryData::getAll();
+       $categories = CategoryData::getAll();
         $ivas = IvaData::getAll();
         $marcas = TrademarkData::getAll();
         $units = unitData::getAll();
@@ -19,20 +19,18 @@
 
 
         ?>
+
         <!-- form start -->
         <form name="pepe" class="form-horizontal" method="post" autocomplete="off" enctype="multipart/form-data"  id="addproduct" role="form" >
           <div class="box-body">
-            <div class="form-group">
-              <label for="image" class="col-sm-2 control-label">Imagen</label>
-              <div class="col-sm-4">
-                <?php if($product->image!=""){?>
-                  <br>
-                        <img src="res/img/<?php echo $product->image;?>" class="img-responsive">
 
+            <div class="form-group">
+            <label for="codigo"  class="col-sm-2 control-label">Imagen</label>
+            <div class="col-sm-4">
+              <?php if($product->image!=""){?>
+              <img style="width:60px;" src="res/img/<?php echo $product->image;?>" class="" alt="User Image">
                 <?php }?>
-              </div>
-              </div>
-              <div class="form-group">
+            </div>
               <div id="contenedorcodigo">
               <label for="codigo"  class="col-sm-2 control-label">Codigo</label>
               <div class="col-sm-4">
@@ -83,7 +81,7 @@
                   <select id="trademark" name="trademark" class="form-control">
                     <option value="">-- NINGUNA --</option>
                     <?php foreach($marcas as $marca):?>
-                      <option value="<?php echo $marca->id;?>"><?php echo $marca->name;?></option>
+                      <option value="<?php echo $marca->id;?>" <?php if($product->trademark_id!=null&& $product->trademark_id==$marca->id){ echo "selected";}?>><?php echo $marca->name;?></option>
                     <?php endforeach;?>
                   </select>
                 </div>
@@ -92,7 +90,7 @@
                   <select id="category_id" name="category_id" class="form-control">
                     <option value="">-- NINGUNA --</option>
                     <?php foreach($categories as $category):?>
-                      <option value="<?php echo $category->id;?>"><?php echo $category->name;?></option>
+                      <option value="<?php echo $category->id;?>" <?php if($product->category_id!=null&& $product->category_id==$category->id){ echo "selected";}?>><?php echo $category->name;?></option>
                     <?php endforeach;?>
                   </select>
                 </div>
@@ -106,7 +104,7 @@
                   <select id="category_id_iva" name="category_id_iva" class="form-control">
                     <option value="">-- General --</option>
                     <?php foreach($ivas as $iva):?>
-                      <option value="<?php echo $iva->id;?>"><?php echo $iva->name." ".$iva->porcentage."%"?></option>
+                      <option value="<?php echo $iva->id;?>" <?php if($product->type_of_iva_id!=null&& $product->type_of_iva_id==$iva->id){ echo "selected";}?>><?php echo $iva->name." ".$iva->porcentage."%"?></option>
                     <?php endforeach;?>
                   </select>
                 </div>
@@ -116,7 +114,7 @@
 
               <label class="col-sm-2 control-label">Unidad de medida*</label>
                 <div class="col-sm-4">
-                  <select id="selectmedida" name="selectmedida" class="form-control" onChange="medida(this.value)">
+                  <select id="selectmedida" name="selectmedida" class="form-control">
                     <option value="">--Seleccione--</option>
                     <?php foreach($units as $unit):?>
                       <option class="<?php switch ($unit->type) {
@@ -127,22 +125,30 @@
                         case 4: echo "text-red"; break;
                         case 5: echo "text-light-blue"; break; default:
                       }
-                      ?>" value="<?php echo $unit->id;?>"> <?php echo $unit->name;?></option>
+                      ?>" value="<?php echo $unit->id;?>" <?php if($product->unit_id!=null&& $product->unit_id==$unit->id){ echo "selected";}?> > <?php echo $unit->name;?></option>
                     <?php endforeach;?>
                   </select>
                   <span id="spanselectmedida"></span>
                 </div>
 
               </div>
+
             </div>
+            <div class="form-group">
+            <label for="cantidad" class="col-sm-2 col-xs-6 control-label">Cantidad</label>
+            <div class="col-sm-4">
+              <input type="number" id="cantidad" name="cantidad" class="form-control" value="<?php echo $product->cantidad; ?>"  placeholder="Cantidad" autocomplete="off" step="any">
+              <span id="spanmedida"></span>
+            </div>
+          </div>
             <div class="form-group">
               <label for="presentation" class="col-sm-2 col-xs-6 control-label">Otras presentaciones</label>
               <div class="col-sm-4 col-xs-5">
                 <div class="switch-field" >
-                  <input type="radio" id="switch_left" name="switch_2" value="0" checked="" onchange="presentaciones2()" >
-                  <label for="switch_left">No</label>
-                  <input type="radio" id="switch_right" name="switch_2" value="1" onchange="presentaciones()">
-                  <label for="switch_right">Si</label>
+                  <input type="radio" id="otrasleft" name="inpotras2" value="0" <?php if($product->other_presentations==0){ echo "checked='true'";}?>>
+                  <label for="otrasleft">No</label>
+                  <input type="radio" id="otrasright" name="inpotras2" value="1"  <?php if($product->other_presentations==1){ echo "checked='true'";}?>>
+                  <label for="otrasright">Si</label>
                 </div>
               </div>
               <div id="presentacionesresumen" class="otraspresentaciones">
@@ -150,24 +156,42 @@
             </div>
             <div class="form-group">
               <div id="contenedorpricce_in">
-              <label for="price_in" class="col-sm-2 control-label">Precio de Costo*</label>
+              <label for="price_in" class="col-sm-2 control-label">Costo predefinido</label>
               <div class="col-sm-4">
-              <input type="text" onchange="validarprice_in();" onkeyup="validarprice_in();" name="price_in" required class="form-control money" id="price_in" placeholder="Precio de entrada">
+              <input type="text" value="<?php echo $product->price_in; ?>" onchange="validarprice_in();" onkeyup="validarprice_in();" name="price_in" required class="form-control money" id="price_in" placeholder="Precio de entrada">
               <span id="spanprice_in"></span>
               </div>
               </div>
               <div id="contenedorpricce_out">
-              <label for="price_out" class="col-sm-2 control-label">Precio de Venta*</label>
+              <label for="price_out" class="col-sm-2 control-label">Precio predefinido</label>
               <div class="col-sm-4">
-              <input type="text" onchange="validarprice_out();" onkeyup="validarprice_out();" name="price_out" required class="form-control money" id="price_out" placeholder="Precio de salida">
+              <input type="text" value="<?php echo $product->price_out; ?>" onchange="validarprice_out();" onkeyup="validarprice_out();" name="price_out" required class="form-control money" id="price_out" placeholder="Precio de salida">
               <span id="spanprice_out"></span>
+              </div>
+              </div>
+            </div>
+            <?php $preciol=OperationData::getQprice($product->id);//si pones esta linea debajo da un error raro en vez de dar variable no definida da la linia de codigo a lla entendi la mascara deja solo la linea ?>
+            <div class="form-group">
+              <div id="contenedorpricce_inl">
+              <label for="price_inl" class="col-sm-2 control-label">Costo según lote</label>
+              <div class="col-sm-4">
+              <input type="text" value="<?php echo $preciol["Costo"]; ?>" onchange="validarprice_inl();" onkeyup="validarprice_inl();" name="price_inl" required class="form-control money" id="price_inl" placeholder="Precio de entrada">
+              <span id="spanprice_inl"></span>
+              </div>
+              </div>
+              <div id="contenedorpricce_outl">
+              <label for="price_outl" class="col-sm-2 control-label">Precio según lote</label>
+              <div class="col-sm-4">
+
+              <input type="text" value="<?php echo $preciol["Precio"]; ?>" onchange="validarprice_outl();" onkeyup="validarprice_outl();" name="price_outl" required class="form-control money" id="price_outl" placeholder="Precio de salida">
+              <span id="spanprice_outl"></span>
               </div>
               </div>
             </div>
             <div class="form-group">
               <label for="q" class="col-sm-2 control-label">Inventario Disponible</label>
               <div class="col-sm-4">
-                <input type="number" min="0" step="any" name="q" required class="form-control"  id="q" placeholder="Inventario Disponible" value="0">
+                <input type="number" min="0" value="<?php echo $preciol["q"]; ?>" step="any" name="q" required class="form-control"  id="q" placeholder="Inventario Disponible" value="0">
               </div>
               <label for="inventary_min" class="col-sm-2 control-label">Minima en inventario*</label>
               <div class="col-sm-4">
@@ -219,155 +243,26 @@
     });
     $("#spanprice_in").html(nuu);
   }
-  function medida(value){
-    console.log("medida "+value);
-    $('#contentselectmedida').removeClass('has-error');
-    $("#spanselectmedida").html("");
-    var elem2 = $('.mostrar4');
-    var mesaje = "";
-    var uno = value * 1;
-    switch (uno) {
-      <?php foreach($units as $unit):
-        if ($unit->type >1) {
-          echo "case ".$unit->id.": mesaje ='Cuantos ".$unit->name."'; break;";
-        }else if ($unit->type ==1) {
-          echo "case ".$unit->id.": mesaje ='Cuantas ".$unit->name."'; break;";
-        }else{
-          echo "case ".$unit->id.": mesaje ='Cuantos ".$unit->name."'; break;";
-        }
-        ?>
-        <?php endforeach;?>
-        default:
-      }
-      if (value<=8 && value!=2){
-        elem2.hide();
-        adeshabx();
-      }else {
-        $("#labelmedida").html(mesaje);
-        alertify.success('Ingrese '+mesaje);
-        deshab();//DESAVILITA EL FORMULARIO
-        $("#contentselectmedida").addClass("has-success");
-        $('.fondo').addClass('bg-gray-light');
-        $('#bg-white2').addClass('bg-white');
-        elem2.fadeIn();
-        $("#cantidad").removeAttr("disabled");
-        $("#selectmedida").removeAttr("disabled");
-        $("#cantidad").focus();
-      }
-    }
-
-    function presentaciones(){
-      console.log("presentaciones")
-      if (validate("selectmedida",1,0)){
-        $("#spanselectmedida").html("");
-        console.log("si valido selectmedida");
-        alertify.genericDialog || alertify.dialog('genericDialog',function(){
-          return {
-            main:function(content){
-              this.setContent(content);
-            },
-            setup:function(){
-              return {
-                focus:{
-                  element:function(){
-                    return this.elements.body.querySelector(this.get('selector'));
-                  },
-                  select:true
-                },
-                options:{
-                  title: true,
-                  basic:false,
-                  maximizable:true,
-                  resizable:false,
-                  padding:false
-                }
-              };
-            },
-            settings:{
-              selector:undefined
-            }
-          };
-        });
-        $("#selectmedida").prop('disabled', true);
-        $("#cantidad").prop('disabled', true);
-        alertify.genericDialog ($('#categorías')[0]).set('selector', 'input[type="password"]');
-        $.get("./?action=addfraction&o=main",
-        {
-          q:$("#cantidad").val(),
-          unit_id: $("#selectmedida").val(),
-        },function(data){
-          if (data.estado == "true") {
-            alertify.success('Se retuvo presentacion principal.');
-          }else {
-            alertify.error('No se pudo retener presentacion');
-          }
-        });
-        $.get("./?action=presentaciones",function(data){
-          $("#categorías").html(data);
-        });
-      }else{
-        $("#switch_left").prop("checked", true);
-        $("#spanselectmedida").html("Complete este campo.");
-        $( "#selectmedida").focus();
-        $("#contentselectmedida").addClass("has-error")
-        alertify.error('Complete campo obligatorio antes de definirn otras presentation');
-        console.log("no valido");
-      }
-    }
-
-
-    function desavilitamedida(){
-      $.get("./?action=addfraction&o=is",
-      {
-        unit_id: $("#selectmedida").val(),
-      },function(data){
-        if (data.estado == "true") {
-          $("#selectmedida").prop('disabled', false);
-          $("#cantidad").prop('disabled', false);
-        }else {
-          $("#cantidad").prop('disabled', true);
-        }
-        $("#presentaciones").load("./?action=viewpresentation");
-        $("#presentacionesresumen").load("./?action=viewpresentation&o=resumido");
-      });
-    }
-
-
-    function presentaciones2(){
-
-      console.log("presentation 2")
-      alertify.confirm("Otras presentaciones","Se eliminaran las presentaciones definidas, ¿Desea continuar?",
-      function(){
-        borrarpresentaciones();
-        alertify.message('Presentaciones Descartadas');
-      },
-      function(){
-          $("#switch_right").prop("checked", true);
-      //  document.pepe.switch_2[1].checked = true;
-        presentaciones();
-        alertify.error('Cancelado');
-      });
-    }
-
-function borrarpresentaciones(){
-  console.log("borrarpresentaciones")
-    $.get("./?action=addfraction&o=borrar",
-    {
-      q:$("#cantidad").val(),
-      unit_id: $("#selectmedida").val(),
-    },function(data){
-      if (data.estado == "true") {
-
-      }else {
-        alertify.error('No se pudo descartar presentacion');
-      }
-      $("#presentacionesresumen").load("./?action=viewpresentation&o=resumido");
-      adeshabx();//avilita formulario
+  function validarprice_outl(){
+    NEMEM = $('#price_outl').cleanVal()/100;
+    nuu = numeroALetras(NEMEM, {
+      plural: '',
+      singular: '',
+      centPlural: 'CENTAVOS',
+      centSingular: 'CENTAVO'
     });
-}
-
-
-
+    $("#spanprice_outl").html(nuu);
+  }
+  function validarprice_inl(){
+    NEMEM = $('#price_inl').cleanVal()/100;
+    nuu = numeroALetras(NEMEM, {
+      plural: 'PESOS',
+      singular: 'PESO',
+      centPlural: 'CENTAVOS',
+      centSingular: 'CENTAVO'
+    });
+    $("#spanprice_inl").html(nuu);
+  }
     /*para dale estilo al campo tipe file*/
     $('input[type=file]').change(function(){
       var filename = jQuery(this).val().split('\\').pop();
@@ -890,38 +785,6 @@ function borrarpresentaciones(){
       for(i=0; ele=frm.elements[i]; i++){//no lleva ;
         ele.disabled=false
       }
-      desavilitamedida();
-
-    }
-    //avilita el formulario y borra los mensajes de error
-    function adeshabx() {
-      console.log("avilita el formulario");
-      $('.fondo').removeClass('bg-gray-light');
-      $('.bg-white').removeClass('bg-white');
-      var elem3 = $('.mostrar2');
-      elem3.hide();
-      var elem4 = $('.mostrar3');
-      elem4.hide();
-      var elem = $('.mostrar');
-      elem.hide()
-      var elem2 = $('.ocultar');
-      elem2.fadeIn();
-      frm = document.forms['pepe'];
-      $("#nuevacategoria").val("");
-      $("#descriptionc").val("");
-      $("#porcentaje").val("");
-      $("#nuevoiva").val("");
-      $("#contentcategory_id").removeClass("has-success");
-      $("#contentcategory_id").removeClass("has-error");
-      $("#contentcategory_id_iva").removeClass("has-error");
-      $("#contentcategory_id_iva").removeClass("has-success");
-      $("#contentnuevacategoria span").html("");
-      $("#spanameiva").html("");
-      $("#spanporcentajeiva").html("");
-      for(i=0; ele=frm.elements[i]; i++){
-        ele.disabled=false;
-      }
-      desavilitamedida();
     }
 
     function adeshabCuantos(){
@@ -1242,157 +1105,7 @@ function borrarpresentaciones(){
           }
           $('.money').mask('000.000.000,00', {reverse: true});
     }
-function validaformulario(){
 
-  if (validate("codigo",6,255,0)){
-      $("#spancodigop").html("");
-      $("#contenedorcodigo").removeClass("has-error")
-  }else {
-    $("#contenedorcodigo").addClass("has-error")
-    $("#codigo" ).focus();
-    $("#spancodigop").html("Codigo demasiado largo.");
-    alertify.error('Codigo demasiado largo, reduzca el Codigo.');
-    return false
-  }
-
-    if (validate("name",1,10,0)){
-        $("#spanamep").html("");
-        $("#contenedorname").removeClass("has-error")
-        $("#contenedorname").addClass("has-success")
-    }else {
-      $("#contenedorname").removeClass("has-success")
-      $("#contenedorname").addClass("has-error")
-      $("#name" ).focus();
-      $("#spanamep").html("Complete este campo.");
-      alertify.error('Complete campo obligatorio');
-      return false;
-    }
-    if (validate("name",6,255,0)){
-        $("#spanamep").html("");
-        $("#contenedorname").removeClass("has-error")
-        $("#contenedorname").addClass("has-success")
-    }else {
-      $("#contenedorname").removeClass("has-success")
-      $("#contenedorname").addClass("has-error")
-      $("#name" ).focus();
-      $("#spanamep").html("Nombre demasiado largo.");
-      alertify.error('Nombre demasiado largo, reduzca el nombre.');
-      return false
-    }
-
-    if (validate("barcode",6,255,0)){
-        $("#spanbarcode").html("");
-        $("#contenedorbarcode").removeClass("has-error")
-    }else {
-      $("#contenedorbarcode").addClass("has-error")
-      $("#barcode" ).focus();
-      $("#spanbarcode").html("Codigo demasiado largo.");
-      alertify.error('Codigo demasiado largo, reduzca el Codigo.');
-      return false
-    }
-
-    if (validate("description",6,255,0)){
-        $("#spandescription").html("");
-        $("#contenedordescription").removeClass("has-error")
-    }else {
-      $("#contenedordescription").addClass("has-error")
-      $("#descripcion" ).focus();
-      $("#spandescription").html("Descripcion demasiado larga.");
-      alertify.error('Descripción demasiado larga, reduzca la Descripción.');
-      return false
-    }
-
-    if (validate("location",6,255,0)){
-        $("#spanlocation").html("");
-        $("#contenedorlocation").removeClass("has-error")
-    }else {
-      $("#contenedorlocation").addClass("has-error")
-      $("#location" ).focus();
-      $("#spanlocation").html("Ubicación demasiado larga.");
-      alertify.error('Ubicación demasiado larga, reduzca la Ubicación.');
-      return false
-    }
-
-  if (validate("selectmedida",1,0,0)){
-    $("#spanselectmedida").html("");
-    $("#contentselectmedida").removeClass("has-error")
-    }else {
-      $("#contentselectmedida").addClass("has-error")
-      $("#selectmedida" ).focus();
-      $("#spanselectmedida").html("Complete este campo.");
-      alertify.error('Complete campo obligatorios');
-      return false
-    }
-
-    if (validate("selectmedida",1,0,0)){
-      $("#spanselectmedida").html("");
-      $("#contentselectmedida").removeClass("has-error")
-      }else {
-        $("#contentselectmedida").addClass("has-error")
-        $("#selectmedida" ).focus();
-        $("#spanselectmedida").html("Complete este campo.");
-        alertify.error('Complete campo obligatorios');
-        return false
-      }
-
-      if (validate("price_in",1,0,0)){
-        $("#spanprice_in").html("");
-        $("#contenedorpricce_in").removeClass("has-error")
-        }else {
-          $("#contenedorpricce_in").addClass("has-error")
-          $("#price_in" ).focus();
-          $("#spanprice_in").html("Complete este campo.");
-          alertify.error('Complete campo obligatorios');
-          return false
-        }
-        id = $('#price_in').cleanVal() *1;
-        if (validate(id,3,1,1)){
-          $("#spanprice_in").html("");
-          $("#contenedorpricce_in").removeClass("has-error")
-          }else {
-            $("#contenedorpricce_in").addClass("has-error")
-            $("#price_in" ).focus();
-            $("#spanprice_in").html("No puede se cero ni negativo.");
-            alertify.error('No puede se cero ni negativo.');
-            return false
-          }
-
-        if (validate("price_out",1,0,0)){
-          $("#spanprice_out").html("");
-          $("#contenedorpricce_out").removeClass("has-error")
-          }else {
-            $("#contenedorpricce_out").addClass("has-error")
-            $("#price_out" ).focus();
-            $("#spanprice_out").html("Complete este campo.");
-            alertify.error('Complete campo obligatorios');
-            return false
-          }
-          id = $('#price_out').cleanVal() * 1;
-          if (validate(id,3,1,1)){
-            $("#spanprice_out").html("");
-            $("#contenedorpricce_out").removeClass("has-error")
-            }else {
-              $("#contenedorpricce_out").addClass("has-error")
-              $("#price_out" ).focus();
-              $("#spanprice_out").html("No puede se cero ni negativo");
-              alertify.error('Complete campo obligatorios');
-              return false
-            }
-            //si no se multiplica por uno no lo detecta como numerico devido a que el campo es un campo de texto
-            id = $('#price_out').cleanVal() * 1;
-            id2 = $('#price_in').cleanVal() * 1;
-            if (validate(id,3,id2,1)){
-              $("#spanprice_out").html("");
-              $("#contenedorpricce_out").removeClass("has-error")
-              }else {
-                $("#contenedorpricce_out").addClass("has-error")
-                $("#price_out" ).focus();
-                $("#spanprice_out").html("El Precio de venta No puede ser menor al Costo");
-                alertify.error('Complete campo obligatorios');
-                return false
-              }
-    return true;
-}
 function alertdecontrol_stock(){
   console.log("alertdecontrol_stock()");
   if ($('#control_stock').prop('checked')) {
@@ -1413,7 +1126,7 @@ function divide_stock(){
 
 
     $(document).ready(function(){
-      borrarpresentaciones();
+
     })
     </script>
   <?php   } ?>

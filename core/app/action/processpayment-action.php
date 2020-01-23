@@ -19,7 +19,7 @@ if(isset($_SESSION["cart2"])){
 				if($c["q"]<=$qyf){
 					$num_succ++;
 				}else{
-				$error = array("sell_id"=>$c["sell_id"],"message"=>"No hay suficiente cantidad de sello para facturar en inventario.");					
+				$error = array("sell_id"=>$c["sell_id"],"message"=>"No hay suficiente cantidad de sello para facturar en inventario.");
 				$errors[count($errors)] = $error;
 				}
 				}else{
@@ -39,9 +39,11 @@ if($num_succ==count($cart2)){
 
 if($process==false){
 $_SESSION["errors"] = $errors;
-	?>	
+	?>
 <script>
-	window.location="index.php?view=payment";
+$('#myModal').modal('show');
+newpayment();
+	//window.location="index.php?view=payment";
 </script>
 <?php
 }
@@ -56,10 +58,10 @@ $_SESSION["errors"] = $errors;
 			$sell->sell_id = $_POST["sell_id"];
 			$sell->payment = $_POST["payment"];
 			$sell->person_id = $_POST["person_id"];
-			
+
 	  				$s = $sell->add();
-					
-					
+
+
 ////////////////////
 print "<script>window.location='index.php?view=onepayment&id=$s[1]';</script>";
 		}

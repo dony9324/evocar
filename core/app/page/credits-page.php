@@ -1,8 +1,8 @@
 <section class="content-header">
   <h1><i class='fa fa-book'></i> Creditos </h1>
   <ol class="breadcrumb">
-    <li><a href="#"><i class="fa fa-home"></i> Inicio</a></li>
-    <li class="active">Creditos</li>
+    <li><a href="#" onClick="changerview('./?page=home')"><i class="fa fa-home"></i> Inicio</a></li>
+    <li class="active"><a href="#" onClick="changerview('./?page=home')"><i class="fa fa-home"></i> Creditos</a></li>
   </ol>
 </section>
 <section class="content">
@@ -11,15 +11,13 @@
       <div class="box">
         <div class="box-header">
           <h3 class="box-title">Lista de Creditos</h3>
-
-
           <div class="btn-group pull-right">
             <?php $u=null;
-
             $u = UserData::getById($_SESSION["user_id"]);
             if($u->is_admin):?>
             <a href="./index.php?action=processcredits" class="btn btn-default">Procesar creditos pagados <i class="fa fa-arrow-right"></i></a>
           <?php endif; ?>
+          <button type="button" id="btnnewpayment" onclick="newpayment()" class="btn btn-default"><i class='fa fa-usd'></i> Nuevo Pago</button>
           <a href="index.php?view=payment" class="btn btn-default"><i class="fa fa-usd"></i> Nuevo Pago</a>
           <div class="btn-group pull-right">
             <?php if($u->is_admin):?>
@@ -34,6 +32,20 @@
         </div>
 
       </div>
+      <div id="newpayment"> </div>
+      <script>
+      //esta funcion carga el formulario para guardar un nuevo Cliente
+      function newpayment(){
+        //estalinea es por un error de doble ventana he impide que se abra dosveces el modal
+        $("#btnnewpayment").prop('disabled', true);
+        console.log("nuevo Pago");
+        $.get("./?action=newpayment",function(data){
+          $("#newpayment").html(data);
+          $('#myModal').modal('show');
+          $("#btnnewpayment").prop('disabled', false);
+        });
+      }
+      </script>
       <!-- /.box-header -->
 
       <div class="box-body">

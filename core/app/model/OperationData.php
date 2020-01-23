@@ -126,11 +126,12 @@ class OperationData {
 
 
 	public static function getQprice($product_id){
-		$q=0;
-		$p=0;
+		$q=0;//disponible
+		$p=0;//precio segun lote
+		$c=0;//costo segun lote
 		$entradas=0;
 		$salidas=0;
-		$qt=0;
+		$qt=0;//restantes del lote actual
 		$operations = self::getAllByProductId($product_id);
 		//obtenemos las entradas y las salidas
 				foreach($operations as $operation){
@@ -150,6 +151,7 @@ class OperationData {
 				$qt=$operation->q;
 				if ($salidas<0) {
 					$p=$operation->change_price_out;
+					$c=$operation->change_price_in;
 					$qt= $q - ($q-$salidas);
 					break;
 				}
@@ -165,7 +167,7 @@ class OperationData {
 //	 $salidas+=$operation->q;
 			}
 		}
-		  $resultado = array("Precio" => $p, "Cantidad"=>$qt, "q"=>$q);
+		  $resultado = array("Precio" => $p, "Cantidad"=>$qt, "q"=>$q, "Costo"=>$c);
 		return $resultado;
 	}
 

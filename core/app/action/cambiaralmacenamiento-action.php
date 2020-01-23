@@ -3,98 +3,56 @@
     <!-- Modal content-->
     <div  class="box box-success fondo">
       <div class="box-header with-border">
-        <h3 class="box-title">Nuevo Cliente</h3>
+        <?php $bodega = BodegaData::getAlloperation_id($_GET["id"]);
+        $operation = OperationData::getById($_GET["id"]);
+        $product  = $operation->getProduct();?>
+        <h3 class="box-title">Defina almacenamiento de: # <?php echo $product->id." ".$product->name  ; ?></h3>
         <button id="bclose" type="button" class="close" data-dismiss="modal" aria-label="Close" aria-hidden="true">
           <span>×</span></button>
         </div>
           <!-- form start -->
-        <form name="pepe" class="form-horizontal" method="post" autocomplete="off" enctype="multipart/form-data"  id="addclient" role="form" >
+        <form name="pepe" class="form-horizontal" method="post" autocomplete="off" enctype="multipart/form-data"  id="addalmacenamiento" role="form" >
           <div class="box-body">
+
+    <?php $alternar=true; foreach($bodega as $bode){
+      $color=AlmacenamientosData::getById($bode->almacenamiento_id);
+      if ($alternar) {
+        $alternar=false;
+        ?>
+        <div class="form-group">
+          <div id="contenedorname">
+          <label for="name"  class="col-sm-2 control-label"><small class="label label-default <?php echo $color->color; ?>"> <?php echo $color->name; ?></small></label>
+          <div class="col-sm-4">
+            <input type="text" value="<?php echo $bode->q; ?>"  name="name"  class="form-control" id="name" placeholder="<?php echo $bode->q; ?>" autofocus>
+            <span id="spanamep"></span>
+          </div>
+        </div>
+        <?php
+        }else {
+        $alternar=true;
+        ?>
+        <div id="contenedornamecorto">
+          <label for="name"  class="col-sm-2 control-label"><small class="label label-default <?php echo $color->color; ?>"> <?php echo $color->name; ?></small></label>
+          <div class="col-sm-4">
+            <label for="name"  class="col-sm-2 control-label"><small class="label label-default <?php echo $color->color; ?>"> <?php echo $color->name; ?></small></label>
+            <span id="spannamecorto"></span>
+          </div>
+          </div>
+        </div>
+
+        <?php
+      }
+      ?>
+            <?php
+          } if ($alternar==false) {
+            echo "</div>";
+          }
+            ?>
             <div class="form-group">
-              <label for="image" class="col-sm-2 control-label">Imagen</label>
-              <div class="col-sm-4">
-                <label  id="imagelabel" for="image" class="col-sm-12 btn btn-default">Seleccionar Imagen</label>
-                <input type="file" name="image" id="image" accept="image/*" peso="">
-                <span id="spanimagep"></span>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <div id="contenedorname">
-              <label for="name"  class="col-sm-2 control-label">Nombre*</label>
-              <div class="col-sm-4">
-                <input type="text"  name="name"  class="form-control" id="name" placeholder="Nombre" autofocus>
-                <span id="spanamep"></span>
-              </div>
-            </div>
-            <div id="contenedorlastname">
-              <label for="lastname" class="col-sm-2 control-label">Apellido</label>
-              <div class="col-sm-4">
-                <input type="text"  name="lastname"  class="form-control" id="lastname" placeholder="Apellido">
-                <span id="spanlastname"></span>
-              </div>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <div id="contenedordescription">
-              <label for="description" class="col-sm-2 control-label">Documento</label>
-              <div class="col-sm-4">
-                <input type="text" name="identity" class="form-control" id="identity" placeholder="Cedula">
-                <span id="spandescription"></span>
-              </div>
-              </div>
-              <div id="contenedorlocation">
-              <label for="location" class="col-sm-2 control-label">Dirección</label>
-              <div class="col-sm-4">
-                <input type="text" name="address1" class="form-control"  id="address1" placeholder="Direccion">
-                <span id="spanlocation"></span>
-              </div>
-            </div>
-            </div>
-
-            <div class="form-group">
-              <div id="contenedordescription">
-            									<label for="email1" class="col-sm-2 control-label">Email</label>
-
-            									<div class="col-sm-4">
-            										<input type="text" name="email1" class="form-control" id="email1" placeholder="Email">
-            									</div>
-              </div>
-              <div id="contenedorlocation">
-            									<label for="phone1" class="col-sm-2 control-label">Telefono</label>
-
-            									<div class="col-sm-4">
-            										<input type="text" name="phone1" class="form-control" id="phone1" placeholder="Telefono">
-            									</div>
-            								</div>
-                          </div>
-
-            								<div class="form-group">
-            									<label for="inputEmail1" class="col-sm-2 control-label">Telefono 2</label>
-
-            									<div class="col-sm-4">
-            										<input type="text" name="phone2" class="form-control" id="phone2" placeholder="Telefono 2">
-            									</div>
-
-            									<label for="inputEmail1" class="col-sm-2 control-label">Empresa</label>
-
-            									<div class="col-sm-4">
-            										<input type="text" name="company" class="form-control" id="company" placeholder="Empresa">
-            									</div>
-            								</div>
-            								<div class="form-group">
-            									<label for="inputEmail1" class="col-sm-2 control-label">Nit</label>
-
-            									<div class="col-sm-4">
-            										<input type="text" name="nit" class="form-control" id="nit" placeholder="Nit">
-            									</div>
-
               <div class="col-sm-offset-2 col-sm-4">
-
                   </div>
               <div class="col-sm-offset-2 col-sm-4">
-                <button type="button"  class="btn btn-success" id="guardar" onclick="addclient();">Guardar Producto</button>
+                <button type="button"  class="btn btn-success" id="guardar" onclick="addalmacenamiento();">Guardar Producto</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
               </div>
             </div>
@@ -128,7 +86,7 @@
           $("#imagelabel").addClass("btn-danger");
           $("#imagelabel").html("<i class='fa fa-fw fa-file-image-o'></i>"+filename);
           console.log('Imagen muy pesada');
-          $("#spanimagep").html("Imagen muy pesada, no se guardara Imagen");
+          $("#spanimagep").html("Imagen muy pesada, no se guardara Imagen.");
           $("body").overhang({
               type: "error",
               message: "Imagen muy pesada, no se guardara Imagen.!"
@@ -153,23 +111,23 @@
 
     });
 
-    function recargarclientes(){
-      console.log("recargarclientes")
+    function recargarAlmacenamientos(){
+      console.log("recargarAlmacenamientos")
       $('#client_id').children('option:not(:first)').remove();
-      $.get("./?action=searchallclientes",
+      $.get("./?action=searchallAlmacenamientos",
       {
         name:$("#name").val(),
       },function(data){
         data.forEach(function(dat, index){
-          $('#client_id').append('<option value="'+dat.id+'">'+dat.name+' '+dat.lastname+'</option>');
+          $('#client_id').append('<option value="'+dat.id+'">'+dat.name+' '+dat.namecorto+'</option>');
           $("#client_id [value="+ dat.id +"]").attr("selected",true);
         })
       });
     }
 
 
-      function addclient(){
-          console.log("addclient");
+      function addalmacenamiento(){
+          console.log("addalmacenamiento");
             $("#guardar").prop('disabled', true);
           if (validaformulario()){
             console.log("si valido formulario");
@@ -181,11 +139,11 @@
             ele.disabled=false;
           }
           $("#guardar").prop('disabled', true);
-          var parametros = new FormData($("#addclient")[0]);
+          var parametros = new FormData($("#addalmacenamiento")[0]);
           $.ajax (
             {
               data:parametros,
-              url:"./?action=addclient",
+              url:"./?action=addalmacenamiento",
               type:"POST",
               contentType: false,
               processData: false,
@@ -193,19 +151,19 @@
               },
               success: function(data){
                 if (data.estado == "true") {
-                  alertify.success('Se guardo cliente correctamente');
+                  alertify.success('Se guardo Almacenamiento correctamente');
                   $("body").overhang({
                       type: "success",
                       duration: 1,
-                      message: "Se guardo cliente correctamente",
+                      message: "Se guardo Almacenamiento correctamente",
                       callback: function() {
                      $('#myModal').modal('hide');
                       }
                   });
-                  recargarclientes();
+                  recargarAlmacenamientos();
                 }else {
                   $("#guardar").prop('disabled', false);
-                  alertify.error('No se pudo guardar cliente');
+                  alertify.error('No se pudo guardar Almacenamiento');
                 }
               }
             }
@@ -241,6 +199,21 @@ function validaformulario(){
       alertify.error('Nombre demasiado largo, reduzca el nombre.');
       return false
     }
+
+    if (validate("namecorto",6,20,0)){
+        $("#spannamecorto").html("");
+        $("#contenedornamecorto").removeClass("has-error")
+        $("#contenedornamecorto").addClass("has-success")
+    }else {
+      $("#contenedornamecorto").removeClass("has-success")
+      $("#contenedornamecorto").addClass("has-error")
+      $("#namecorto" ).focus();
+      $("#spannamecorto").html("Nombre corto demasiado largo.");
+      alertify.error('Nombre corto demasiado largo, reduzca el nombre.');
+      return false
+    }
+
+
       return true;
 }
     </script>

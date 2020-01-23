@@ -28,33 +28,37 @@ $infoiva= CompanyData::getById(1)->value;
 $infonit= CompanyData::getById(2)->value;
 $infocell= CompanyData::getById(3)->value;
 $mensaje= CompanyData::getById(4)->value;
-$infoweb= CompanyData::getById(4)->value;
-$infodire= CompanyData::getById(5)->value;
-
+$infodire= CompanyData::getById(4)->value;
+$infnnota= CompanyData::getById(6)->value;
 $sell = SellData::getById($_GET["id"]);
 $operations = OperationData::getAllProductsBySellId($_GET["id"]);
-$discount = $sell-> discount;
+$discount = $sell->discount;
 if($sell->person_id!=null){ $client = $sell->getPerson();}
 $user = $sell->getUser();
-$total=0;
+$total = $sell->total;
 
 $items = array();
 
 foreach($operations as $operation){
 	$product = $operation->getProduct();
 
+if ($operation->discount>0) {
+	array_push($items, new item("#".$product->id." Nombre: ".$product->name," "),
+	new item("Cantida:".$operation->q . " Valor x 1:"."$".number_format(($operation->change_price_out/100),2,'.',',')." total:"."$".number_format(($operation->precitotal/100),2,'.',',')."Descuento".number_format(($operation->discount/100),2,'.',','),""), new item("===============================","=================")
+	);
+}else {
+	array_push($items, new item("#".$product->id." Nombre: ".$product->name," "),
+	new item("Cantida:".$operation->q . " Valor x 1:"."$".number_format(($operation->change_price_out/100),2,'.',',')." total:"."$".number_format(($operation->precitotal/100),2,'.',','),""), new item("===============================","=================")
+	);
+}
 
 
-    array_push($items, new item("Nombre: ".$product->name," "),
-    new item("Cantida:".$operation->q . " Valor x 1:"."$".$product->price_out. " total:"."$".$operation->q*$product->price_out,""), new item("===============================","=================")
-    );
-	$total+=$operation->q*$product->price_out;
 	}
-$subtotal = new item('Base: ', number_format(($total/(($infoiva/100)+1)),2,".",","));
-$dis = new item('Descuento', number_format($discount,2,".",","));
+$subtotal = new item('Base: ', number_format((($total/(($infoiva/100)+1))/100),2,'.',','));
+$dis = new item('Descuento', number_format(($sell->discount/100),2,'.',','));
 $dis2 = $discount;
-$tax = new item('iva'.$infoiva."%", number_format((($total/(($infoiva/100)+1))*($infoiva/100)),2,".",","));
-$total = new item('Total', number_format($total-$discount,2,".",","), true);
+$tax = new item('iva'.$infoiva."%", number_format(((($total/(($infoiva/100)+1))*($infoiva/100))/100),2,'.',','));
+$total = new item('Total', number_format(($total -	$sell->discount)/100,2,'.',','), true);
 /* Date is kept the same for testing */
 // $date = date('l jS \of F Y h:i:s A');
 $date = $sell->created_at;
@@ -73,6 +77,7 @@ try{
 
 
 /* Name of shop */
+$printer -> setFont(Printer::FONT_B);//texto pequeño
 $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
 $printer -> text("Ferreteria la Bendicion.\n");
 $printer -> selectPrintMode();
@@ -90,6 +95,7 @@ $printer -> text("PRODUCTOS\n");
 $printer -> setEmphasis(false);
 
 /* Items */
+$printer -> setFont(Printer::FONT_B);//texto pequeño
 $printer -> setJustification(Printer::JUSTIFY_LEFT);
 $printer -> setEmphasis(true);
 //$printer -> text(new item('', '$'));
@@ -121,8 +127,8 @@ if($sell->person_id!=null){
 
 
 $printer -> text("Atendido por: ".$user->name." ".$user->lastname."\n");
-if($infoweb!=null){
-	$printer -> text("web: ".$infoweb."\n");
+if($infodire!=null){
+	$printer -> text("web: ".$infodire."\n");
 	}
 $printer -> feed(1);
 $printer -> text($date . "\n");

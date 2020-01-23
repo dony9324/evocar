@@ -84,7 +84,7 @@ print_r($arr2);
 						?>
 						<tr class="<?php if($product->control_stock==1){ if($q<=$product->inventary_min && $q>0){ echo "warning"; } if(!($q<=$product->inventary_min)){echo "success";}  if(!$q>0){ echo "danger"; }}else { 	}?>">
 								<td style="width:auto;"><?php echo $product->id; ?></td>
-							<td> <button onclick="masdetalles(<?php echo $product->id; ?>)" type="button" class="masdetalles btn btn-success btn-flat" style=" vertical-align: middle; width: 35px;"><i class="fa fa-tags" ></i></button></td>
+							<td> <button onclick="masdetalles(<?php echo $product->id; ?>)" type="button" class="masdetalles btn btn-info btn-flat" style=" vertical-align: middle; "><i class="fa fa-plus-square" ></i></button></td>
 							<td>  <?php echo $product->name; ?></td>
 
 

@@ -16,14 +16,14 @@ if(isset($_GET["o"])){
 			while($r = $query->fetch_array()){
 				$found = true ;
 				$userid = $r['id'];
-				$usertime = $r['time'];
+				$usertime = $r['time'];//en segundos
 			}
 			header('Content-type: application/json');
 			$resultado = array();
 			if($found==true) {
 				$_SESSION["ultimoAcceso"]=time();
 				//setcookie("ultimoAcceso","true");
-				setcookie("ultimoAcceso","true",(time()+40));
+				setcookie("ultimoAcceso","true",(time()+40));//40 segundos
 				$_SESSION['user_id']=$userid ;
 				$_SESSION['user_time']=$usertime ;
 				$resultado = array("estado" => "true");
@@ -63,7 +63,7 @@ if(isset($_GET["o"])){
 					$resultado = array("estado" => "true");
 					return print(json_encode($resultado));
 				}else {
-					setcookie("ultimoAcceso","true",(time()+400));//40
+					setcookie("ultimoAcceso","true",(time()+40));//40 segundos
 					//	$_SESSION["ultimoAcceso"] = time();
 					$resultado = array("estado" => "false");
 					return print(json_encode($resultado));

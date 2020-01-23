@@ -122,6 +122,7 @@ endif; ?>
 	</script>
 	<table style="width:100%;" class="text-center table table-bordered table-hover">
 		<thead>
+			<th>#</th>
 			<th>Producto</th>
 			<th>Cantidad</th>
 			<th>Costo</th>
@@ -135,6 +136,7 @@ endif; ?>
 				$product = ProductData::getById($p["product_id"]);
 				?>
 				<tr style="width:11%;">
+					<td style="width:auto"><?php echo $product->id; ?></td>
 					<td style="width:auto"><?php echo $product->name; ?></td>
 					<td  style="width:11%;" >
 						<div class="input-group">
@@ -491,7 +493,7 @@ $("#q<?php echo $p["product_id"];?>").blur(function(){
 				<div id="contenedormoney">
 					<label for="name" class="col-sm-2 control-label">Efectivo*</label>
 					<div class="col-sm-4">
-						<input onchange="validarmoney();" onkeyup="validarmoney();"  type="text" min="0" name="money" class="form-control money" id="money" placeholder="Efectivo" autocomplete="ÑÖcompletes" >
+						<input onchange="validarmoney();" onkeyup="validarmoney();"  type="text" min="0" name="money" class="form-control money" id="money" placeholder="Efectivo" autocomplete="ÑÖcompletes">
 						<span id="spanmoney"></span>
 					</div>
 				</div>

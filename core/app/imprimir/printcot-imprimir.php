@@ -29,21 +29,27 @@ $infonit= CompanyData::getById(2)->value;
 $infocell= CompanyData::getById(3)->value;
 $mensaje= CompanyData::getById(4)->value;
 $infodire= CompanyData::getById(5)->value;
+$infnnota= CompanyData::getById(6)->value;
 $total=0;
 $total2=0;
+ $descuento=0;
 $items = array();
 $user = UserData::getById($_SESSION["user_id"]);
 foreach($_SESSION["cart"] as $p){
 	$product = ProductData::getById($p["product_id"]);
-$pt = $product->price_out*$p["q"];
+$pt = $p["price_out"]*$p["q"];
+ $descuento += $p["descuento"];
  $total +=$pt;
     array_push($items, new item("Nombre: ".$product->name, ""),
-    new item("Cant:".$p["q"]."  Valor x 1:"."$".($product->price_out)."  total: "."$".$pt,""), new item("===============================","=================")
+    new item("Cant:".$p["q"]."  Valor x 1:"."$".number_format(($p["price_out"]/100),2,".",",")."  total: "."$".number_format($pt/100,2,".",","),""), new item("===============================","=================")
     );
 	}
-$subtotal = new item('Base: ', number_format(($total/(($infoiva/100)+1)),2,".",","));
-$tax = new item('iva'.$infoiva."%", number_format((($total/(($infoiva/100)+1))*($infoiva/100)),2,".",","));
-$total3 = new item('Total', number_format ($total,2,".",","));
+$subtotal = new item('Base: ', number_format(($total/(($infoiva/100)+1))/100,2,".",","));
+$tax = new item('iva'.$infoiva."%", number_format(((($total/(($infoiva/100)+1))*($infoiva/100))/100),2,".",","));
+$total3 = new item('Total', number_format (($total/100),2,".",","));
+ $descuenopri = new item('Descuento', number_format (($descuento/100),2,".",","));
+ //$n=($total-$descuenopri)/100;
+// $total4 = new item('Total.', number_format ($n,2,".",","));
 /* Date is kept the same for testing */
  $date = date(' Y-m-d h:i:s A');
 
@@ -91,6 +97,11 @@ $printer -> text($tax);
 
 $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
 $printer -> text($total3);
+if ($descuento>0) {
+	$printer -> text($descuenopri);
+	//$printer -> text($total4);
+}
+
 $printer -> selectPrintMode();
 
 /* Footer */
@@ -104,10 +115,9 @@ if($mensaje!=null){
 
 $printer -> feed(1);
 $printer -> text($date . "\n");
-$printer->setBarcodeHeight(80);
-$printer->setBarcodeTextPosition(Printer::BARCODE_TEXT_BELOW);
-$printer->barcode("9876");
-$printer->barcode("ABC");
+//$printer->setBarcodeHeight(40);//altura de codigo de barras
+//$printer->setBarcodeTextPosition(Printer::BARCODE_TEXT_BELOW);
+//$printer->barcode("9876");
 /* Cut the receipt and open the cash drawer */
 $printer -> cut();
 $printer -> pulse();

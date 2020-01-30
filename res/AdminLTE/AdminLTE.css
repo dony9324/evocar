@@ -5726,7 +5726,48 @@ table.text-center th {
   border-radius: 0 4px 4px 0;
 }
 
+/*dony botones rojos*/
+.switch-field2 {
+  overflow: hidden;
+}
+.switch-field2 input {
+  display: none;
+}
+.switch-field2 label {
+  float: left;
+}
+.switch-field2 label {
+  display: inline-block;
+  background-color: #ffffff;
+  /*color: rgba(0, 0, 0, 0.6);*/
+  font-size: 16px;
+  font-weight: normal;
+  text-align: center;
+  text-shadow: none;
+  padding: 6px 14px;
+  -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+  -webkit-transition: all 0.1s ease-in-out;
+  -moz-transition:    all 0.1s ease-in-out;
+  -ms-transition:     all 0.1s ease-in-out;
+  -o-transition:      all 0.1s ease-in-out;
+  transition:         all 0.1s ease-in-out;
+}
+.switch-field2 label:hover {
+  cursor: pointer;
+}
+.switch-field2 input:checked + label {
+  background-color: #dd4b39;
 
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.switch-field2 label:first-of-type {
+  border-radius: 4px 0 0 4px;
+}
+.switch-field2 label:last-of-type {
+  border-radius: 0 4px 4px 0;
+}
 /*dony boton tange*/
 
 

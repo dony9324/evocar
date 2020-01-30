@@ -78,7 +78,7 @@ if(isset($_SESSION["reabastecer"])){
 		}
 			unset($_SESSION["reabastecer"]);
 			setcookie("selled","selled");
-			setcookie("bodega",$s[1],(time()+1600));///segundos
+			setcookie("bodega",$s[1],(time()+1500));///segundos
 	}
 }
 }

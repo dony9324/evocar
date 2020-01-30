@@ -1,3 +1,4 @@
+<!-- el tres hace referrencia a una venta -->
 <div id="myModal" class="modal fade in" role="dialog"><!--parte oscura del modal-->
   <div class="modal-dialog modal-lg"> <!-- tamaño del modal-->
     <!-- Modal content-->
@@ -66,21 +67,6 @@
     /*para dale estilo al campo tipe file*/
     $('.example').mask('0#');
 
-    function recargarAlmacenamientos(){
-      console.log("recargarAlmacenamientos")
-      $('#client_id').children('option:not(:first)').remove();
-      $.get("./?action=searchallAlmacenamientos",
-      {
-        name:$("#name").val(),
-      },function(data){
-        data.forEach(function(dat, index){
-          $('#client_id').append('<option value="'+dat.id+'">'+dat.name+' '+dat.namecorto+'</option>');
-          $("#client_id [value="+ dat.id +"]").attr("selected",true);
-        })
-      });
-    }
-
-
       function actualizarbodega(){
           console.log("actualizarbodega");
             $("#guardar").prop('disabled', true);
@@ -113,7 +99,7 @@
                      $('#myModal').modal('hide');
                       }
                   });
-                  setTimeout(function(){  console.log("recarga almacenamiento"); recargarbodegaonere(); },2000);
+                  setTimeout(function(){  console.log("recarga almacenamiento"); recargarentregaonesell(); },2000);
 
                 }else {
                   $("#guardar").prop('disabled', false);

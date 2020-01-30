@@ -1,4 +1,4 @@
-<section class="content-header">
+﻿<section class="content-header">
   <h1>Resumen de Venta<small></small></h1>
   <ol class="breadcrumb">
     <li><a href="#" onClick="changerview('./?page=home')"><i class="fa fa-home"></i> Inicio</a></li>
@@ -116,24 +116,21 @@
                 <?php
                 if ($sell->accredit==1) {
 
-
                 $d = SellData::getById($_GET["id"]);
                 $pago = PaymentData::getQYesF($_GET["id"]);
                 $pagos = PaymentData::getAllByProductId($_GET["id"]);
-                if(count($pagos)>0){
                 $total_pago = 0;
+                if(count($pagos)>0){
+
                 ?>
 
                 <div class=" col-sm-4 ">
                   <table style="width:100%;" class="table table-condensed">
-
                 <?php foreach($pagos as $spago):?>
-
               	<tr>
               		<td><?php echo number_format($spago->payment/100,2,',','.');?></td>
               		<td><?php $total_pago = $total_pago + $spago->payment; echo $spago->created_at; ?></td>
               	</tr>
-
               <?php  endforeach; }?>
               <tr>
                 <td>Total pagado </td>
@@ -234,6 +231,18 @@
 
 
 
+      <script>
+          $.get("./?scritp=entregaonesell&id=<?php echo $_GET["id"];?>",function(data){
+            $("#entregaonesell").html(data);
+          });
+      function recargarentregaonesell(){
+        $.get("./?scritp=entregaonesell&id=<?php echo $_GET["id"];?>",function(data){
+          $("#entregaonesell").html(data);
+        });
+
+      }
+      </script>
+      <div id="entregaonesell">
 
 
 

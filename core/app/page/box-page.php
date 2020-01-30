@@ -68,9 +68,9 @@
                       $product  = $operation->getProduct();
                       $total += $operation->q*$product->price_out;
                     }
-                    $total_total += $total; ?>
+                    $total_total += ($sell->total - $sell->discount); ?>
                     <td><?php echo count($operations);?> </td>
-                    <td><?php echo "<b>$ ".number_format($total,2,".",",")."</b>";?></td>
+                    <td><?php echo "<b>$ ".number_format((($sell->total - $sell->discount)/100),2,".",",")."</b>";?></td>
                     <td><?php echo $sell->created_at; ?></td>
                   </tr>
 
@@ -101,7 +101,7 @@
 
           <div class="description-block border-right">
 
-            <h5 class="description-header"><?php if (isset($total_total)){echo "$ ".number_format($total_total,2,".",","); }?></h5>
+            <h5 class="description-header"><?php if (isset($total_total)){echo "$ ".number_format($total_total/100,2,".",","); }?></h5>
             <span class="description-text">TOTAL</span>
           </div>
           <!-- /.description-block -->

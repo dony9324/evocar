@@ -76,10 +76,10 @@
 .skin .sidebar-menu > li.active > a,
 .skin .sidebar-menu > li.menu-open > a {
   color: #ffffff;
-  background: #1e282c;
+  background: #1b2529;
 }
 .skin .sidebar-menu > li.active > a {
-  border-left-color: #222d32;
+  border-left-color: #3c8dbc;
 }
 .skin .sidebar-menu > li > .treeview-menu {
   margin: 0 1px;

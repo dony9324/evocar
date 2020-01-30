@@ -1299,6 +1299,17 @@ function borrarpresentaciones(){
                      $('#myModal').modal('hide');
                       }
                   });
+
+                  if (data.id != "" && data.id != 0) {
+                    alertify.error("Se ha realizado un reabastecimiento, defina donde se almacenaran los productos.");
+
+                    setTimeout(function(){ cambiar(data.id);}, 3000);
+
+                    alertify.error('Si no se define los productos serán almacenados en el almacenamiento principal.');
+
+                  }
+
+
                 }else {
                   $("#guardar").prop('disabled', false);
                   alertify.error('No se pudo guardar producto');
@@ -1313,6 +1324,20 @@ function borrarpresentaciones(){
           }
           $('.money').mask('000.000.000,00', {reverse: true});
     }
+
+
+    function cambiar(operation_id){
+      console.log("funcion cambiar");
+      $.get("./?action=cambiaralmacenamiento",{id: operation_id},function(data){
+        $("#newproducto").html(data);
+        $('#myModal').modal('show');
+      //  $("#btnnewalmacenamiento").prop('disabled', false);
+      });
+    }
+
+
+
+
 function validaformulario(){
 
   if (validate("codigo",6,255,0)){

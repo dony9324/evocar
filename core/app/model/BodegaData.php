@@ -37,7 +37,7 @@ class BodegaData {
 
 // partiendo de que ya tenemos creado un objecto BodegaData previamente utilizamos el contexto
 	public function update(){
-		$sql = "update ".self::$tablename." set name=\"$this->name\",description=\"$this->description\" where id=$this->id";
+		$sql = "update ".self::$tablename." set q=\"$this->q\" where id=$this->id";
 		Executor::doit($sql);
 	}
 
@@ -49,9 +49,6 @@ class BodegaData {
 		$data = new BodegaData();
 		while($r = $query[0]->fetch_array()){
 			$data->id = $r['id'];
-			$data->name = $r['name'];
-			$data->name_corto = $r['name_corto'];
-			$data->created_at = $r['created_at'];
 			$found = $data;
 			break;
 		}

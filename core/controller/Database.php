@@ -4,8 +4,8 @@ class Database {
 	public static $con;
 	function  __construct(){
 		///evocar es la oficial ya 2020 - 01 -14
-		//	$this->user="root";$this->pass="";$this->host="localhost";$this->ddbb="evocar";
-			$this->user="root";$this->pass="";$this->host="localhost";$this->ddbb="evocarpruevas";
+			$this->user="root";$this->pass="";$this->host="localhost";$this->ddbb="evocar";
+		//	$this->user="root";$this->pass="";$this->host="localhost";$this->ddbb="evocarpruevas";
 			if ($this->ddbb=="evocarpruevas") {
 				$_SESSION['pruevas']=true;
 			}else {

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 if(!isset($_SESSION["user_id"])){
   if(isset($_GET["view"]) && $_GET["view"]!=""){
     Core::redir("./");
@@ -33,7 +33,11 @@ if(!isset($_SESSION["user_id"])){
   <!-- añadir alertas con alertifyjs -->
   <link href="res/alertifyjs/css/alertify.css" rel="stylesheet">
   <link href="res/alertifyjs/css/themes/bootstrap.css"rel="stylesheet">
+  <link href="res/bootstrap-timepicker.min.css"rel="stylesheet">
+  <link href="res/daterangepicker.css"rel="stylesheet">
+
   <script src="res/alertifyjs/alertify.js"></script>
+
 </head>
 
 <body class="hold-transition skin <?php if(!isset($_SESSION["user_id"])):?> sidebar-collapse<?php else: echo "sidebar-mini"; endif; ?>">
@@ -80,17 +84,12 @@ if(!isset($_SESSION["user_id"])){
             if ($_SESSION['pruevas']) {
               echo "<li class='dropdown messages-menu'>
               <a href='#' class='dropdown-toggle' data-toggle='dropdown'>
-              <button type='button' class='btn btn-block btn-success btn-lg'>pruevas</button>
+              <button type='button' class='btn btn-block btn-success'>pruevas</button>
               </a>
 
               </li>";
             }else {
-              echo "<li class='dropdown messages-menu'>
-              <a href='#' class='dropdown-toggle' data-toggle='dropdown'>
-              <button type='button' class='btn btn-block btn-danger btn-lg'>REAL</button>
-              </a>
-
-              </li>";
+              
             }
 
             ?>
@@ -237,34 +236,30 @@ if(!isset($_SESSION["user_id"])){
         <!-- Optionally, you can add icons to the links -->
         <li id="home" class="active1"><a href="index.php?view=home"><i class="fa fa-home"></i><span>Inicio</span></a></li>
         <?php if(isset($_SESSION["user_id"])): ?>
-          <li id="sell"><a href="#" onclick="changerview('./?page=sell')"><i class="fa fa-usd"></i><span>Vender</span></a></li>
-          <li id="cuentas"><a href="#" onclick="changerview('./?page=cuentas')"><i class="fa fa-tasks"></i><span>cuentas</span></a></li>
-          <li id="entregas"><a href="#" onclick="changerview('./?page=entregas')"><i class="fa fa-check-square"></i><span>Entregas</span></a></li>
-          <li id="box"><a href="#"  onclick="changerview('./?page=box')"><i class="fa fa-cube"></i><span>Caja</span></a></li>
-          <li id="credits"><a href="#"  onclick="changerview('./?page=credits')"><i class="fa fa-book"></i><span>Creditos</span></a></li>
-          <li id="clients"><a href="#"  onclick="changerview('./?page=clients')"><i class="fa fa-user"></i><span>Clientes</span></a></li>
-
-          <?php if($u->is_admin):?>
-            <li id="providers"><a href="#" onclick="changerview('./?page=providers')"><i class="fa fa-truck"></i><span>Proveedores</span></a></li>
-            <li id="Almacenamientos"><a href="#"onclick="changerview('./?page=Almacenamientos')"><i class="fa fa-files-o"></i><span>Almacenamientos</span><span class="pull-right-container"><span class="label label-primary pull-right"><?php	$alm = AlmacenamientosData::getAll(); echo count($alm);?></span></span></a></li>
-            <li id="inventary"><a href="#" onclick="changerview('./?page=inventary')"><i class="fa fa-tags"></i><span>Inventario</span></a></li>
-            <li id="res"><a href="#" onclick="changerview('./?page=ressells')"><i class="fa fa-th-list"></i><span>Compras y Ventas</span></a></li>
-            <li id="devoluciones"><a href="#" onclick="changerview('./?page=devoluciones')"><i class="fa fa-exchange"></i><span>Devoluciones</span></a></li>
-
-
-            <li id="reportes" class="treeview">
-              <a href="#"><i class="fa fa-caret-square-o-down"></i> <span>Estadísticas</span>
-                <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i>
-                </span>
-              </a>
-              <ul id="treeview-menu" class="treeview-menu">
-                <li id="res"><a href="index.php?view=res  view=sells"><i class="fa fa-th-list"></i> Compras y Ventas</a></li>
-              </ul>
-            </li>
-            <li id="users"><a href="#" onclick="changerview('./?page=users&o=all')"><i class="fa fa-users"></i><span>Usuarios</span></a></li>
-
-            <li id="settings"><a href="index.php?view=settings"><i class="fa fa-cogs"></i><span>Configuracion</span></a></li>
-          <?php endif;?><?php endif;?>
+        <li id="sell"><a href="#" onclick="changerview('./?page=sell')"><i class="fa fa-usd"></i><span>Vender</span></a></li>
+        <li id="cuentas"><a href="#" onclick="changerview('./?page=cuentas')"><i class="fa fa-tasks"></i><span>cuentas</span></a></li>
+        <li id="entregas"><a href="#" onclick="changerview('./?page=entregas')"><i class="fa fa-check-square"></i><span>Entregas</span></a></li>
+        <li id="box"><a href="#"  onclick="changerview('./?page=box')"><i class="fa fa-cube"></i><span>Caja</span></a></li>
+        <li id="credits"><a href="#"  onclick="changerview('./?page=credits')"><i class="fa fa-book"></i><span>Creditos</span></a></li>
+        <li id="clients"><a href="#"  onclick="changerview('./?page=clients')"><i class="fa fa-user"></i><span>Clientes</span></a></li>
+        <?php if($u->is_admin):?>
+        <li id="providers"><a href="#" onclick="changerview('./?page=providers')"><i class="fa fa-truck"></i><span>Proveedores</span></a></li>
+        <li id="inventary"><a href="#" onclick="changerview('./?page=inventary')"><i class="fa fa-tags"></i><span>Inventario</span></a></li>
+        <li id="Almacenamientos"><a href="#"onclick="changerview('./?page=Almacenamientos')"><i class="fa fa-files-o"></i><span>Almacenamientos</span><span class="pull-right-container"><span class="label label-primary pull-right"><?php	$alm = AlmacenamientosData::getAll(); echo count($alm);?></span></span></a></li>
+        <li id="res"><a href="#" onclick="changerview('./?page=ressells')"><i class="fa fa-th-list"></i><span>Compras y Ventas</span></a></li>
+        <li id="devoluciones"><a href="#" onclick="changerview('./?page=devoluciones')"><i class="fa fa-exchange"></i><span>Devoluciones</span></a></li>
+        <li id="reportes" class="treeview">
+          <a href="#"><i class="fa fa-caret-square-o-down"></i> <span>Estadísticas</span>
+            <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul id="treeview-menu" class="treeview-menu">
+            <li id="res"><a href="index.php?view=res  view=sells"><i class="fa fa-th-list"></i> Compras y Ventas</a></li>
+          </ul>
+        </li>
+        <li id="users"><a href="#" onclick="changerview('./?page=users&o=all')"><i class="fa fa-users"></i><span>Usuarios</span></a></li>
+        <li id="settings"><a href="index.php?view=settings"><i class="fa fa-cogs"></i><span>Configuracion</span></a></li>
+        <?php endif;?><?php endif;?>
         </ul>
         <!-- /.sidebar-menu -->
       </section>
@@ -428,6 +423,9 @@ if(!isset($_SESSION["user_id"])){
   <script src = "res/jquery.slimscroll.min.js"> </script>
   <script src = "res/select2.full.min.js"> </script>
   <script src = "res/overhang.min.js"> </script>
+  <!-- bootstrap time picker -->
+<script src="res/bootstrap-timepicker.min.js"></script>
+<script src="res/daterangepicker.js"></script>
 
   <div id="myModalcargando" class="modal fade" role="dialog" style="vertical-align:central;">
     <div class="modal-dialog" style="width: 270px;">

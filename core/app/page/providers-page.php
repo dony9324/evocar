@@ -83,8 +83,6 @@
                     <td><?php echo $user->nit; ?></td>
                     <td style="width:130px;">
                       <a href="index.php?view=editprovider&id=<?php echo $user->id;?>" class="btn btn-warning btn-xs">Editar</a>
-                      <a href="index.php?action=delprovider&id=<?php echo $user->id;?>" class="btn btn-danger btn-xs">Eliminar</a>
-
                     </td>
                   </tr>
                   <?php

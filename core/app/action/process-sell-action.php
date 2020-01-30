@@ -80,6 +80,7 @@ if(count($_POST)>0){
 				$sell->adelanto = $_POST["adelanto"];
 				$sell->cantidad_adelanto = $_POST["cantidad_adelanto"];
 				$sell->money_person = $_POST["money"];
+				if($_POST["money"]==""){$sell->money_person = 0;}
 				$sell->entrega = $_POST["entrega"];
 				$sell->extracode = ""; //este campo no tiene uso actualmente
 				foreach($cart as  $c){
@@ -107,6 +108,39 @@ if(count($_POST)>0){
 						$op->sell_id=$s[1];
 						$op->user_id = $_SESSION["user_id"];
 						$add = $op->add();
+
+
+
+						////rigistramos el almacemaiento temporalmente se registran en la bodega principal en la tabla entrega
+						$almacemaiento=AlmacenamientosData::getAll();
+						$bodega = new BodegaData();
+						$bodega->operation_id = $add[1];
+						$bodega->q = $op->q;
+						$bodega->product_id = $op->product_id;
+						$bodega->operation_type_id = 1; //entrada 2 salida esta es para el calculo rapido de inventario;
+						$bodega->created_at = "NOW()";
+						$bodega->almacemaiento_id = 1;
+						$bodega->almacenamiento_id2 = NULL;
+						$bodega->type = 3; //TRES PARA VENTAS
+						$bodega->user_id = $_SESSION["user_id"];
+						if (count($almacemaiento)>0) {
+						foreach ($almacemaiento as $key) {
+						 if ($key->id==1) {
+							 $bodega->almacemaiento_id = $key->id;
+							 $bodega->q = $op->q;
+								$bodega->add();
+						 }else {
+							 $bodega->almacemaiento_id = $key->id;
+							 $bodega->q=0;
+							 $bodega->add();
+						 }
+						}
+						}
+
+
+
+
+
 					}
 					//hacer un pago a credito
 					if ($process == true && $s[1]!=0 && $_POST["adelanto"]==1 && $_POST["switch_2"]==1) {
@@ -121,7 +155,9 @@ if(count($_POST)>0){
 
 					unset($_SESSION["cart"]);
 					setcookie("selled","selled");//para saver si la venta fue reciente
+					setcookie("bodega3",$s[1],(time()+1500));///segundos
 					$resultado = array("estado" => "true", "onesell" => $s[1]);
+
 					//print "<script> window.location='index.php?view=onesell&id=$s[1]';</script>";
 				}
 			}

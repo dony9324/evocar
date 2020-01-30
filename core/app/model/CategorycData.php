@@ -1,19 +1,23 @@
 <?php
-class CuentasData {
-	public static $tablename = "cuentas";
+class CategorycData {
+	public static $tablename = "categoryc";
 	public function  __construct(){
 		$this->id = "";
 		$this->name = "";
-		$this->saldo_inicial = "";
+		$this->description = "";
 		$this->user_id = "";
 		$this->created_at = "NOW()";
 	}
 	public function add(){
-		$sql = "insert into cuentas (name,saldo_inicial,user_id,created_at) ";
-		$sql .= "value (\"$this->name\",\"$this->saldo_inicial\",\"$this->user_id\",$this->created_at)";
+		$sql = "insert into categoryc (name,user_id,created_at) ";
+		$sql .= "value (\"$this->name\",\"$this->user_id\",$this->created_at)";
 		Executor::doit($sql);
 	}
-
+	public function add2(){
+		$sql = "insert into unit (name,description,abbreviation,user_id,created_at) ";
+		$sql .= "value (\"$this->name\",\"$this->description\",\"$this->abbreviation\",\"$this->user_id\",$this->created_at)";
+		Executor::doit($sql);
+	}
 	public static function delById($id){
 		$sql = "delete from ".self::$tablename." where id=$id";
 		Executor::doit($sql);
@@ -23,9 +27,9 @@ class CuentasData {
 		Executor::doit($sql);
 	}
 
-// partiendo de que ya tenemos creado un objecto CuentasData previamente utilizamos el contexto
+// partiendo de que ya tenemos creado un objecto CategoryData previamente utilizamos el contexto
 	public function update(){
-		$sql = "update ".self::$tablename." set name=\"$this->name\" where id=$this->id";
+		$sql = "update categoryc set name=\"$this->name\" where id=$this->id";
 		Executor::doit($sql);
 	}
 
@@ -34,12 +38,10 @@ class CuentasData {
 		$sql = "select * from ".self::$tablename." where id=$id";
 		$query = Executor::doit($sql);
 		$found = null;
-		$data = new CuentasData();
+		$data = new CategorycData();
 		while($r = $query[0]->fetch_array()){
 			$data->id = $r['id'];
 			$data->name = $r['name'];
-			$data->saldo_inicial = $r['saldo_inicial'];
-			$data->user_id = $r['user_id'];
 			$data->created_at = $r['created_at'];
 			$found = $data;
 			break;
@@ -47,16 +49,17 @@ class CuentasData {
 		return $found;
 	}
 
+
+
 	public static function getAll(){
 		$sql = "select * from ".self::$tablename ." ORDER BY id ";
 		$query = Executor::doit($sql);
 		$array = array();
 		$cnt = 0;
 		while($r = $query[0]->fetch_array()){
-			$array[$cnt] = new CuentasData();
+			$array[$cnt] = new CategoryData();
 			$array[$cnt]->id = $r['id'];
 			$array[$cnt]->name = $r['name'];
-			$array[$cnt]->saldo_inicial = $r['saldo_inicial'];
 			$array[$cnt]->created_at = $r['created_at'];
 			$cnt++;
 		}
@@ -70,7 +73,7 @@ class CuentasData {
 		$array = array();
 		$cnt = 0;
 		while($r = $query[0]->fetch_array()){
-			$array[$cnt] = new CuentassData();
+			$array[$cnt] = new CategoryData();
 			$array[$cnt]->id = $r['id'];
 			$array[$cnt]->name = $r['name'];
 			$array[$cnt]->description = $r['description'];
@@ -79,6 +82,8 @@ class CuentasData {
 		}
 		return $array;
 	}
+
+
 }
 
 ?>

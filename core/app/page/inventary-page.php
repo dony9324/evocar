@@ -1,4 +1,4 @@
-<section class="content-header">
+﻿<section class="content-header">
 	<h1> <i class='fa fa-tags'></i> Inventario <small></small> </h1>
 	<ol class="breadcrumb">
 		<li onclick="changerview('./?page=home')"><a href="#" id="inventaryhome"><i class="fa fa-home"></i> inicio</a>
@@ -34,6 +34,9 @@
 				<div id="newproducto"> </div>
 				<div id="categorías"></div>
 				<script>
+				function recargarbodegaonere(){
+					changerview('./?page=inventary');
+				}
 					//esta funcion carga el formulario para guardar un nuevo producto
 					function newproducto() {
 						//estalinea es por un error de doble ventana he impide que se abra dosveces el modal
@@ -117,7 +120,7 @@
 
 									<a href="index.php?view=editproduct&id=<?php echo $product->id; ?>" class="btn btn-xs btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
 									<?php  $u = UserData::getById($_SESSION["user_id"]); if($u->id == 1 or $u->id ==3 ):?>
-									<a href="index.php?action=delproduct&id=<?php echo $product->id; ?>" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+									
 									<a href="#" onclick="printoutcot<?php echo $product->id; ?>()" class="btn btn-xs btn-info"><i class="fa fa-print"></i></a>
 
 

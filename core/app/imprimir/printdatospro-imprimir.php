@@ -16,7 +16,7 @@ use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 */
 $connector = new WindowsPrintConnector("EPSON TM-T20II Receipt");
 $printer = new Printer($connector);
-$codigo ="+.".$_GET["id"];
+$codigo =$_GET["id"];
 $q = $_GET["q"];
 $name = $_GET["name"];
 $printer -> setJustification(Printer::JUSTIFY_CENTER);

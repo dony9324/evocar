@@ -3,6 +3,7 @@ if(count($_POST)>0){
   header('Content-type: application/json');
   $resultado = array();
   $resultado = array("estado" => "false");
+  $resultado += array("id" => "");
   $product = new ProductData();
 
   $product->id_group = 0;
@@ -41,16 +42,19 @@ if(count($_POST)>0){
         $product->image = $image->file_dst_name;
         $prod = $product->add();
         $resultado = array("estado" => "true" );
+        $resultado += array("id" => "");
       }
     }else{
   $prod= $product->add();
   $resultado = array("estado" => "true" );
+  $resultado += array("id" => "");
     }
   }else{
   $prod= $product->add();
   $resultado = array("estado" => "true" );
+  $resultado += array("id" => "");
   }
-if($_POST["q"]!="" || $_POST["q"]!="0"){
+if($_POST["q"]!="" && $_POST["q"]!="0"){
  $op = new OperationData();
  $op->product_id = $_SESSION["insert_id"]; ;
  $op->operation_type_id=1;
@@ -60,11 +64,48 @@ if($_POST["q"]!="" || $_POST["q"]!="0"){
  $op->sell_id="NULL";
  $op->user_id=$_SESSION["user_id"];
 $op->is_oficial=1;
-$op->add();
+if ($add = $op->add()) {
+
+}else {
+  $resultado = array("estado" => "false");
+  $resultado += array("id" => "");
 }
 
+
+  ////rigistramos el almacemaiento temporalmente se registran en la bodega principal
+  $almacemaiento=AlmacenamientosData::getAll();
+  $bodega = new BodegaData();
+  $bodega->operation_id = $add[1];
+  $bodega->q = $op->q;
+  $bodega->product_id = $op->product_id;
+  $bodega->operation_type_id = 1; //entrada 2 salida esta es para el calculo rapido de inventario;
+  $bodega->created_at = "NOW()";
+  $bodega->almacemaiento_id = 1;
+  $bodega->almacenamiento_id2 = NULL;
+  $bodega->type = 1;
+  $bodega->user_id = $_SESSION["user_id"];
+  if (count($almacemaiento)>0) {
+  foreach ($almacemaiento as $key) {
+   if ($key->id==1) {
+     $bodega->almacemaiento_id = $key->id;
+     $bodega->q = $op->q;
+      $bodega->add();
+   }else {
+     $bodega->almacemaiento_id = $key->id;
+     $bodega->q=0;
+     $bodega->add();
+   }
+  }
+  }
+  $resultado = array("estado" => "true", "id" => $add[1]);
+  setcookie("bodega2",$add[1],(time()+1600));///segundos
+}
+
+
+
+
 // las otras presentaciones
-$product->id_group = $_SESSION["insert_id"];//leemos el id del ultimo registro sql
+$product->id_group = $_SESSION["insert_id"];//solo esta al ingresar productos, leemos el id del ultimo registro sql
  if(isset($_SESSION["fraction"])){
     foreach($_SESSION["fraction"] as $p){
      $product->group_amount = 1;

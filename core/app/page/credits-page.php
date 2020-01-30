@@ -18,7 +18,6 @@
             <a href="./index.php?action=processcredits" class="btn btn-default">Procesar creditos pagados <i class="fa fa-arrow-right"></i></a>
           <?php endif; ?>
           <button type="button" id="btnnewpayment" onclick="newpayment()" class="btn btn-default"><i class='fa fa-usd'></i> Nuevo Pago</button>
-          <a href="index.php?view=payment" class="btn btn-default"><i class="fa fa-usd"></i> Nuevo Pago</a>
           <div class="btn-group pull-right">
             <?php if($u->is_admin):?>
               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
